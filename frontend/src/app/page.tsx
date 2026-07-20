@@ -1,8 +1,20 @@
-export default function Home() {
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/authStore";
+
+export default function HomePage() {
+  const router = useRouter();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated());
+
+  useEffect(() => {
+    router.replace(isAuthenticated ? "/chat" : "/auth");
+  }, [isAuthenticated, router]);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-8">
-      <h1 className="text-2xl font-semibold">LLM Monitoring App</h1>
-      <p className="text-gray-600">Frontend scaffold — Phase 0</p>
-    </main>
+    <div className="min-h-screen flex items-center justify-center text-sm text-gray-500">
+      Redirecting…
+    </div>
   );
 }
