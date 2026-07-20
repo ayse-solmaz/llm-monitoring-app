@@ -1,27 +1,29 @@
 package main
 
 import (
-	"net/http"
-	"os"
+	"log"
 
-	"github.com/gin-gonic/gin"
+	"github.com/aysnu/llm-monitoring-app/backend/internal/config"
+	"github.com/aysnu/llm-monitoring-app/backend/internal/database"
+	"github.com/aysnu/llm-monitoring-app/backend/internal/router"
+	"github.com/joho/godotenv"
 )
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	_ = godotenv.Load()
+
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatalf("config: %v", err)
 	}
 
-	r := gin.Default()
+	db, err := database.Connect(cfg.DatabaseURL)
+	if err != nil {
+		log.Fatalf("database: %v", err)
+	}
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "LLM Monitoring API — scaffold running",
-		})
-	})
-
-	if err := r.Run(":" + port); err != nil {
-		panic(err)
+	r := router.New(cfg, db)
+	if err := r.Run(":" + cfg.Port); err != nil {
+		log.Fatalf("server: %v", err)
 	}
 }

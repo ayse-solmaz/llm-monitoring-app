@@ -28,6 +28,7 @@ backend/tmp/
 backend/*.exe
 backend/*.test
 backend/vendor/
+backend/dev.db
 
 # Logs
 *.log

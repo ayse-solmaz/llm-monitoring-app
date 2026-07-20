@@ -1,0 +1,46 @@
+package router
+
+import (
+	"github.com/aysnu/llm-monitoring-app/backend/internal/config"
+	"github.com/aysnu/llm-monitoring-app/backend/internal/handlers"
+	"github.com/aysnu/llm-monitoring-app/backend/internal/middleware"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+)
+
+func New(cfg *config.Config, db *gorm.DB) *gin.Engine {
+	r := gin.Default()
+	r.Use(middleware.CORS(cfg.CORSOrigin))
+
+	cmn := handlers.NewCMNHandler(cfg)
+	configHandler := handlers.NewConfigHandler(cfg)
+	authHandler := handlers.NewAuthHandler(db, cfg.JWTSecret)
+
+	v1 := r.Group("/api/v1")
+	{
+		v1.GET("/healthz", cmn.Healthz)
+		v1.GET("/version", cmn.Version)
+
+		v1.GET("/config", configHandler.GetConfig)
+		v1.GET("/config/models", configHandler.GetModels)
+
+		authGroup := v1.Group("/auth")
+		{
+			authGroup.POST("/register", authHandler.Register)
+			authGroup.POST("/login", authHandler.Login)
+			authGroup.POST("/refresh", authHandler.Refresh)
+			authGroup.POST("/logout", authHandler.Logout)
+
+			protected := authGroup.Group("")
+			protected.Use(middleware.JWTAuth(cfg.JWTSecret))
+			{
+				protected.GET("/me", authHandler.Me)
+				protected.PUT("/me", authHandler.UpdateMe)
+				protected.POST("/change-password", authHandler.ChangePassword)
+				protected.DELETE("/me", authHandler.DeleteMe)
+			}
+		}
+	}
+
+	return r
+}
