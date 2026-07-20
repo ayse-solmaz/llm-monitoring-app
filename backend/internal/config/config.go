@@ -31,6 +31,9 @@ func Load() (*Config, error) {
 	}
 
 	if cfg.DatabaseURL == "" {
+		if os.Getenv("RENDER") == "true" {
+			return nil, fmt.Errorf("DATABASE_URL is required on Render")
+		}
 		cfg.DatabaseURL = "dev.db"
 	}
 	if cfg.JWTSecret == "" {
