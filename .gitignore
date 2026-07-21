@@ -30,6 +30,8 @@ backend/*.exe
 backend/*.test
 backend/vendor/
 backend/dev.db
+backend/*.db
+backend/server.exe
 
 # Logs
 *.log

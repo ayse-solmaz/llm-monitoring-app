@@ -1,5 +1,5 @@
 # AGENT_PLAYBOOK.md — Orchestration Guide
-> **Nasıl kullanılır (TR):** Bu dosya agent'lara İngilizce yazıldı çünkü kodlama agent'ları İngilizce talimatlarla daha tutarlı çalışır. Her fazda ilgili "PROMPT" bloğunu kopyalayıp agent'a ver. Fazın "DoD" (Definition of Done) listesini **sen kendin elinle** doğrula — agent "bitti" dedi diye geçme. Bu dosyayı, PRD.md ve MVP.md ile birlikte repo köküne koy; agent'a her oturumda "Read PRD.md, MVP.md and AGENT_PLAYBOOK.md first" de. Önerilen araç: Claude Code (kurulum ve dokümanlar: https://docs.claude.com/en/docs/claude-code/overview).
+> **How to use:** This file is written in English because coding agents work more consistently with English instructions. Copy the relevant "PROMPT" block into your agent for each phase. **Manually verify** each phase's DoD checklist yourself — do not skip verification just because the agent says it is done. Keep this file alongside PRD.md and MVP.md at the repo root; tell the agent each session: "Read PRD.md, MVP.md and AGENT_PLAYBOOK.md first". Recommended tool: Claude Code (setup and docs: https://docs.claude.com/en/docs/claude-code/overview).
 
 ---
 
@@ -48,7 +48,7 @@ In /frontend create a single spike page at /spike:
 Keep everything in one client component. No auth, no backend, no styling beyond basic layout.
 If "gemma-2-2b-it-q4f16_1-MLC" is not in the current prebuilt model list of the installed web-llm version, list available Gemma variants and pick the smallest instruct variant, telling me which one you chose.
 ```
-**DoD (verify yourself, TR):** Chrome'da /spike aç → model insin → cevap aksın → konsolda TTFT ve stats görün. Bu çalışmadan Faz 1'e geçme.
+**DoD (verify yourself):** Open /spike in Chrome → model loads → response streams → TTFT and stats appear in the console. Do not proceed to Phase 1 until this works.
 
 ---
 
@@ -68,7 +68,7 @@ Read PRD.md §6. In /backend implement with Gin + GORM + PostgreSQL:
 - Give me a smoke-test script (curl) covering: register, login, me, refresh, change-password, logout.
 Use local Postgres via docker compose for development; include docker-compose.yml.
 ```
-**DoD (TR):** Curl script'i baştan sona hatasız geçiyor; yanlış şifreyle 401 geliyor.
+**DoD:** The curl script passes end-to-end; wrong password returns 401.
 
 ---
 
@@ -88,7 +88,7 @@ In /frontend create the SPA skeleton: routes /auth, /chat, /dashboard sharing on
 Then, using the Vercel MCP tools: deploy /frontend, set NEXT_PUBLIC_API_URL to the Render URL. Give me the production URL.
 Finally tell me the exact CORS_ORIGIN value to update on Render (the Vercel domain) and update it via Render MCP.
 ```
-**DoD (TR):** Vercel URL'inde kayıt ol → giriş yap → /chat'e yönlen. Render URL/healthz 200. Bu andan itibaren canlı sistem hiç bozulmayacak.
+**DoD:** Register and log in on the Vercel URL → redirect to /chat. Render URL /healthz returns 200. From this point on, the live system must never break.
 
 ---
 
@@ -103,7 +103,7 @@ Read PRD §4 View 2 and §5. Build /chat properly:
 - Implement lib/scoring.ts exactly as PRD §5: latencyScore, lengthScore, formatScore (0-100 each, deterministic rules with documented thresholds), composite = weighted average (0.4/0.3/0.3), decision: accept>=70, review>=40, else reject. Show a score card under each assistant message.
 No backend persistence yet. Keep the /spike page untouched as fallback.
 ```
-**DoD (TR):** Canlıda (Vercel) chat çalışıyor, metrikler akış sırasında güncelleniyor, her cevabın altında skor kartı var.
+**DoD:** On production (Vercel), chat works; metrics update during streaming; each reply shows a score card underneath.
 
 ---
 
@@ -124,7 +124,7 @@ Extend the curl smoke script. Deploy to Render via Render MCP and verify live.
 2) Build /dashboard (PRD §4 View 3): 3a session list (paginated, newest first), 3b session detail (messages + metrics + score badges), 3c summary charts with recharts: avg tokens/sec over sessions (line), decision distribution (pie/bar), using the two summary endpoints.
 Deploy to Vercel via Vercel MCP. Verify on production.
 ```
-**DoD (TR):** Temiz tarayıcıda: register → chat'te 2-3 mesaj → dashboard'da oturum, metrikler ve grafikler görünüyor. Hepsi canlı URL'lerde.
+**DoD:** In a clean browser: register → send 2–3 chat messages → dashboard shows sessions, metrics, and charts. All on live URLs.
 
 ---
 
@@ -143,23 +143,23 @@ Write the final root README.md in English:
 - Known limitations (WebGPU browser support, Render cold start)
 Also do a final sweep: remove dead code, ensure .env.example files are complete, verify /spike still works as fallback demo.
 ```
-**DoD (TR):** MVP.md §4'teki tüm kutuları kendin işaretle. Render'ı uyandır (healthz'e istek at), gizli pencerede tam akışı bir kez daha oyna, teslim et.
+**DoD:** Check every box in MVP.md §4 yourself. Wake Render (hit healthz), run the full flow once in a private window, then deliver.
 
 ---
 
-## TROUBLESHOOTING CHEATSHEET (TR)
+## TROUBLESHOOTING CHEATSHEET
 
-| Belirti | Agent'a söyle |
+| Symptom | Tell the agent |
 |---|---|
-| Model listede yok hatası | "List prebuiltAppConfig.model_list from the installed web-llm version and switch to the closest Gemma instruct variant" |
-| CORS hatası (console'da) | "Fix CORS: backend must allow origin <vercel-url> with credentials and Authorization header" |
+| Model not in list error | "List prebuiltAppConfig.model_list from the installed web-llm version and switch to the closest Gemma instruct variant" |
+| CORS error (in console) | "Fix CORS: backend must allow origin <vercel-url> with credentials and Authorization header" |
 | Render build fail | "Fetch the Render build logs via Render MCP and fix the Dockerfile accordingly" |
-| 401 döngüsü | "Debug the refresh flow: log token expiry, ensure refresh runs once and retries the original request" |
-| Chat kasıyor | "Move metric state updates to requestAnimationFrame batching; do not setState per token" |
+| 401 loop | "Debug the refresh flow: log token expiry, ensure refresh runs once and retries the original request" |
+| Chat stutters | "Move metric state updates to requestAnimationFrame batching; do not setState per token" |
 
-## GOLDEN RULES (TR)
-1. Aynı anda tek faz, tek agent görevi. Paralel büyük görev verme — çakışır.
-2. Her fazdan sonra commit + push. Canlıyı bozan değişikliği hemen revert et.
-3. Agent'ın "çalışıyor" demesi kanıt değildir; DoD adımlarını tarayıcıda/curl'de kendin yap.
-4. Bir görev 30 dk'dan uzun süredir dönüyorsa durdur, görevi daha küçük parçaya böl.
-5. Faz 0 spike'ı her şeyden önce gelir. O çalışmadan hiçbir şeye başlama.
+## GOLDEN RULES
+1. One phase, one agent task at a time. Do not run large parallel tasks — they conflict.
+2. Commit + push after each phase. Revert immediately any change that breaks production.
+3. The agent saying "it works" is not proof; verify DoD steps yourself in the browser or with curl.
+4. If a task spins for more than 30 minutes, stop and split it into smaller pieces.
+5. Phase 0 spike comes first. Do not start anything else until it works.
