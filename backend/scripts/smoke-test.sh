@@ -7,9 +7,26 @@ PASSWORD="${PASSWORD:-secret123}"
 NEW_PASSWORD="${NEW_PASSWORD:-newsecret123}"
 NAME="${NAME:-Smoke Tester}"
 
+expect_http() {
+  local expected="$1"
+  shift
+  local code
+  code=$(curl -sS -o /dev/null -w "%{http_code}" "$@")
+  if [ "$code" != "$expected" ]; then
+    echo "Expected HTTP $expected but got $code" >&2
+    exit 1
+  fi
+  echo "HTTP $code"
+}
+
 echo "==> healthz"
 curl -sS "$BASE_URL/healthz"
 echo
+
+echo "==> register invalid email should 400"
+expect_http 400 -X POST "$BASE_URL/auth/register" \
+  -H "Content-Type: application/json" \
+  -d "{\"email\":\"not-an-email\",\"password\":\"$PASSWORD\",\"name\":\"$NAME\"}"
 
 echo "==> register"
 curl -sS -X POST "$BASE_URL/auth/register" \
@@ -36,10 +53,26 @@ curl -sS "$BASE_URL/auth/me" \
   -H "Authorization: Bearer $ACCESS_TOKEN"
 echo
 
-echo "==> refresh"
-curl -sS -X POST "$BASE_URL/auth/refresh" \
+echo "==> refresh (token rotation)"
+REFRESH=$(curl -sS -X POST "$BASE_URL/auth/refresh" \
+  -H "Content-Type: application/json" \
+  -d "{\"refresh_token\":\"$REFRESH_TOKEN\"}")
+echo "$REFRESH"
+ROTATED_REFRESH_TOKEN=$(echo "$REFRESH" | sed -n 's/.*"refresh_token":"\([^"]*\)".*/\1/p')
+if [ -z "$ROTATED_REFRESH_TOKEN" ]; then
+  echo "Expected refresh_token in refresh response" >&2
+  exit 1
+fi
+
+echo "==> old refresh token should 401 after rotation"
+expect_http 401 -X POST "$BASE_URL/auth/refresh" \
   -H "Content-Type: application/json" \
   -d "{\"refresh_token\":\"$REFRESH_TOKEN\"}"
+
+echo "==> rotated refresh token should work"
+curl -sS -X POST "$BASE_URL/auth/refresh" \
+  -H "Content-Type: application/json" \
+  -d "{\"refresh_token\":\"$ROTATED_REFRESH_TOKEN\"}"
 echo
 
 echo "==> change-password"
@@ -50,14 +83,9 @@ curl -sS -X POST "$BASE_URL/auth/change-password" \
 echo
 
 echo "==> refresh with old token should 401 after password change"
-HTTP_CODE=$(curl -sS -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/auth/refresh" \
+expect_http 401 -X POST "$BASE_URL/auth/refresh" \
   -H "Content-Type: application/json" \
-  -d "{\"refresh_token\":\"$REFRESH_TOKEN\"}")
-if [ "$HTTP_CODE" != "401" ]; then
-  echo "Expected HTTP 401 but got $HTTP_CODE" >&2
-  exit 1
-fi
-echo "HTTP $HTTP_CODE"
+  -d "{\"refresh_token\":\"$ROTATED_REFRESH_TOKEN\"}"
 
 echo "==> login with new password"
 LOGIN2=$(curl -sS -X POST "$BASE_URL/auth/login" \
@@ -79,9 +107,30 @@ curl -sS -o /dev/null -w "HTTP %{http_code}\n" -X POST "$BASE_URL/auth/logout" \
   -d "{\"refresh_token\":\"$REFRESH_TOKEN2\"}"
 
 echo "==> wrong password should 401"
-curl -sS -o /dev/null -w "HTTP %{http_code}\n" -X POST "$BASE_URL/auth/login" \
+expect_http 401 -X POST "$BASE_URL/auth/login" \
   -H "Content-Type: application/json" \
   -d "{\"email\":\"$EMAIL\",\"password\":\"wrong-password\"}"
+
+echo "==> rate limit should 429"
+got429=0
+for _ in $(seq 1 20); do
+  code=$(curl -sS -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/auth/login" \
+    -H "Content-Type: application/json" \
+    -d '{"email":"ratelimit@example.com","password":"wrong-password"}')
+  if [ "$code" = "429" ]; then
+    echo "HTTP 429"
+    got429=1
+    break
+  fi
+  if [ "$code" != "401" ]; then
+    echo "Expected HTTP 401 or 429 but got $code" >&2
+    exit 1
+  fi
+done
+if [ "$got429" -ne 1 ]; then
+  echo "Expected HTTP 429 but rate limit was not triggered" >&2
+  exit 1
+fi
 
 echo "==> create llm session"
 SESSION=$(curl -sS -X POST "$BASE_URL/llm/sessions" \

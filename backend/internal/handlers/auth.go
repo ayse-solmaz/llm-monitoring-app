@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"regexp"
 	"strings"
 	"time"
 
@@ -13,6 +14,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
+)
+
+const (
+	minPasswordLen = 8
+	maxPasswordLen = 128
+	maxEmailLen    = 254
+)
+
+var (
+	emailRegex          = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
+	errInvalidRefresh   = errors.New("invalid refresh token")
 )
 
 type AuthHandler struct {
@@ -70,8 +82,8 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		response.BadRequest(c, "invalid email")
 		return
 	}
-	if len(req.Password) < 8 {
-		response.BadRequest(c, "password must be at least 8 characters")
+	if msg := validatePassword(req.Password); msg != "" {
+		response.BadRequest(c, msg)
 		return
 	}
 
@@ -143,31 +155,61 @@ func (h *AuthHandler) Refresh(c *gin.Context) {
 	}
 
 	tokenHash := auth.HashRefreshToken(req.RefreshToken)
-	var stored models.RefreshToken
-	if err := h.db.Where("token_hash = ?", tokenHash).First(&stored).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+	var tokens tokenResponse
+	err := h.db.Transaction(func(tx *gorm.DB) error {
+		var stored models.RefreshToken
+		if err := tx.Where("token_hash = ?", tokenHash).First(&stored).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return errInvalidRefresh
+			}
+			return err
+		}
+
+		if stored.Revoked || time.Now().After(stored.ExpiresAt) {
+			return errInvalidRefresh
+		}
+
+		if err := tx.Model(&stored).Update("revoked", true).Error; err != nil {
+			return err
+		}
+
+		accessToken, err := auth.GenerateAccessToken(stored.UserID, h.jwtSecret)
+		if err != nil {
+			return err
+		}
+
+		refreshToken, err := auth.GenerateRefreshToken()
+		if err != nil {
+			return err
+		}
+
+		newStored := models.RefreshToken{
+			UserID:    stored.UserID,
+			TokenHash: auth.HashRefreshToken(refreshToken),
+			ExpiresAt: time.Now().Add(config.RefreshTokenTTL),
+			Revoked:   false,
+		}
+		if err := tx.Create(&newStored).Error; err != nil {
+			return err
+		}
+
+		tokens = tokenResponse{
+			AccessToken:  accessToken,
+			RefreshToken: refreshToken,
+			ExpiresIn:    int(config.AccessTokenTTL.Seconds()),
+		}
+		return nil
+	})
+	if err != nil {
+		if errors.Is(err, errInvalidRefresh) {
 			response.Unauthorized(c, "invalid refresh token")
 			return
 		}
-		response.InternalError(c, "failed to lookup refresh token")
+		response.InternalError(c, "failed to refresh token")
 		return
 	}
 
-	if stored.Revoked || time.Now().After(stored.ExpiresAt) {
-		response.Unauthorized(c, "invalid refresh token")
-		return
-	}
-
-	accessToken, err := auth.GenerateAccessToken(stored.UserID, h.jwtSecret)
-	if err != nil {
-		response.InternalError(c, "failed to generate access token")
-		return
-	}
-
-	response.OK(c, gin.H{
-		"access_token": accessToken,
-		"expires_in":   int(config.AccessTokenTTL.Seconds()),
-	})
+	response.OK(c, tokens)
 }
 
 func (h *AuthHandler) Logout(c *gin.Context) {
@@ -238,8 +280,8 @@ func (h *AuthHandler) ChangePassword(c *gin.Context) {
 		response.BadRequest(c, "invalid JSON body")
 		return
 	}
-	if len(req.NewPassword) < 8 {
-		response.BadRequest(c, "new password must be at least 8 characters")
+	if msg := validatePassword(req.NewPassword); msg != "" {
+		response.BadRequest(c, msg)
 		return
 	}
 
@@ -291,31 +333,42 @@ func (h *AuthHandler) DeleteMe(c *gin.Context) {
 }
 
 func (h *AuthHandler) issueTokens(userID uuid.UUID) (tokenResponse, error) {
-	accessToken, err := auth.GenerateAccessToken(userID, h.jwtSecret)
-	if err != nil {
-		return tokenResponse{}, err
-	}
+	var tokens tokenResponse
+	err := h.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&models.RefreshToken{}).
+			Where("user_id = ? AND revoked = ?", userID, false).
+			Update("revoked", true).Error; err != nil {
+			return err
+		}
 
-	refreshToken, err := auth.GenerateRefreshToken()
-	if err != nil {
-		return tokenResponse{}, err
-	}
+		accessToken, err := auth.GenerateAccessToken(userID, h.jwtSecret)
+		if err != nil {
+			return err
+		}
 
-	stored := models.RefreshToken{
-		UserID:    userID,
-		TokenHash: auth.HashRefreshToken(refreshToken),
-		ExpiresAt: time.Now().Add(config.RefreshTokenTTL),
-		Revoked:   false,
-	}
-	if err := h.db.Create(&stored).Error; err != nil {
-		return tokenResponse{}, err
-	}
+		refreshToken, err := auth.GenerateRefreshToken()
+		if err != nil {
+			return err
+		}
 
-	return tokenResponse{
-		AccessToken:  accessToken,
-		RefreshToken: refreshToken,
-		ExpiresIn:    int(config.AccessTokenTTL.Seconds()),
-	}, nil
+		stored := models.RefreshToken{
+			UserID:    userID,
+			TokenHash: auth.HashRefreshToken(refreshToken),
+			ExpiresAt: time.Now().Add(config.RefreshTokenTTL),
+			Revoked:   false,
+		}
+		if err := tx.Create(&stored).Error; err != nil {
+			return err
+		}
+
+		tokens = tokenResponse{
+			AccessToken:  accessToken,
+			RefreshToken: refreshToken,
+			ExpiresIn:    int(config.AccessTokenTTL.Seconds()),
+		}
+		return nil
+	})
+	return tokens, err
 }
 
 func (h *AuthHandler) currentUser(c *gin.Context) (models.User, bool) {
@@ -353,8 +406,21 @@ func publicUser(user models.User) gin.H {
 	}
 }
 
+func validatePassword(password string) string {
+	if len(password) < minPasswordLen {
+		return "password must be at least 8 characters"
+	}
+	if len(password) > maxPasswordLen {
+		return "password must be at most 128 characters"
+	}
+	return ""
+}
+
 func isValidEmail(email string) bool {
-	return strings.Contains(email, "@") && len(email) >= 3
+	if len(email) > maxEmailLen {
+		return false
+	}
+	return emailRegex.MatchString(email)
 }
 
 func isDuplicateKeyError(err error) bool {

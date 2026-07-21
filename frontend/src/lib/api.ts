@@ -18,7 +18,7 @@ async function parseEnvelope<T>(res: Response): Promise<T> {
 }
 
 async function refreshAccessToken(): Promise<boolean> {
-  const { refreshToken, setAccessToken, clearSession } = useAuthStore.getState();
+  const { refreshToken, setTokens, clearSession } = useAuthStore.getState();
   if (!refreshToken) {
     return false;
   }
@@ -30,7 +30,7 @@ async function refreshAccessToken(): Promise<boolean> {
       body: JSON.stringify({ refresh_token: refreshToken }),
     });
     const data = await parseEnvelope<RefreshData>(res);
-    setAccessToken(data.access_token);
+    setTokens(data.access_token, data.refresh_token);
     return true;
   } catch {
     clearSession();

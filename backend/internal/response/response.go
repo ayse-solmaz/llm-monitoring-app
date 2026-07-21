@@ -51,3 +51,11 @@ func Conflict(c *gin.Context, message string) {
 func InternalError(c *gin.Context, message string) {
 	Fail(c, http.StatusInternalServerError, "internal_error", message)
 }
+
+func TooManyRequests(c *gin.Context, message string) {
+	Fail(c, http.StatusTooManyRequests, "too_many_requests", message)
+}
+
+func PayloadTooLarge(c *gin.Context, message string) {
+	Fail(c, http.StatusRequestEntityTooLarge, "payload_too_large", message)
+}

@@ -6,8 +6,32 @@ $Password = if ($env:PASSWORD) { $env:PASSWORD } else { "secret123" }
 $NewPassword = if ($env:NEW_PASSWORD) { $env:NEW_PASSWORD } else { "newsecret123" }
 $Name = if ($env:NAME) { $env:NAME } else { "Smoke Tester" }
 
+function Expect-HttpStatus {
+    param(
+        [scriptblock]$Request,
+        [int]$ExpectedStatus
+    )
+    try {
+        & $Request | Out-Null
+        throw "Expected HTTP $ExpectedStatus but request succeeded"
+    } catch {
+        $httpResponse = $_.Exception.Response
+        if ($httpResponse -and [int]$httpResponse.StatusCode -eq $ExpectedStatus) {
+            Write-Host "HTTP $ExpectedStatus"
+            return
+        }
+        throw
+    }
+}
+
 Write-Host "==> healthz"
 (Invoke-RestMethod "$BaseUrl/healthz" | ConvertTo-Json -Compress)
+
+Write-Host "==> register invalid email should 400"
+Expect-HttpStatus {
+    $badRegister = @{ email = "not-an-email"; password = $Password; name = $Name } | ConvertTo-Json
+    Invoke-WebRequest -Method Post -Uri "$BaseUrl/auth/register" -ContentType "application/json" -Body $badRegister -UseBasicParsing
+} -ExpectedStatus 400
 
 Write-Host "==> register"
 $registerBody = @{ email = $Email; password = $Password; name = $Name } | ConvertTo-Json
@@ -29,27 +53,33 @@ $headers = @{ Authorization = "Bearer $AccessToken" }
 Write-Host "==> me"
 Invoke-RestMethod -Uri "$BaseUrl/auth/me" -Headers $headers | ConvertTo-Json -Depth 5
 
-Write-Host "==> refresh"
+Write-Host "==> refresh (token rotation)"
 $refreshBody = @{ refresh_token = $RefreshToken } | ConvertTo-Json
-Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/refresh" -ContentType "application/json" -Body $refreshBody | ConvertTo-Json -Depth 5
+$refresh = Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/refresh" -ContentType "application/json" -Body $refreshBody
+$refresh | ConvertTo-Json -Depth 5
+$RotatedRefreshToken = $refresh.data.refresh_token
+if (-not $RotatedRefreshToken) {
+    throw "Expected refresh_token in refresh response"
+}
+
+Write-Host "==> old refresh token should 401 after rotation"
+Expect-HttpStatus {
+    $oldRefreshBody = @{ refresh_token = $RefreshToken } | ConvertTo-Json
+    Invoke-WebRequest -Method Post -Uri "$BaseUrl/auth/refresh" -ContentType "application/json" -Body $oldRefreshBody -UseBasicParsing
+} -ExpectedStatus 401
+
+Write-Host "==> rotated refresh token should work"
+$rotatedRefreshBody = @{ refresh_token = $RotatedRefreshToken } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/refresh" -ContentType "application/json" -Body $rotatedRefreshBody | ConvertTo-Json -Depth 5
 
 Write-Host "==> change-password"
 $changeBody = @{ current_password = $Password; new_password = $NewPassword } | ConvertTo-Json
 Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/change-password" -Headers $headers -ContentType "application/json" -Body $changeBody | ConvertTo-Json -Depth 5
 
 Write-Host "==> refresh with old token should 401 after password change"
-try {
-    $oldRefreshBody = @{ refresh_token = $RefreshToken } | ConvertTo-Json
-    $response = Invoke-WebRequest -Method Post -Uri "$BaseUrl/auth/refresh" -ContentType "application/json" -Body $oldRefreshBody -UseBasicParsing
-    throw "Expected HTTP 401 but got $($response.StatusCode)"
-} catch {
-    $httpResponse = $_.Exception.Response
-    if ($httpResponse -and [int]$httpResponse.StatusCode -eq 401) {
-        Write-Host "HTTP 401"
-    } else {
-        throw
-    }
-}
+Expect-HttpStatus {
+    Invoke-WebRequest -Method Post -Uri "$BaseUrl/auth/refresh" -ContentType "application/json" -Body $rotatedRefreshBody -UseBasicParsing
+} -ExpectedStatus 401
 
 Write-Host "==> login with new password"
 $login2Body = @{ email = $Email; password = $NewPassword } | ConvertTo-Json
@@ -65,17 +95,36 @@ Write-Host "==> logout again (idempotent) should 200"
 Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/logout" -ContentType "application/json" -Body $logoutBody | ConvertTo-Json -Depth 5
 
 Write-Host "==> wrong password should 401"
-try {
+Expect-HttpStatus {
     $badBody = @{ email = $Email; password = "wrong-password" } | ConvertTo-Json
-    $response = Invoke-WebRequest -Method Post -Uri "$BaseUrl/auth/login" -ContentType "application/json" -Body $badBody -UseBasicParsing
-    throw "Expected HTTP 401 but got $($response.StatusCode)"
-} catch {
-    $httpResponse = $_.Exception.Response
-    if ($httpResponse -and [int]$httpResponse.StatusCode -eq 401) {
-        Write-Host "HTTP 401"
-    } else {
+    Invoke-WebRequest -Method Post -Uri "$BaseUrl/auth/login" -ContentType "application/json" -Body $badBody -UseBasicParsing
+} -ExpectedStatus 401
+
+Write-Host "==> rate limit should 429"
+$rateLimitBody = @{ email = "ratelimit@example.com"; password = "wrong-password" } | ConvertTo-Json
+$got429 = $false
+for ($i = 1; $i -le 20; $i++) {
+    try {
+        $response = Invoke-WebRequest -Method Post -Uri "$BaseUrl/auth/login" -ContentType "application/json" -Body $rateLimitBody -UseBasicParsing
+        if ($response.StatusCode -eq 401) {
+            continue
+        }
+        throw "Expected HTTP 401 or 429 but got $($response.StatusCode)"
+    } catch {
+        $httpResponse = $_.Exception.Response
+        if ($httpResponse -and [int]$httpResponse.StatusCode -eq 429) {
+            Write-Host "HTTP 429"
+            $got429 = $true
+            break
+        }
+        if ($httpResponse -and [int]$httpResponse.StatusCode -eq 401) {
+            continue
+        }
         throw
     }
+}
+if (-not $got429) {
+    throw "Expected HTTP 429 but rate limit was not triggered"
 }
 
 Write-Host "==> create llm session"

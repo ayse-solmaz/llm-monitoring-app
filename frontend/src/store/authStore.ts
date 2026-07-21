@@ -10,6 +10,7 @@ type AuthState = {
     refreshToken: string,
     user?: UserData | null
   ) => void;
+  setTokens: (accessToken: string, refreshToken: string) => void;
   setAccessToken: (accessToken: string) => void;
   setUser: (user: UserData | null) => void;
   clearSession: () => void;
@@ -22,6 +23,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   setSession: (accessToken, refreshToken, user = null) =>
     set({ accessToken, refreshToken, user }),
+  setTokens: (accessToken, refreshToken) => set({ accessToken, refreshToken }),
   setAccessToken: (accessToken) => set({ accessToken }),
   setUser: (user) => set({ user }),
   clearSession: () => set({ accessToken: null, refreshToken: null, user: null }),
