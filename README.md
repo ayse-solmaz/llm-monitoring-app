@@ -5,7 +5,6 @@ Browser-side Gemma inference via MLC-LLM/WebLLM with live raw metrics and determ
 ## Live URLs
 
 - **Frontend:** https://llm-monitoring-app.vercel.app
-- **Backend health:** https://llm-monitoring-api.onrender.com/api/v1/healthz
 
 **Requirements:** Chrome or Edge 113+ (WebGPU). On the Render free tier, the first API request after idle may take 30–60 seconds to wake the service.
 
