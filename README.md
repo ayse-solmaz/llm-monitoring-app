@@ -1,19 +1,20 @@
-<!-- Works on docs / sites. GitHub README strips iframes — use Markdown instead. -->
-<iframe
-  src="https://academy.masterfabric.co/embed/badge?credit=1&size=120&style=patch"
-  title="MasterFabric Academy badge"
-  width="220"
-  height="200"
-  style="border:0;overflow:hidden;background:#000"
-  loading="lazy"
-></iframe>
+<div align="center">
+  <a href="https://academy.masterfabric.co">
+    <img src="https://academy.masterfabric.co/academy-badge.png" width="120" alt="MasterFabric Academy">
+  </a>
+  <p><sub>academy.masterfabric.co is a <a href="https://masterfabric.co">MasterFabric</a> subsidiary.</sub></p>
+</div>
+
+---
 
 # Raw LLM Monitoring & Decision Scoring App
 
 Browser-side Gemma inference via MLC-LLM/WebLLM with live raw metrics and deterministic decision scoring. Sessions, messages, and scores are persisted to a Go backend and visualized on a monitoring dashboard.
 
 ## Live URLs
- https://llm-monitoring-app.vercel.app
+
+- **Frontend:** https://llm-monitoring-app.vercel.app
+- **Backend health:** https://llm-monitoring-api.onrender.com/api/v1/healthz
 
 **Requirements:** Chrome or Edge 113+ (WebGPU). On the Render free tier, the first API request after idle may take 30–60 seconds to wake the service.
 
