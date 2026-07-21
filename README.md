@@ -1,3 +1,13 @@
+<!-- Works on docs / sites. GitHub README strips iframes — use Markdown instead. -->
+<iframe
+  src="https://academy.masterfabric.co/embed/badge?credit=1&size=120&style=patch"
+  title="MasterFabric Academy badge"
+  width="220"
+  height="200"
+  style="border:0;overflow:hidden;background:#000"
+  loading="lazy"
+></iframe>
+
 # Raw LLM Monitoring & Decision Scoring App
 
 Browser-side Gemma inference via MLC-LLM/WebLLM with live raw metrics and deterministic decision scoring. Sessions, messages, and scores are persisted to a Go backend and visualized on a monitoring dashboard.
