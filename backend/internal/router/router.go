@@ -30,8 +30,8 @@ func New(cfg *config.Config, db *gorm.DB) *gin.Engine {
 		{
 			authGroup.POST("/register", middleware.RateLimitAuth(), authHandler.Register)
 			authGroup.POST("/login", middleware.RateLimitAuth(), authHandler.Login)
-			authGroup.POST("/refresh", authHandler.Refresh)
-			authGroup.POST("/logout", authHandler.Logout)
+			authGroup.POST("/refresh", middleware.RateLimitAuth(), authHandler.Refresh)
+			authGroup.POST("/logout", middleware.RateLimitAuth(), authHandler.Logout)
 
 			protected := authGroup.Group("")
 			protected.Use(middleware.JWTAuth(cfg.JWTSecret))

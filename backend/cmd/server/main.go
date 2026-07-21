@@ -3,16 +3,22 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/aysnu/llm-monitoring-app/backend/internal/config"
 	"github.com/aysnu/llm-monitoring-app/backend/internal/database"
 	"github.com/aysnu/llm-monitoring-app/backend/internal/router"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
 func main() {
 	_ = godotenv.Load()
+
+	if os.Getenv("GIN_MODE") == "" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
 	cfg, err := config.Load()
 	if err != nil {

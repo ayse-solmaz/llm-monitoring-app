@@ -12,6 +12,12 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	maxContentLen    = 65536
+	maxDeviceInfoLen = 512
+	maxModelIDLen    = 128
+)
+
 type LLMHandler struct {
 	db *gorm.DB
 }
@@ -58,6 +64,18 @@ func (h *LLMHandler) CreateSession(c *gin.Context) {
 	}
 	if req.ModelID == "" {
 		response.BadRequest(c, "model_id is required")
+		return
+	}
+	if len(req.ModelID) > maxModelIDLen {
+		response.BadRequest(c, "model_id must be at most 128 characters")
+		return
+	}
+	if len(req.DeviceInfo) > maxDeviceInfoLen {
+		response.BadRequest(c, "device_info must be at most 512 characters")
+		return
+	}
+	if req.ModelLoadMs != nil && *req.ModelLoadMs < 0 {
+		response.BadRequest(c, "model_load_ms must be non-negative")
 		return
 	}
 
@@ -202,6 +220,30 @@ func (h *LLMHandler) CreateMessage(c *gin.Context) {
 	}
 	if req.Content == "" {
 		response.BadRequest(c, "content is required")
+		return
+	}
+	if len(req.Content) > maxContentLen {
+		response.BadRequest(c, "content must be at most 65536 characters")
+		return
+	}
+	if req.TTFTMs < 0 {
+		response.BadRequest(c, "ttft_ms must be non-negative")
+		return
+	}
+	if req.TokensPrompt < 0 {
+		response.BadRequest(c, "tokens_prompt must be non-negative")
+		return
+	}
+	if req.TokensCompletion < 0 {
+		response.BadRequest(c, "tokens_completion must be non-negative")
+		return
+	}
+	if req.TokensPerSec < 0 {
+		response.BadRequest(c, "tokens_per_sec must be non-negative")
+		return
+	}
+	if req.TotalMs < 0 {
+		response.BadRequest(c, "total_ms must be non-negative")
 		return
 	}
 
