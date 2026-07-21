@@ -251,7 +251,7 @@ Used for backend infrastructure and operations:
 - Updated `CORS_ORIGIN` to `https://llm-monitoring-app.vercel.app` after frontend deploy
 - Triggered redeploys and verified deploy status via `get_deploy` / `list_deploys`
 
-> **Note:** Render MCP does not expose database connection strings. Link `DATABASE_URL` to the Postgres instance in the [Render Dashboard](https://dashboard.render.com/web/srv-d9euanrtqb8s73b8136g) if not already connected.
+> **Note:** Render MCP does not expose database connection strings, so `DATABASE_URL` was linked to the `llm-monitoring-db` Postgres instance manually in the [Render Dashboard](https://dashboard.render.com/web/srv-d9euanrtqb8s73b8136g). This connection is live — production smoke tests (auth + all 8 LLM endpoints) pass against the deployed API and Postgres.
 
 ### Vercel MCP
 
