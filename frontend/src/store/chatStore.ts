@@ -15,6 +15,7 @@ const emptyLiveMetrics = (): LiveMetrics => ({
 
 type ChatState = {
   selectedModelId: string | null;
+  backendSessionId: string | null;
   modelLoadMs: number | null;
   isModelLoading: boolean;
   isModelReady: boolean;
@@ -22,6 +23,7 @@ type ChatState = {
   loadError: string | null;
   messages: ChatMessage[];
   liveMetrics: LiveMetrics;
+  setBackendSessionId: (id: string | null) => void;
   setSelectedModelId: (id: string) => void;
   setModelLoading: (loading: boolean) => void;
   setModelReady: (ready: boolean) => void;
@@ -37,6 +39,7 @@ type ChatState = {
 
 export const useChatStore = create<ChatState>((set) => ({
   selectedModelId: null,
+  backendSessionId: null,
   modelLoadMs: null,
   isModelLoading: false,
   isModelReady: false,
@@ -46,6 +49,7 @@ export const useChatStore = create<ChatState>((set) => ({
   liveMetrics: emptyLiveMetrics(),
 
   setSelectedModelId: (id) => set({ selectedModelId: id }),
+  setBackendSessionId: (id) => set({ backendSessionId: id }),
   setModelLoading: (loading) => set({ isModelLoading: loading }),
   setModelReady: (ready) => set({ isModelReady: ready }),
   setLoadProgress: (progress) => set({ loadProgress: progress }),
@@ -69,5 +73,6 @@ export const useChatStore = create<ChatState>((set) => ({
 
   resetLiveMetrics: () => set({ liveMetrics: emptyLiveMetrics() }),
 
-  clearChat: () => set({ messages: [], liveMetrics: emptyLiveMetrics() }),
+  clearChat: () =>
+    set({ messages: [], liveMetrics: emptyLiveMetrics(), backendSessionId: null }),
 }));

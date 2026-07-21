@@ -66,3 +66,60 @@ export type LiveMetrics = {
   runtimeStatsText: string | null;
   isStreaming: boolean;
 };
+
+export type ApiSession = {
+  id: string;
+  user_id: string;
+  model_id: string;
+  device_info: string;
+  model_load_ms: number | null;
+  created_at: string;
+};
+
+export type ApiMessage = {
+  id: string;
+  session_id: string;
+  role: "user" | "assistant";
+  content: string;
+  ttft_ms: number;
+  tokens_prompt: number;
+  tokens_completion: number;
+  tokens_per_sec: number;
+  total_ms: number;
+  created_at: string;
+  score?: ApiScore;
+};
+
+export type ApiScore = {
+  id: string;
+  message_id: string;
+  latency_score: number;
+  length_score: number;
+  format_score: number;
+  composite: number;
+  decision: ScoreResult["decision"];
+  created_at: string;
+};
+
+export type ApiSessionDetail = ApiSession & {
+  messages: ApiMessage[];
+};
+
+export type SessionsListData = {
+  sessions: ApiSession[];
+  page: number;
+  limit: number;
+  total: number;
+};
+
+export type MetricsSummary = {
+  avg_ttft_ms: number | null;
+  avg_tokens_per_sec: number | null;
+  total_tokens: number;
+  session_count: number;
+};
+
+export type ScoresSummary = {
+  avg_composite: number | null;
+  by_decision: Record<ScoreResult["decision"], number>;
+};

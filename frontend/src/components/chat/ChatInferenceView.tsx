@@ -8,6 +8,11 @@ import {
   type MLCEngine,
 } from "@mlc-ai/web-llm";
 import { apiFetch } from "@/lib/api";
+import {
+  persistAssistantResult,
+  persistSession,
+  persistUserMessage,
+} from "@/lib/llm-api";
 import { scoreResponse } from "@/lib/scoring";
 import { estimateTokens } from "@/lib/tokens";
 import type { LiveMetrics, ModelInfo, ModelsData } from "@/lib/types";
@@ -108,6 +113,7 @@ export default function ChatInferenceView() {
     setLoadProgress,
     setLoadError,
     setModelLoadMs,
+    setBackendSessionId,
     addMessage,
     updateMessage,
     setLiveMetrics,
@@ -162,6 +168,7 @@ export default function ChatInferenceView() {
     setModelReady(false);
     setLoadProgress(null);
     setModelLoadMs(null);
+    setBackendSessionId(null);
     engineRef.current = null;
 
     const loadStart = performance.now();
@@ -177,6 +184,8 @@ export default function ChatInferenceView() {
       setModelLoadMs(loadMs);
       setModelReady(true);
       setLiveMetrics({ modelLoadMs: loadMs });
+
+      persistSession(selectedModelId, loadMs, setBackendSessionId);
     } catch (err) {
       setLoadError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -190,6 +199,7 @@ export default function ChatInferenceView() {
     setModelLoadMs,
     setModelLoading,
     setModelReady,
+    setBackendSessionId,
   ]);
 
   const sendMessage = useCallback(async () => {
@@ -210,6 +220,11 @@ export default function ChatInferenceView() {
 
     const userMessage = { id: newId(), role: "user" as const, content: trimmed };
     addMessage(userMessage);
+
+    const sessionId = useChatStore.getState().backendSessionId;
+    if (sessionId) {
+      persistUserMessage(sessionId, trimmed);
+    }
 
     const assistantId = newId();
     addMessage({ id: assistantId, role: "assistant", content: "" });
@@ -336,6 +351,22 @@ export default function ChatInferenceView() {
         runtimeStatsText,
         isStreaming: false,
       });
+
+      const activeSessionId = useChatStore.getState().backendSessionId;
+      if (activeSessionId && fullReply && !fullReply.startsWith("Error:")) {
+        persistAssistantResult(
+          activeSessionId,
+          fullReply,
+          {
+            ttftMs,
+            tokensPerSec,
+            promptTokens,
+            completionTokens,
+            totalMs,
+          },
+          score
+        );
+      }
     } catch (err) {
       const errorText =
         err instanceof Error ? err.message : "Streaming failed";
