@@ -15,6 +15,7 @@ func New(cfg *config.Config, db *gorm.DB) *gin.Engine {
 	cmn := handlers.NewCMNHandler(cfg)
 	configHandler := handlers.NewConfigHandler(cfg)
 	authHandler := handlers.NewAuthHandler(db, cfg.JWTSecret)
+	llmHandler := handlers.NewLLMHandler(db)
 
 	v1 := r.Group("/api/v1")
 	{
@@ -39,6 +40,19 @@ func New(cfg *config.Config, db *gorm.DB) *gin.Engine {
 				protected.POST("/change-password", authHandler.ChangePassword)
 				protected.DELETE("/me", authHandler.DeleteMe)
 			}
+		}
+
+		llm := v1.Group("/llm")
+		llm.Use(middleware.JWTAuth(cfg.JWTSecret))
+		{
+			llm.POST("/sessions", llmHandler.CreateSession)
+			llm.GET("/sessions", llmHandler.ListSessions)
+			llm.GET("/sessions/:id", llmHandler.GetSession)
+			llm.DELETE("/sessions/:id", llmHandler.DeleteSession)
+			llm.POST("/sessions/:id/messages", llmHandler.CreateMessage)
+			llm.POST("/sessions/:id/scores", llmHandler.CreateScore)
+			llm.GET("/metrics/summary", llmHandler.MetricsSummary)
+			llm.GET("/scores/summary", llmHandler.ScoresSummary)
 		}
 	}
 

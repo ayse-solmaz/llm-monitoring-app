@@ -68,4 +68,52 @@ curl -sS -o /dev/null -w "HTTP %{http_code}\n" -X POST "$BASE_URL/auth/login" \
   -H "Content-Type: application/json" \
   -d "{\"email\":\"$EMAIL\",\"password\":\"wrong-password\"}"
 
+echo "==> create llm session"
+SESSION=$(curl -sS -X POST "$BASE_URL/llm/sessions" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"model_id":"gemma-2-2b-it-q4f16_1-MLC","device_info":"smoke-test","model_load_ms":1200}')
+echo "$SESSION"
+SESSION_ID=$(echo "$SESSION" | sed -n 's/.*"id":"\([^"]*\)".*/\1/p')
+
+echo "==> create llm message"
+MESSAGE=$(curl -sS -X POST "$BASE_URL/llm/sessions/$SESSION_ID/messages" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"role":"assistant","content":"Hello from smoke test","ttft_ms":250,"tokens_prompt":12,"tokens_completion":8,"tokens_per_sec":18.5,"total_ms":900}')
+echo "$MESSAGE"
+MESSAGE_ID=$(echo "$MESSAGE" | sed -n 's/.*"id":"\([^"]*\)".*/\1/p')
+
+echo "==> create llm score"
+curl -sS -X POST "$BASE_URL/llm/sessions/$SESSION_ID/scores" \
+  -H "Authorization: Bearer $ACCESS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{\"message_id\":\"$MESSAGE_ID\",\"latency_score\":85,\"length_score\":70,\"format_score\":90,\"composite\":82,\"decision\":\"accept\"}"
+echo
+
+echo "==> get llm session detail"
+curl -sS "$BASE_URL/llm/sessions/$SESSION_ID" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+echo
+
+echo "==> list llm sessions"
+curl -sS "$BASE_URL/llm/sessions?page=1&limit=10" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+echo
+
+echo "==> metrics summary"
+curl -sS "$BASE_URL/llm/metrics/summary" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+echo
+
+echo "==> scores summary"
+curl -sS "$BASE_URL/llm/scores/summary" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+echo
+
+echo "==> delete llm session"
+curl -sS -X DELETE "$BASE_URL/llm/sessions/$SESSION_ID" \
+  -H "Authorization: Bearer $ACCESS_TOKEN"
+echo
+
 echo "Smoke test complete."

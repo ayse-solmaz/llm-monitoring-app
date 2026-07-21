@@ -53,8 +53,8 @@ func (h *ConfigHandler) GetConfig(c *gin.Context) {
 	response.OK(c, gin.H{
 		"version": h.cfg.Version,
 		"features": gin.H{
-			"auth":       true,
-			"llm_persist": false,
+			"auth":        true,
+			"llm_persist": true,
 		},
 		"scoring": gin.H{
 			"weights": gin.H{

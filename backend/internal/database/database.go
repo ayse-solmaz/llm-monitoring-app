@@ -30,7 +30,13 @@ func Connect(databaseURL string) (*gorm.DB, error) {
 		return nil, fmt.Errorf("connect database: %w", err)
 	}
 
-	if err := db.AutoMigrate(&models.User{}, &models.RefreshToken{}); err != nil {
+	if err := db.AutoMigrate(
+		&models.User{},
+		&models.RefreshToken{},
+		&models.Session{},
+		&models.Message{},
+		&models.Score{},
+	); err != nil {
 		return nil, fmt.Errorf("migrate database: %w", err)
 	}
 

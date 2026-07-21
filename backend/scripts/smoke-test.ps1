@@ -61,4 +61,54 @@ try {
     }
 }
 
+Write-Host "==> create llm session"
+$sessionBody = @{
+    model_id = "gemma-2-2b-it-q4f16_1-MLC"
+    device_info = "smoke-test"
+    model_load_ms = 1200
+} | ConvertTo-Json
+$session = Invoke-RestMethod -Method Post -Uri "$BaseUrl/llm/sessions" -Headers $headers -ContentType "application/json" -Body $sessionBody
+$session | ConvertTo-Json -Depth 5
+$SessionId = $session.data.id
+
+Write-Host "==> create llm message"
+$messageBody = @{
+    role = "assistant"
+    content = "Hello from smoke test"
+    ttft_ms = 250
+    tokens_prompt = 12
+    tokens_completion = 8
+    tokens_per_sec = 18.5
+    total_ms = 900
+} | ConvertTo-Json
+$message = Invoke-RestMethod -Method Post -Uri "$BaseUrl/llm/sessions/$SessionId/messages" -Headers $headers -ContentType "application/json" -Body $messageBody
+$message | ConvertTo-Json -Depth 5
+$MessageId = $message.data.id
+
+Write-Host "==> create llm score"
+$scoreBody = @{
+    message_id = $MessageId
+    latency_score = 85
+    length_score = 70
+    format_score = 90
+    composite = 82
+    decision = "accept"
+} | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "$BaseUrl/llm/sessions/$SessionId/scores" -Headers $headers -ContentType "application/json" -Body $scoreBody | ConvertTo-Json -Depth 5
+
+Write-Host "==> get llm session detail"
+Invoke-RestMethod -Uri "$BaseUrl/llm/sessions/$SessionId" -Headers $headers | ConvertTo-Json -Depth 6
+
+Write-Host "==> list llm sessions"
+Invoke-RestMethod -Uri "$BaseUrl/llm/sessions?page=1&limit=10" -Headers $headers | ConvertTo-Json -Depth 5
+
+Write-Host "==> metrics summary"
+Invoke-RestMethod -Uri "$BaseUrl/llm/metrics/summary" -Headers $headers | ConvertTo-Json -Depth 5
+
+Write-Host "==> scores summary"
+Invoke-RestMethod -Uri "$BaseUrl/llm/scores/summary" -Headers $headers | ConvertTo-Json -Depth 5
+
+Write-Host "==> delete llm session"
+Invoke-RestMethod -Method Delete -Uri "$BaseUrl/llm/sessions/$SessionId" -Headers $headers | ConvertTo-Json -Depth 5
+
 Write-Host "Smoke test complete."
