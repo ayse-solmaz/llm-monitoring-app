@@ -3,8 +3,7 @@
 Browser-side Gemma inference via MLC-LLM/WebLLM with live raw metrics and deterministic decision scoring. Sessions, messages, and scores are persisted to a Go backend and visualized on a monitoring dashboard.
 
 ## Live URLs
-
-- **Frontend:** https://llm-monitoring-app.vercel.app
+ https://llm-monitoring-app.vercel.app
 
 **Requirements:** Chrome or Edge 113+ (WebGPU). On the Render free tier, the first API request after idle may take 30–60 seconds to wake the service.
 
