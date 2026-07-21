@@ -1,23 +1,16 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { apiFetch } from "@/lib/api";
+import Link from "next/link";
+import AuthForm from "@/components/auth/AuthForm";
+import AmbientBackground from "@/components/ui/AmbientBackground";
+import GlowShell from "@/components/ui/GlowShell";
 import { useAuthStore } from "@/store/authStore";
-import type { TokenData, UserData } from "@/lib/types";
-
-type Mode = "login" | "register";
 
 export default function AuthPage() {
   const router = useRouter();
   const accessToken = useAuthStore((s) => s.accessToken);
-  const setSession = useAuthStore((s) => s.setSession);
-  const [mode, setMode] = useState<Mode>("login");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (accessToken) {
@@ -27,109 +20,30 @@ export default function AuthPage() {
 
   if (accessToken) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-sm text-gray-500">
-        Redirecting…
+      <div className="sky-calm flex min-h-screen items-center justify-center font-system text-[15px] text-ink-muted">
+        <AmbientBackground />
+        <span className="relative-z">Redirecting…</span>
       </div>
     );
   }
 
-  async function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    try {
-      if (mode === "register") {
-        await apiFetch<UserData>(
-          "/auth/register",
-          {
-            method: "POST",
-            body: JSON.stringify({ email, password, name }),
-          },
-          false
-        );
-      }
-
-      const tokens = await apiFetch<TokenData>(
-        "/auth/login",
-        {
-          method: "POST",
-          body: JSON.stringify({ email, password }),
-        },
-        false
-      );
-
-      setSession(tokens.access_token, tokens.refresh_token);
-      router.replace("/chat");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Authentication failed");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md border rounded-lg p-6 flex flex-col gap-4">
-        <h1 className="text-xl font-semibold">LLM Monitoring App</h1>
-
-        <div className="flex gap-2 text-sm">
-          <button
-            type="button"
-            className={`px-3 py-1 rounded border ${mode === "login" ? "bg-gray-100" : ""}`}
-            onClick={() => setMode("login")}
-          >
-            Login
-          </button>
-          <button
-            type="button"
-            className={`px-3 py-1 rounded border ${mode === "register" ? "bg-gray-100" : ""}`}
-            onClick={() => setMode("register")}
-          >
-            Register
-          </button>
+    <div className="sky-calm min-h-screen font-system relative">
+      <AmbientBackground />
+      <header className="glass-header relative-z">
+        <div className="glass-header-inner">
+          <Link href="/" className="text-[17px] font-semibold text-ink">
+            LLM Monitoring
+          </Link>
+          <Link href="/" className="nav-link">
+            Back to home
+          </Link>
         </div>
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          {mode === "register" && (
-            <input
-              className="border rounded px-3 py-2 text-sm"
-              placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-          )}
-          <input
-            className="border rounded px-3 py-2 text-sm"
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            className="border rounded px-3 py-2 text-sm"
-            type="password"
-            placeholder="Password (min 8 characters)"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            minLength={8}
-            required
-          />
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="border rounded px-3 py-2 text-sm disabled:opacity-50"
-          >
-            {loading
-              ? "Please wait…"
-              : mode === "login"
-                ? "Login"
-                : "Register & Login"}
-          </button>
-        </form>
+      </header>
+      <div className="relative-z flex min-h-[calc(100vh-3.5rem)] items-center justify-center px-6 py-16">
+        <GlowShell variant="auth" className="w-full max-w-[420px]">
+          <AuthForm />
+        </GlowShell>
       </div>
     </div>
   );

@@ -43,7 +43,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
   if (!ready) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-sm text-gray-500">
+      <div className="min-h-screen flex items-center justify-center sky-calm text-[15px] text-ink-muted font-system">
         Checking session…
       </div>
     );

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
+import AmbientBackground from "@/components/ui/AmbientBackground";
 
 const links = [
   { href: "/chat", label: "Chat" },
@@ -27,39 +28,38 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       }
     }
     clearSession();
-    router.replace("/auth");
+    router.replace("/");
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="border-b px-4 py-3 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-6">
-          <span className="font-semibold text-sm">LLM Monitoring</span>
-          <nav className="flex gap-4 text-sm">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={
-                  pathname === link.href
-                    ? "font-medium underline"
-                    : "text-gray-600 hover:text-black"
-                }
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+    <div className="app-shell sky-calm font-system">
+      <AmbientBackground />
+      <header className="glass-header relative-z">
+        <div className="glass-header-inner">
+          <div className="flex items-center gap-8">
+            <Link href="/" className="text-[17px] font-semibold text-ink">
+              LLM Monitoring
+            </Link>
+            <nav className="flex gap-6">
+              {links.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={
+                    pathname === link.href ? "nav-link-active" : "nav-link"
+                  }
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
+          <button type="button" onClick={handleLogout} className="btn-secondary text-[14px]">
+            Logout
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="text-sm border rounded px-3 py-1"
-        >
-          Logout
-        </button>
       </header>
-      <main className="flex-1 p-4">{children}</main>
+      <main className="app-main">{children}</main>
     </div>
   );
 }

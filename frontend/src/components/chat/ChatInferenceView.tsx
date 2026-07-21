@@ -19,6 +19,7 @@ import type { LiveMetrics, ModelInfo, ModelsData } from "@/lib/types";
 import { checkWebGPUSupport, WEBGPU_FALLBACK_MESSAGE } from "@/lib/webgpu";
 import { useChatStore } from "@/store/chatStore";
 import ScoreCard from "@/components/chat/ScoreCard";
+import GlowShell from "@/components/ui/GlowShell";
 
 function newId(): string {
   return crypto.randomUUID();
@@ -36,57 +37,61 @@ function MetricRow({
   value: string | number | null;
 }) {
   return (
-    <div className="flex justify-between gap-2 text-sm">
-      <span className="text-gray-500">{label}</span>
-      <span className="font-mono text-right">{value ?? "—"}</span>
+    <div className="flex justify-between gap-2">
+      <span className="metric-label">{label}</span>
+      <span className="metric-value text-right">{value ?? "—"}</span>
     </div>
   );
 }
 
 function MetricsPanel({ metrics }: { metrics: LiveMetrics }) {
   return (
-    <aside className="rounded border bg-gray-50 p-4 flex flex-col gap-3 h-fit">
-      <h2 className="text-sm font-semibold">Live metrics</h2>
-      <MetricRow
-        label="TTFT"
-        value={
-          metrics.ttftMs !== null ? `${Math.round(metrics.ttftMs)} ms` : null
-        }
-      />
-      <MetricRow
-        label="Tokens/sec"
-        value={
-          metrics.tokensPerSec !== null
-            ? metrics.tokensPerSec.toFixed(1)
-            : null
-        }
-      />
-      <MetricRow label="Prompt tokens" value={metrics.promptTokens} />
-      <MetricRow label="Completion tokens" value={metrics.completionTokens} />
-      <MetricRow
-        label="Elapsed"
-        value={
-          metrics.elapsedMs > 0 ? `${Math.round(metrics.elapsedMs)} ms` : null
-        }
-      />
-      {metrics.modelLoadMs !== null && (
+    <GlowShell variant="card" className="p-5 flex flex-col gap-4 h-fit">
+      <div className="relative z-10 flex flex-col gap-4">
+        <h2 className="text-[13px] font-semibold uppercase tracking-wide text-ink-muted">
+          Live metrics
+        </h2>
         <MetricRow
-          label="Model load"
-          value={`${Math.round(metrics.modelLoadMs)} ms`}
+          label="TTFT"
+          value={
+            metrics.ttftMs !== null ? `${Math.round(metrics.ttftMs)} ms` : null
+          }
         />
-      )}
-      {metrics.runtimeStatsText && (
-        <div className="mt-1">
-          <p className="text-xs text-gray-500 mb-1">Runtime stats</p>
-          <pre className="text-[10px] leading-snug whitespace-pre-wrap font-mono bg-white border rounded p-2 max-h-40 overflow-auto">
-            {metrics.runtimeStatsText}
-          </pre>
-        </div>
-      )}
-      {metrics.isStreaming && (
-        <p className="text-xs text-blue-600 animate-pulse">Streaming…</p>
-      )}
-    </aside>
+        <MetricRow
+          label="Tokens/sec"
+          value={
+            metrics.tokensPerSec !== null
+              ? metrics.tokensPerSec.toFixed(1)
+              : null
+          }
+        />
+        <MetricRow label="Prompt tokens" value={metrics.promptTokens} />
+        <MetricRow label="Completion tokens" value={metrics.completionTokens} />
+        <MetricRow
+          label="Elapsed"
+          value={
+            metrics.elapsedMs > 0 ? `${Math.round(metrics.elapsedMs)} ms` : null
+          }
+        />
+        {metrics.modelLoadMs !== null && (
+          <MetricRow
+            label="Model load"
+            value={`${Math.round(metrics.modelLoadMs)} ms`}
+          />
+        )}
+        {metrics.runtimeStatsText && (
+          <div className="mt-1 pt-3 border-t border-white/35">
+            <p className="metric-label mb-2">Runtime stats</p>
+            <pre className="text-[11px] leading-snug whitespace-pre-wrap font-mono bg-white/40 rounded-xl p-3 max-h-40 overflow-auto text-ink">
+              {metrics.runtimeStatsText}
+            </pre>
+          </div>
+        )}
+        {metrics.isStreaming && (
+          <p className="text-[13px] font-medium text-navy-mid animate-pulse">Streaming…</p>
+        )}
+      </div>
+    </GlowShell>
   );
 }
 
@@ -393,46 +398,45 @@ export default function ChatInferenceView() {
     : 0;
 
   return (
-    <div className="max-w-6xl mx-auto flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-xl font-semibold">Chat</h1>
-        <p className="text-sm text-gray-600">
+        <h1 className="page-title">Chat</h1>
+        <p className="page-subtitle">
           Browser-side inference with live metrics and decision scoring
         </p>
       </div>
 
       {webgpuSupported === null && (
-        <p className="text-sm text-gray-500">Checking WebGPU support…</p>
+        <p className="text-[15px] text-ink-muted">Checking WebGPU support…</p>
       )}
 
       {webgpuSupported === false && (
-        <div className="rounded border border-amber-300 bg-amber-50 p-4 text-sm">
-          <p className="font-medium text-amber-900">
+        <div className="glass-card-static p-5 text-[15px]">
+          <p className="font-semibold text-ink">
             {WEBGPU_FALLBACK_MESSAGE.title}
           </p>
-          <p className="mt-2 text-amber-800">{WEBGPU_FALLBACK_MESSAGE.body}</p>
-          <ul className="mt-2 list-inside list-disc text-amber-800">
+          <p className="mt-2 text-ink-body">{WEBGPU_FALLBACK_MESSAGE.body}</p>
+          <ul className="mt-2 list-inside list-disc text-ink-body">
             {WEBGPU_FALLBACK_MESSAGE.browsers.map((b) => (
               <li key={b}>{b}</li>
             ))}
           </ul>
-          <p className="mt-2 text-amber-800">{WEBGPU_FALLBACK_MESSAGE.hint}</p>
+          <p className="mt-2 text-ink-body">{WEBGPU_FALLBACK_MESSAGE.hint}</p>
         </div>
       )}
 
       {webgpuSupported && (
         <>
-          {/* Subview 2a — model selector + load */}
-          <section className="rounded border p-4 flex flex-col gap-3">
-            <h2 className="text-sm font-semibold">Model</h2>
+          <section className="glass-card-static p-5 flex flex-col gap-4">
+            <h2 className="text-[17px] font-semibold text-ink">Model</h2>
             {modelsError && (
-              <p className="text-sm text-red-600">{modelsError}</p>
+              <p className="text-[15px] font-medium text-red-600">{modelsError}</p>
             )}
             <div className="flex flex-wrap items-end gap-3">
-              <label className="flex flex-col gap-1 text-sm">
-                <span className="text-gray-600">Model</span>
+              <label className="flex flex-col gap-1.5 text-[15px]">
+                <span className="text-ink-muted">Model</span>
                 <select
-                  className="border rounded px-3 py-2 min-w-[280px] text-sm"
+                  className="glass-select min-w-[280px]"
                   value={selectedModelId ?? ""}
                   onChange={(e) => setSelectedModelId(e.target.value)}
                   disabled={isModelLoading || isModelReady || isStreaming}
@@ -450,7 +454,7 @@ export default function ChatInferenceView() {
                 disabled={
                   !selectedModelId || isModelLoading || isModelReady || isStreaming
                 }
-                className="rounded border px-4 py-2 text-sm disabled:opacity-50"
+                className="btn-primary"
               >
                 {isModelReady
                   ? "Model loaded"
@@ -463,7 +467,7 @@ export default function ChatInferenceView() {
                   type="button"
                   onClick={clearChat}
                   disabled={isStreaming}
-                  className="rounded border px-3 py-2 text-sm text-gray-600 disabled:opacity-50"
+                  className="btn-secondary"
                 >
                   Clear chat
                 </button>
@@ -471,31 +475,27 @@ export default function ChatInferenceView() {
             </div>
 
             {(isModelLoading || loadProgress) && (
-              <div className="flex flex-col gap-1">
-                <div className="h-3 w-full overflow-hidden rounded bg-gray-200">
-                  <div
-                    className="h-full bg-blue-500 transition-all"
-                    style={{ width: `${progressPercent}%` }}
-                  />
+              <div className="flex flex-col gap-2">
+                <div className="progress-track">
+                  <div className="progress-fill" style={{ width: `${progressPercent}%` }} />
                 </div>
-                <p className="text-xs text-gray-600">
+                <p className="text-[13px] text-ink-muted">
                   {loadProgress?.text ?? "Starting…"} ({progressPercent}%)
                 </p>
               </div>
             )}
 
             {loadError && (
-              <p className="text-sm text-red-600">Load error: {loadError}</p>
+              <p className="text-[15px] font-medium text-red-600">Load error: {loadError}</p>
             )}
           </section>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4">
-            {/* Subview 2b — chat */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-6">
             <section className="flex flex-col gap-3 min-h-[420px]">
-              <div className="flex-1 rounded border bg-white flex flex-col">
-                <div className="flex-1 overflow-y-auto p-4 space-y-4 max-h-[480px]">
+              <div className="flex-1 glass-card-static flex flex-col overflow-hidden p-0">
+                <div className="flex-1 overflow-y-auto p-5 space-y-4 max-h-[480px]">
                   {messages.length === 0 && (
-                    <p className="text-sm text-gray-400">
+                    <p className="text-[15px] text-ink-muted">
                       Load a model, then send a message to start a multi-turn
                       session.
                     </p>
@@ -508,10 +508,8 @@ export default function ChatInferenceView() {
                       }
                     >
                       <div
-                        className={`inline-block max-w-[90%] rounded px-3 py-2 text-sm whitespace-pre-wrap ${
-                          msg.role === "user"
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-100 text-gray-900"
+                        className={`inline-block max-w-[90%] px-4 py-2.5 text-[15px] whitespace-pre-wrap ${
+                          msg.role === "user" ? "bubble-user" : "bubble-assistant"
                         }`}
                       >
                         {msg.content || (isStreaming ? "…" : "")}
@@ -525,9 +523,9 @@ export default function ChatInferenceView() {
                   ))}
                 </div>
 
-                <div className="border-t p-3 flex gap-2">
+                <div className="border-t border-white/35 p-4 flex gap-3">
                   <textarea
-                    className="flex-1 min-h-[72px] rounded border p-2 text-sm resize-y"
+                    className="glass-input flex-1 min-h-[72px] resize-y"
                     placeholder={
                       isModelReady
                         ? "Type a message…"
@@ -549,7 +547,7 @@ export default function ChatInferenceView() {
                     disabled={
                       !isModelReady || isStreaming || !input.trim()
                     }
-                    className="self-end rounded border px-4 py-2 text-sm disabled:opacity-50"
+                    className="btn-primary self-end shrink-0"
                   >
                     {isStreaming ? "Streaming…" : "Send"}
                   </button>
@@ -557,7 +555,6 @@ export default function ChatInferenceView() {
               </div>
             </section>
 
-            {/* Subview 2c — live metrics */}
             <MetricsPanel metrics={liveMetrics} />
           </div>
         </>

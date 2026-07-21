@@ -31,9 +31,23 @@ import type {
 } from "@/lib/types";
 
 const DECISION_COLORS = {
-  accept: "#16a34a",
-  review: "#d97706",
-  reject: "#dc2626",
+  accept: "#248a3d",
+  review: "#b45309",
+  reject: "#c41e1e",
+};
+
+const CHART_AXIS = "#001D39";
+const CHART_GRID = "rgba(73, 118, 159, 0.35)";
+const CHART_LINE = "#0A4174";
+const CHART_FILL = "#7BBDE8";
+const TOOLTIP_STYLE = {
+  backgroundColor: "rgba(255, 255, 255, 0.92)",
+  backdropFilter: "blur(12px)",
+  border: "1px solid rgba(255, 255, 255, 0.5)",
+  borderRadius: "12px",
+  boxShadow: "0 8px 32px rgba(0, 29, 57, 0.12)",
+  color: "#001D39",
+  fontSize: "13px",
 };
 
 function formatDate(iso: string): string {
@@ -174,24 +188,24 @@ export default function DashboardView() {
     : [];
 
   if (loading) {
-    return <p className="text-sm text-gray-500">Loading dashboard…</p>;
+    return <p className="text-[15px] text-ink-muted">Loading dashboard…</p>;
   }
 
   if (error) {
-    return <p className="text-sm text-red-600">{error}</p>;
+    return <p className="text-[15px] font-medium text-red-700">{error}</p>;
   }
 
   return (
-    <div className="max-w-6xl mx-auto flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-xl font-semibold">Dashboard</h1>
-        <p className="text-sm text-gray-600">
+        <h1 className="page-title">Dashboard</h1>
+        <p className="page-subtitle">
           Session history, metrics, and decision scoring summaries
         </p>
       </div>
 
       {metrics && (
-        <section className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatCard label="Sessions" value={String(metrics.session_count)} />
           <StatCard
             label="Avg TTFT"
@@ -213,23 +227,23 @@ export default function DashboardView() {
         </section>
       )}
 
-      <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <ChartCard title="Avg tokens/sec by session">
           {throughputSeries.length === 0 ? (
-            <p className="text-sm text-gray-400 p-4">No session data yet.</p>
+            <p className="text-[15px] text-ink-muted p-5">No session data yet.</p>
           ) : (
             <ResponsiveContainer width="100%" height={240}>
               <LineChart data={throughputSeries}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="label" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} />
-                <Tooltip />
+                <CartesianGrid stroke={CHART_GRID} strokeDasharray="3 3" />
+                <XAxis dataKey="label" tick={{ fontSize: 11, fill: CHART_AXIS }} />
+                <YAxis tick={{ fontSize: 11, fill: CHART_AXIS }} />
+                <Tooltip contentStyle={TOOLTIP_STYLE} />
                 <Line
                   type="monotone"
                   dataKey="avgTokensPerSec"
-                  stroke="#2563eb"
+                  stroke={CHART_LINE}
                   strokeWidth={2}
-                  dot={{ r: 3 }}
+                  dot={{ r: 3, fill: CHART_LINE }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -238,7 +252,7 @@ export default function DashboardView() {
 
         <ChartCard title="Decision distribution">
           {decisionChartData.every((d) => d.count === 0) ? (
-            <p className="text-sm text-gray-400 p-4">No scores yet.</p>
+            <p className="text-[15px] text-ink-muted p-5">No scores yet.</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <ResponsiveContainer width="100%" height={240}>
@@ -250,7 +264,7 @@ export default function DashboardView() {
                     cx="50%"
                     cy="50%"
                     outerRadius={70}
-                    label
+                    label={{ fill: CHART_AXIS, fontSize: 11 }}
                   >
                     {decisionChartData.map((entry) => (
                       <Cell
@@ -263,16 +277,16 @@ export default function DashboardView() {
                       />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip contentStyle={TOOLTIP_STYLE} />
                 </PieChart>
               </ResponsiveContainer>
               <ResponsiveContainer width="100%" height={240}>
                 <BarChart data={decisionChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
-                  <Tooltip />
-                  <Bar dataKey="count">
+                  <CartesianGrid stroke={CHART_GRID} strokeDasharray="3 3" />
+                  <XAxis dataKey="name" tick={{ fontSize: 11, fill: CHART_AXIS }} />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: CHART_AXIS }} />
+                  <Tooltip contentStyle={TOOLTIP_STYLE} />
+                  <Bar dataKey="count" fill={CHART_FILL} radius={[6, 6, 0, 0]}>
                     {decisionChartData.map((entry) => (
                       <Cell
                         key={entry.name}
@@ -289,80 +303,80 @@ export default function DashboardView() {
             </div>
           )}
           {scores?.avg_composite !== null && scores?.avg_composite !== undefined && (
-            <p className="text-xs text-gray-500 px-4 pb-3">
+            <p className="text-[13px] text-ink-muted px-5 pb-4">
               Avg composite score: {scores.avg_composite}
             </p>
           )}
         </ChartCard>
       </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-4">
-        <section className="rounded border bg-white">
-          <div className="border-b px-4 py-3">
-            <h2 className="text-sm font-semibold">Sessions</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
+        <section className="glass-card-static overflow-hidden p-0">
+          <div className="px-5 py-4 border-b border-white/35">
+            <h2 className="text-[17px] font-semibold text-ink">Sessions</h2>
           </div>
-          <ul className="divide-y max-h-[420px] overflow-y-auto">
+          <ul className="divide-y divide-white/30 max-h-[420px] overflow-y-auto">
             {sessions.length === 0 && (
-              <li className="p-4 text-sm text-gray-400">No sessions yet.</li>
+              <li className="p-5 text-[15px] text-ink-muted">No sessions yet.</li>
             )}
             {sessions.map((session) => (
               <li key={session.id}>
                 <button
                   type="button"
                   onClick={() => setSelectedId(session.id)}
-                  className={`w-full text-left px-4 py-3 text-sm hover:bg-gray-50 ${
-                    selectedId === session.id ? "bg-blue-50" : ""
+                  className={`session-item-hover w-full text-left px-5 py-3.5 text-[15px] transition-colors ${
+                    selectedId === session.id ? "session-item-selected" : ""
                   }`}
                 >
-                  <p className="font-medium truncate">{session.model_id}</p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="font-semibold text-ink truncate">{session.model_id}</p>
+                  <p className="text-[13px] text-ink-muted mt-0.5">
                     {formatDate(session.created_at)}
                   </p>
                 </button>
               </li>
             ))}
           </ul>
-          <div className="border-t px-4 py-2 flex items-center justify-between text-xs">
+          <div className="border-t border-white/35 px-5 py-3 flex items-center justify-between text-[13px] text-ink-muted">
             <button
               type="button"
               disabled={page <= 1}
               onClick={() => setPage((p) => p - 1)}
-              className="disabled:opacity-40"
+              className="btn-secondary px-3 py-1.5 text-[13px] disabled:opacity-40"
             >
               Previous
             </button>
-            <span>
+            <span className="font-medium text-ink">
               Page {page} / {totalPages}
             </span>
             <button
               type="button"
               disabled={page >= totalPages}
               onClick={() => setPage((p) => p + 1)}
-              className="disabled:opacity-40"
+              className="btn-secondary px-3 py-1.5 text-[13px] disabled:opacity-40"
             >
               Next
             </button>
           </div>
         </section>
 
-        <section className="rounded border bg-white p-4">
-          <h2 className="text-sm font-semibold mb-3">Session detail</h2>
+        <section className="glass-card-static p-5">
+          <h2 className="text-[17px] font-semibold text-ink mb-4">Session detail</h2>
           {!detail && (
-            <p className="text-sm text-gray-400">Select a session to view messages.</p>
+            <p className="text-[15px] text-ink-muted">Select a session to view messages.</p>
           )}
           {detail && (
-            <div className="space-y-4">
-              <div className="text-xs text-gray-500 grid grid-cols-2 gap-2">
+            <div className="space-y-5">
+              <div className="text-[13px] text-ink-muted grid grid-cols-2 gap-2">
                 <p>
-                  <span className="font-medium text-gray-700">Model:</span>{" "}
+                  <span className="font-medium text-ink">Model:</span>{" "}
                   {detail.model_id}
                 </p>
                 <p>
-                  <span className="font-medium text-gray-700">Created:</span>{" "}
+                  <span className="font-medium text-ink">Created:</span>{" "}
                   {formatDate(detail.created_at)}
                 </p>
                 <p className="col-span-2 truncate">
-                  <span className="font-medium text-gray-700">Device:</span>{" "}
+                  <span className="font-medium text-ink">Device:</span>{" "}
                   {detail.device_info || "—"}
                 </p>
               </div>
@@ -371,12 +385,14 @@ export default function DashboardView() {
                 {detail.messages.map((msg) => (
                   <div
                     key={msg.id}
-                    className={`rounded border p-3 text-sm ${
-                      msg.role === "user" ? "bg-blue-50" : "bg-gray-50"
+                    className={`rounded-[18px] p-4 text-[15px] ${
+                      msg.role === "user"
+                        ? "bg-sky/25 border border-white/40"
+                        : "bg-white/40 border border-white/45 backdrop-blur-sm"
                     }`}
                   >
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                      <span className="text-xs font-semibold uppercase text-gray-500">
+                    <div className="flex items-center justify-between gap-2 mb-1.5">
+                      <span className="text-[11px] font-semibold uppercase tracking-wide text-ink-muted">
                         {msg.role}
                       </span>
                       {msg.score && (
@@ -386,9 +402,9 @@ export default function DashboardView() {
                         />
                       )}
                     </div>
-                    <p className="whitespace-pre-wrap">{msg.content}</p>
+                    <p className="whitespace-pre-wrap text-ink">{msg.content}</p>
                     {msg.role === "assistant" && (
-                      <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2 text-[10px] text-gray-500">
+                      <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-2 text-[11px] text-ink-muted">
                         <span>TTFT: {msg.ttft_ms} ms</span>
                         <span>tok/s: {msg.tokens_per_sec.toFixed(1)}</span>
                         <span>prompt: {msg.tokens_prompt}</span>
@@ -413,9 +429,9 @@ export default function DashboardView() {
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded border bg-white p-3">
-      <p className="text-xs text-gray-500">{label}</p>
-      <p className="text-lg font-semibold font-mono">{value}</p>
+    <div className="glass-card p-5">
+      <p className="stat-value">{value}</p>
+      <p className="stat-label">{label}</p>
     </div>
   );
 }
@@ -428,9 +444,9 @@ function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="rounded border bg-white">
-      <div className="border-b px-4 py-3">
-        <h2 className="text-sm font-semibold">{title}</h2>
+    <div className="glass-card-static overflow-hidden p-0">
+      <div className="px-5 py-4 border-b border-white/35">
+        <h2 className="text-[17px] font-semibold text-ink">{title}</h2>
       </div>
       {children}
     </div>

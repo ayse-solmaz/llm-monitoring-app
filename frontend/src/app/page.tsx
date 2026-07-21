@@ -2,19 +2,26 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import LandingPage from "@/components/landing/LandingPage";
 import { useAuthStore } from "@/store/authStore";
 
 export default function HomePage() {
   const router = useRouter();
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated());
+  const accessToken = useAuthStore((s) => s.accessToken);
 
   useEffect(() => {
-    router.replace(isAuthenticated ? "/chat" : "/auth");
-  }, [isAuthenticated, router]);
+    if (accessToken) {
+      router.replace("/chat");
+    }
+  }, [accessToken, router]);
 
-  return (
-    <div className="min-h-screen flex items-center justify-center text-sm text-gray-500">
-      Redirecting…
-    </div>
-  );
+  if (accessToken) {
+    return (
+      <div className="min-h-screen flex items-center justify-center sky-calm text-[15px] text-ink-muted font-system">
+        Redirecting…
+      </div>
+    );
+  }
+
+  return <LandingPage />;
 }

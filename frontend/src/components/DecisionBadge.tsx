@@ -6,15 +6,15 @@ export const decisionStyles: Record<
 > = {
   accept: {
     label: "Accept",
-    className: "bg-green-100 text-green-900 border-green-300",
+    className: "bg-green-100 text-green-800",
   },
   review: {
     label: "Review",
-    className: "bg-amber-100 text-amber-900 border-amber-300",
+    className: "bg-amber-100 text-amber-900",
   },
   reject: {
     label: "Reject",
-    className: "bg-red-100 text-red-900 border-red-300",
+    className: "bg-red-100 text-red-800",
   },
 };
 
@@ -28,7 +28,7 @@ export default function DecisionBadge({
   const style = decisionStyles[decision];
   return (
     <span
-      className={`inline-flex items-center rounded border px-2 py-0.5 text-xs font-semibold uppercase ${style.className}`}
+      className={`inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium ${style.className}`}
     >
       {style.label}
       {composite !== undefined ? ` · ${composite}` : ""}
