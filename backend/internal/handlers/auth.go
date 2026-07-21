@@ -182,15 +182,10 @@ func (h *AuthHandler) Logout(c *gin.Context) {
 	}
 
 	tokenHash := auth.HashRefreshToken(req.RefreshToken)
-	result := h.db.Model(&models.RefreshToken{}).
+	if err := h.db.Model(&models.RefreshToken{}).
 		Where("token_hash = ? AND revoked = ?", tokenHash, false).
-		Update("revoked", true)
-	if result.Error != nil {
+		Update("revoked", true).Error; err != nil {
 		response.InternalError(c, "failed to revoke refresh token")
-		return
-	}
-	if result.RowsAffected == 0 {
-		response.NotFound(c, "refresh token not found")
 		return
 	}
 
@@ -259,7 +254,15 @@ func (h *AuthHandler) ChangePassword(c *gin.Context) {
 		return
 	}
 
-	if err := h.db.Model(&user).Update("password_hash", hash).Error; err != nil {
+	err = h.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&user).Update("password_hash", hash).Error; err != nil {
+			return err
+		}
+		return tx.Model(&models.RefreshToken{}).
+			Where("user_id = ? AND revoked = ?", user.ID, false).
+			Update("revoked", true).Error
+	})
+	if err != nil {
 		response.InternalError(c, "failed to update password")
 		return
 	}

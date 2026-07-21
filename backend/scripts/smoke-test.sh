@@ -49,6 +49,16 @@ curl -sS -X POST "$BASE_URL/auth/change-password" \
   -d "{\"current_password\":\"$PASSWORD\",\"new_password\":\"$NEW_PASSWORD\"}"
 echo
 
+echo "==> refresh with old token should 401 after password change"
+HTTP_CODE=$(curl -sS -o /dev/null -w "%{http_code}" -X POST "$BASE_URL/auth/refresh" \
+  -H "Content-Type: application/json" \
+  -d "{\"refresh_token\":\"$REFRESH_TOKEN\"}")
+if [ "$HTTP_CODE" != "401" ]; then
+  echo "Expected HTTP 401 but got $HTTP_CODE" >&2
+  exit 1
+fi
+echo "HTTP $HTTP_CODE"
+
 echo "==> login with new password"
 LOGIN2=$(curl -sS -X POST "$BASE_URL/auth/login" \
   -H "Content-Type: application/json" \
@@ -62,6 +72,11 @@ curl -sS -X POST "$BASE_URL/auth/logout" \
   -H "Content-Type: application/json" \
   -d "{\"refresh_token\":\"$REFRESH_TOKEN2\"}"
 echo
+
+echo "==> logout again (idempotent) should 200"
+curl -sS -o /dev/null -w "HTTP %{http_code}\n" -X POST "$BASE_URL/auth/logout" \
+  -H "Content-Type: application/json" \
+  -d "{\"refresh_token\":\"$REFRESH_TOKEN2\"}"
 
 echo "==> wrong password should 401"
 curl -sS -o /dev/null -w "HTTP %{http_code}\n" -X POST "$BASE_URL/auth/login" \

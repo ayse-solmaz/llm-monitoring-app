@@ -37,6 +37,20 @@ Write-Host "==> change-password"
 $changeBody = @{ current_password = $Password; new_password = $NewPassword } | ConvertTo-Json
 Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/change-password" -Headers $headers -ContentType "application/json" -Body $changeBody | ConvertTo-Json -Depth 5
 
+Write-Host "==> refresh with old token should 401 after password change"
+try {
+    $oldRefreshBody = @{ refresh_token = $RefreshToken } | ConvertTo-Json
+    $response = Invoke-WebRequest -Method Post -Uri "$BaseUrl/auth/refresh" -ContentType "application/json" -Body $oldRefreshBody -UseBasicParsing
+    throw "Expected HTTP 401 but got $($response.StatusCode)"
+} catch {
+    $httpResponse = $_.Exception.Response
+    if ($httpResponse -and [int]$httpResponse.StatusCode -eq 401) {
+        Write-Host "HTTP 401"
+    } else {
+        throw
+    }
+}
+
 Write-Host "==> login with new password"
 $login2Body = @{ email = $Email; password = $NewPassword } | ConvertTo-Json
 $login2 = Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/login" -ContentType "application/json" -Body $login2Body
@@ -45,6 +59,9 @@ $RefreshToken2 = $login2.data.refresh_token
 
 Write-Host "==> logout"
 $logoutBody = @{ refresh_token = $RefreshToken2 } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/logout" -ContentType "application/json" -Body $logoutBody | ConvertTo-Json -Depth 5
+
+Write-Host "==> logout again (idempotent) should 200"
 Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/logout" -ContentType "application/json" -Body $logoutBody | ConvertTo-Json -Depth 5
 
 Write-Host "==> wrong password should 401"
