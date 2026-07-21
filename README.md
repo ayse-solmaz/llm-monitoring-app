@@ -74,7 +74,7 @@ All JSON responses (except `/healthz`) use the envelope: `{ "data": …, "error"
 | 2 | Config | GET | `/config/models` | Public | Supported WebLLM model list |
 | 3 | Auth | POST | `/auth/register` | Public | Register (email + password, bcrypt) |
 | 4 | Auth | POST | `/auth/login` | Public | Login → access + refresh tokens |
-| 5 | Auth | POST | `/auth/refresh` | Public | Refresh access token |
+| 5 | Auth | POST | `/auth/refresh` | Public | Rotate refresh token → new access + refresh tokens |
 | 6 | Auth | POST | `/auth/logout` | Public | Revoke refresh token |
 | 7 | Auth | GET | `/auth/me` | **JWT** | Current user profile |
 | 8 | Auth | PUT | `/auth/me` | **JWT** | Update profile |
@@ -264,11 +264,27 @@ Used for frontend deployment monitoring and verification:
 
 > Initial file-upload deploy attempts via `deploy_to_vercel` were abandoned in favor of Git-linked deployment.
 
-### MF Academy MCP
+### MasterFabric Academy MCP
 
-**Status: not connected — pending institution credentials.**
+**Status: connected (local stdio server).**
 
-MF Academy MCP connection details were requested from the course provider per PRD §8. No MCP server URL or auth configuration was available during development. Render MCP and Vercel MCP were used for all deploy and ops tasks instead.
+Used for a full **auth and CORS security review** with mentor personas loaded via `get_mentor_persona`:
+
+- **staff-engineer** — production readiness, operability, maintainability
+- **security-coach** — AuthN/AuthZ, JWT/session handling, abuse controls, safe defaults
+
+Review scope: `backend/internal/handlers/auth.go`, JWT middleware, and CORS configuration in `backend/internal/middleware/middleware.go`.
+
+**17 findings** were identified across severity levels. All were implemented and verified live (local + production smoke tests):
+
+| Category | Implemented |
+|----------|-------------|
+| Session security | Refresh token rotation, revoke-all on password change, idempotent logout, token capping on login |
+| Abuse prevention | Per-IP rate limiting on `/auth/login` and `/auth/register` (10/min → 429) |
+| Input validation | Email regex + 254-char cap, password 8–128 chars, 1 MB body limit on auth routes |
+| CORS | `Access-Control-Max-Age: 86400` to reduce preflight overhead |
+
+Configured in `.cursor/mcp.json` as `masterfabric-academy`, running the local MCP server from the MasterFabric Academy `one-hundered-days` repo.
 
 ---
 
