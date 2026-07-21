@@ -68,7 +68,7 @@ func (h *LLMHandler) CreateSession(c *gin.Context) {
 		ModelLoadMs: req.ModelLoadMs,
 	}
 
-	if err := h.db.Create(&session).Error; err != nil {
+	if err := withCtx(c, h.db).Create(&session).Error; err != nil {
 		response.InternalError(c, "failed to create session")
 		return
 	}
@@ -95,14 +95,14 @@ func (h *LLMHandler) ListSessions(c *gin.Context) {
 	}
 
 	var total int64
-	if err := h.db.Model(&models.Session{}).Where("user_id = ?", userID).Count(&total).Error; err != nil {
+	if err := withCtx(c, h.db).Model(&models.Session{}).Where("user_id = ?", userID).Count(&total).Error; err != nil {
 		response.InternalError(c, "failed to count sessions")
 		return
 	}
 
 	var sessions []models.Session
 	offset := (page - 1) * limit
-	if err := h.db.Where("user_id = ?", userID).
+	if err := withCtx(c, h.db).Where("user_id = ?", userID).
 		Order("created_at DESC").
 		Offset(offset).
 		Limit(limit).
@@ -136,7 +136,7 @@ func (h *LLMHandler) GetSession(c *gin.Context) {
 	}
 
 	var session models.Session
-	if err := h.db.Preload("Messages", func(db *gorm.DB) *gorm.DB {
+	if err := withCtx(c, h.db).Preload("Messages", func(db *gorm.DB) *gorm.DB {
 		return db.Order("created_at ASC")
 	}).Preload("Messages.Score").
 		Where("id = ? AND user_id = ?", sessionID, userID).
@@ -163,7 +163,7 @@ func (h *LLMHandler) DeleteSession(c *gin.Context) {
 		return
 	}
 
-	result := h.db.Where("id = ? AND user_id = ?", sessionID, userID).Delete(&models.Session{})
+	result := withCtx(c, h.db).Where("id = ? AND user_id = ?", sessionID, userID).Delete(&models.Session{})
 	if result.Error != nil {
 		response.InternalError(c, "failed to delete session")
 		return
@@ -216,7 +216,7 @@ func (h *LLMHandler) CreateMessage(c *gin.Context) {
 		TotalMs:          req.TotalMs,
 	}
 
-	if err := h.db.Create(&message).Error; err != nil {
+	if err := withCtx(c, h.db).Create(&message).Error; err != nil {
 		response.InternalError(c, "failed to create message")
 		return
 	}
@@ -259,7 +259,7 @@ func (h *LLMHandler) CreateScore(c *gin.Context) {
 	}
 
 	var message models.Message
-	if err := h.db.Where("id = ? AND session_id = ?", req.MessageID, sessionID).
+	if err := withCtx(c, h.db).Where("id = ? AND session_id = ?", req.MessageID, sessionID).
 		First(&message).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			response.NotFound(c, "message not found in session")
@@ -270,7 +270,7 @@ func (h *LLMHandler) CreateScore(c *gin.Context) {
 	}
 
 	var existing models.Score
-	if err := h.db.Where("message_id = ?", req.MessageID).First(&existing).Error; err == nil {
+	if err := withCtx(c, h.db).Where("message_id = ?", req.MessageID).First(&existing).Error; err == nil {
 		response.Conflict(c, "score already exists for message")
 		return
 	} else if !errors.Is(err, gorm.ErrRecordNotFound) {
@@ -287,7 +287,7 @@ func (h *LLMHandler) CreateScore(c *gin.Context) {
 		Decision:     req.Decision,
 	}
 
-	if err := h.db.Create(&score).Error; err != nil {
+	if err := withCtx(c, h.db).Create(&score).Error; err != nil {
 		response.InternalError(c, "failed to create score")
 		return
 	}
@@ -309,7 +309,7 @@ func (h *LLMHandler) MetricsSummary(c *gin.Context) {
 	}
 
 	var result row
-	err := h.db.Raw(`
+	err := withCtx(c, h.db).Raw(`
 		SELECT
 			AVG(m.ttft_ms) AS avg_ttft,
 			AVG(m.tokens_per_sec) AS avg_tokens_per_sec,
@@ -342,7 +342,7 @@ func (h *LLMHandler) ScoresSummary(c *gin.Context) {
 		AvgComposite *float64
 	}
 	var avg avgRow
-	if err := h.db.Raw(`
+	if err := withCtx(c, h.db).Raw(`
 		SELECT AVG(sc.composite) AS avg_composite
 		FROM scores sc
 		INNER JOIN messages m ON m.id = sc.message_id
@@ -358,7 +358,7 @@ func (h *LLMHandler) ScoresSummary(c *gin.Context) {
 		Count    int64
 	}
 	var counts []countRow
-	if err := h.db.Raw(`
+	if err := withCtx(c, h.db).Raw(`
 		SELECT sc.decision, COUNT(*) AS count
 		FROM scores sc
 		INNER JOIN messages m ON m.id = sc.message_id
@@ -387,7 +387,7 @@ func (h *LLMHandler) ScoresSummary(c *gin.Context) {
 
 func (h *LLMHandler) loadOwnedSession(c *gin.Context, userID, sessionID uuid.UUID) (models.Session, bool) {
 	var session models.Session
-	if err := h.db.Where("id = ? AND user_id = ?", sessionID, userID).First(&session).Error; err != nil {
+	if err := withCtx(c, h.db).Where("id = ? AND user_id = ?", sessionID, userID).First(&session).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			response.NotFound(c, "session not found")
 			return models.Session{}, false

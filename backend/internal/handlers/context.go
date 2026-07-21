@@ -5,7 +5,12 @@ import (
 	"github.com/aysnu/llm-monitoring-app/backend/internal/response"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
+
+func withCtx(c *gin.Context, db *gorm.DB) *gorm.DB {
+	return db.WithContext(c.Request.Context())
+}
 
 func currentUserID(c *gin.Context) (uuid.UUID, bool) {
 	rawID, exists := c.Get(middleware.UserIDKey)

@@ -9,6 +9,11 @@ import (
 	"golang.org/x/time/rate"
 )
 
+const (
+	rateLimiterCleanupInterval = 10 * time.Minute
+	rateLimiterIdleTTL         = 30 * time.Minute
+)
+
 type ipLimiter struct {
 	limiter  *rate.Limiter
 	lastSeen time.Time
@@ -22,10 +27,28 @@ type IPRateLimiter struct {
 }
 
 func NewIPRateLimiter(requestsPerMinute, burst int) *IPRateLimiter {
-	return &IPRateLimiter{
+	l := &IPRateLimiter{
 		limiters: make(map[string]*ipLimiter),
 		r:        rate.Limit(float64(requestsPerMinute) / 60.0),
 		b:        burst,
+	}
+	go l.cleanupLoop()
+	return l
+}
+
+func (l *IPRateLimiter) cleanupLoop() {
+	ticker := time.NewTicker(rateLimiterCleanupInterval)
+	defer ticker.Stop()
+
+	for range ticker.C {
+		cutoff := time.Now().Add(-rateLimiterIdleTTL)
+		l.mu.Lock()
+		for ip, entry := range l.limiters {
+			if entry.lastSeen.Before(cutoff) {
+				delete(l.limiters, ip)
+			}
+		}
+		l.mu.Unlock()
 	}
 }
 

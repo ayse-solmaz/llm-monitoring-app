@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"net/http"
+	"time"
 
 	"github.com/aysnu/llm-monitoring-app/backend/internal/config"
 	"github.com/aysnu/llm-monitoring-app/backend/internal/database"
@@ -23,7 +25,15 @@ func main() {
 	}
 
 	r := router.New(cfg, db)
-	if err := r.Run(":" + cfg.Port); err != nil {
+
+	srv := &http.Server{
+		Addr:         ":" + cfg.Port,
+		Handler:      r,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 30 * time.Second,
+		IdleTimeout:  120 * time.Second,
+	}
+	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatalf("server: %v", err)
 	}
 }

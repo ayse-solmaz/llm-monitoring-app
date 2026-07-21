@@ -44,6 +44,7 @@ func New(cfg *config.Config, db *gorm.DB) *gin.Engine {
 		}
 
 		llm := v1.Group("/llm")
+		llm.Use(middleware.MaxBodySize(1 << 20))
 		llm.Use(middleware.JWTAuth(cfg.JWTSecret))
 		{
 			llm.POST("/sessions", llmHandler.CreateSession)

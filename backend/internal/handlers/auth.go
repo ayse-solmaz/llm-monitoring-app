@@ -23,8 +23,7 @@ const (
 )
 
 var (
-	emailRegex          = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
-	errInvalidRefresh   = errors.New("invalid refresh token")
+	emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
 )
 
 type AuthHandler struct {
@@ -99,7 +98,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		Name:         strings.TrimSpace(req.Name),
 	}
 
-	if err := h.db.Create(&user).Error; err != nil {
+	if err := withCtx(c, h.db).Create(&user).Error; err != nil {
 		if isDuplicateKeyError(err) {
 			response.Conflict(c, "email already registered")
 			return
@@ -120,7 +119,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 
 	email := normalizeEmail(req.Email)
 	var user models.User
-	if err := h.db.Where("email = ?", email).First(&user).Error; err != nil {
+	if err := withCtx(c, h.db).Where("email = ?", email).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			response.Unauthorized(c, "invalid email or password")
 			return
@@ -134,7 +133,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		return
 	}
 
-	tokens, err := h.issueTokens(user.ID)
+	tokens, err := h.issueTokens(c, user.ID)
 	if err != nil {
 		response.InternalError(c, "failed to issue tokens")
 		return
@@ -155,34 +154,37 @@ func (h *AuthHandler) Refresh(c *gin.Context) {
 	}
 
 	tokenHash := auth.HashRefreshToken(req.RefreshToken)
+
+	var stored models.RefreshToken
+	if err := withCtx(c, h.db).Where("token_hash = ?", tokenHash).First(&stored).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			response.Unauthorized(c, "invalid refresh token")
+			return
+		}
+		response.InternalError(c, "failed to refresh token")
+		return
+	}
+	if stored.Revoked || time.Now().After(stored.ExpiresAt) {
+		response.Unauthorized(c, "invalid refresh token")
+		return
+	}
+
+	accessToken, err := auth.GenerateAccessToken(stored.UserID, h.jwtSecret)
+	if err != nil {
+		response.InternalError(c, "failed to refresh token")
+		return
+	}
+	refreshToken, err := auth.GenerateRefreshToken()
+	if err != nil {
+		response.InternalError(c, "failed to refresh token")
+		return
+	}
+
 	var tokens tokenResponse
-	err := h.db.Transaction(func(tx *gorm.DB) error {
-		var stored models.RefreshToken
-		if err := tx.Where("token_hash = ?", tokenHash).First(&stored).Error; err != nil {
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				return errInvalidRefresh
-			}
-			return err
-		}
-
-		if stored.Revoked || time.Now().After(stored.ExpiresAt) {
-			return errInvalidRefresh
-		}
-
+	err = withCtx(c, h.db).Transaction(func(tx *gorm.DB) error {
 		if err := tx.Model(&stored).Update("revoked", true).Error; err != nil {
 			return err
 		}
-
-		accessToken, err := auth.GenerateAccessToken(stored.UserID, h.jwtSecret)
-		if err != nil {
-			return err
-		}
-
-		refreshToken, err := auth.GenerateRefreshToken()
-		if err != nil {
-			return err
-		}
-
 		newStored := models.RefreshToken{
 			UserID:    stored.UserID,
 			TokenHash: auth.HashRefreshToken(refreshToken),
@@ -192,7 +194,6 @@ func (h *AuthHandler) Refresh(c *gin.Context) {
 		if err := tx.Create(&newStored).Error; err != nil {
 			return err
 		}
-
 		tokens = tokenResponse{
 			AccessToken:  accessToken,
 			RefreshToken: refreshToken,
@@ -201,10 +202,6 @@ func (h *AuthHandler) Refresh(c *gin.Context) {
 		return nil
 	})
 	if err != nil {
-		if errors.Is(err, errInvalidRefresh) {
-			response.Unauthorized(c, "invalid refresh token")
-			return
-		}
 		response.InternalError(c, "failed to refresh token")
 		return
 	}
@@ -224,7 +221,7 @@ func (h *AuthHandler) Logout(c *gin.Context) {
 	}
 
 	tokenHash := auth.HashRefreshToken(req.RefreshToken)
-	if err := h.db.Model(&models.RefreshToken{}).
+	if err := withCtx(c, h.db).Model(&models.RefreshToken{}).
 		Where("token_hash = ? AND revoked = ?", tokenHash, false).
 		Update("revoked", true).Error; err != nil {
 		response.InternalError(c, "failed to revoke refresh token")
@@ -260,7 +257,7 @@ func (h *AuthHandler) UpdateMe(c *gin.Context) {
 		return
 	}
 
-	if err := h.db.Model(&user).Update("name", name).Error; err != nil {
+	if err := withCtx(c, h.db).Model(&user).Update("name", name).Error; err != nil {
 		response.InternalError(c, "failed to update profile")
 		return
 	}
@@ -296,7 +293,7 @@ func (h *AuthHandler) ChangePassword(c *gin.Context) {
 		return
 	}
 
-	err = h.db.Transaction(func(tx *gorm.DB) error {
+	err = withCtx(c, h.db).Transaction(func(tx *gorm.DB) error {
 		if err := tx.Model(&user).Update("password_hash", hash).Error; err != nil {
 			return err
 		}
@@ -318,7 +315,7 @@ func (h *AuthHandler) DeleteMe(c *gin.Context) {
 		return
 	}
 
-	err := h.db.Transaction(func(tx *gorm.DB) error {
+	err := withCtx(c, h.db).Transaction(func(tx *gorm.DB) error {
 		if err := tx.Where("user_id = ?", user.ID).Delete(&models.RefreshToken{}).Error; err != nil {
 			return err
 		}
@@ -332,22 +329,21 @@ func (h *AuthHandler) DeleteMe(c *gin.Context) {
 	response.OK(c, gin.H{"message": "account deleted"})
 }
 
-func (h *AuthHandler) issueTokens(userID uuid.UUID) (tokenResponse, error) {
+func (h *AuthHandler) issueTokens(c *gin.Context, userID uuid.UUID) (tokenResponse, error) {
+	accessToken, err := auth.GenerateAccessToken(userID, h.jwtSecret)
+	if err != nil {
+		return tokenResponse{}, err
+	}
+	refreshToken, err := auth.GenerateRefreshToken()
+	if err != nil {
+		return tokenResponse{}, err
+	}
+
 	var tokens tokenResponse
-	err := h.db.Transaction(func(tx *gorm.DB) error {
+	err = withCtx(c, h.db).Transaction(func(tx *gorm.DB) error {
 		if err := tx.Model(&models.RefreshToken{}).
 			Where("user_id = ? AND revoked = ?", userID, false).
 			Update("revoked", true).Error; err != nil {
-			return err
-		}
-
-		accessToken, err := auth.GenerateAccessToken(userID, h.jwtSecret)
-		if err != nil {
-			return err
-		}
-
-		refreshToken, err := auth.GenerateRefreshToken()
-		if err != nil {
 			return err
 		}
 
@@ -385,7 +381,7 @@ func (h *AuthHandler) currentUser(c *gin.Context) (models.User, bool) {
 	}
 
 	var user models.User
-	if err := h.db.First(&user, "id = ?", userID).Error; err != nil {
+	if err := withCtx(c, h.db).First(&user, "id = ?", userID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			response.NotFound(c, "user not found")
 			return models.User{}, false
