@@ -1,29 +1,36 @@
 # Build stage
-FROM golang:1.23-alpine AS builder
+FROM golang:1.26.4-alpine AS builder
+
+RUN apk add --no-cache git ca-certificates
 
 WORKDIR /app
-
-RUN apk add --no-cache ca-certificates git
 
 COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o server ./cmd/server
+RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/masterfabric ./cmd/server
 
-# Run stage (Alpine — small image with CA certs for Postgres TLS)
-FROM alpine:3.20
+# Runtime stage
+FROM alpine:3.24
 
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates tzdata \
+    && addgroup -S appgroup && adduser -S appuser -G appgroup
 
 WORKDIR /app
 
-COPY --from=builder /app/server .
+COPY --from=builder /bin/masterfabric /app/masterfabric
+COPY --from=builder /app/internal/infrastructure/postgres/migrations /app/migrations
 
-RUN adduser -D -g '' appuser
+ENV MIGRATIONS_DIR=/app/migrations
+ENV KAFKA_ENABLED=false
+ENV WS_ENABLED=false
+
+RUN chown -R appuser:appgroup /app
+
 USER appuser
 
 EXPOSE 8080
 
-CMD ["./server"]
+ENTRYPOINT ["/app/masterfabric"]

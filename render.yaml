@@ -1,10 +1,4 @@
-# Render Blueprint — backend API + Postgres
-# https://render.com/docs/blueprint-spec
-#
-# Postgres was created via MCP as llm-monitoring-db.
-# This file documents the web service config; link DATABASE_URL in the
-# Render Dashboard: Web Service → Environment → Link Database.
-
+﻿# Render Blueprint — masterfabric-go backend + Postgres
 services:
   - type: web
     name: llm-monitoring-api
@@ -20,6 +14,10 @@ services:
         generateValue: true
       - key: CORS_ORIGIN
         value: https://llm-monitoring-app.vercel.app
+      - key: KAFKA_ENABLED
+        value: "false"
+      - key: WS_ENABLED
+        value: "false"
       - key: BUILD_VERSION
         value: "0.1.0"
       - key: DATABASE_URL

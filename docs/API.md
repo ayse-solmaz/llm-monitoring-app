@@ -15,7 +15,7 @@ flowchart LR
   end
 
   subgraph Render["Render"]
-    GoAPI["Go API<br/>Gin + JWT"]
+    GoAPI["masterfabric-go API<br/>Chi + JWT + LLM module"]
     Postgres[("PostgreSQL")]
   end
 

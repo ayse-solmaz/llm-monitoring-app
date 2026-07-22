@@ -2,12 +2,14 @@
 
 ## Local setup
 
+Backend is **[masterfabric-go](https://github.com/gurkanfikretgunak/masterfabric-go)** (Chi, DDD, goose migrations). LLM monitoring routes are added as an app module; Kafka and WebSocket are disabled by default.
+
 ### Prerequisites
 
-- **Node.js** 20+
-- **Go** 1.22+
-- **Chrome or Edge** 113+ (WebGPU) for inference
-- Optional: **Docker** for local Postgres
+- **Go** 1.26+
+- **PostgreSQL** 16 (required — no SQLite)
+- Optional: **Docker** for local Postgres/Redis (`backend/deployments/docker-compose.yml`)
+- **Node.js** 20+ for frontend
 
 ### 1. Clone and configure
 
@@ -16,46 +18,41 @@ git clone https://github.com/ayse-solmaz/llm-monitoring-app.git
 cd llm-monitoring-app
 ```
 
-**Backend** — copy env and edit secrets:
+**Backend:**
 
 ```bash
 cp backend/.env.example backend/.env
+# Set DATABASE_URL to Postgres, JWT_SECRET (32+ bytes), CORS_ORIGIN
 ```
 
-**Frontend** — copy env:
+**Frontend:**
 
 ```bash
 cp frontend/.env.example frontend/.env.local
 ```
 
-### 2. Backend
-
-**SQLite (default, no Docker):**
+### 2. Backend (Postgres)
 
 ```bash
 cd backend
-# DATABASE_URL=dev.db in .env
-go run ./cmd/server
-```
+# Start Postgres (Docker):
+docker compose -f deployments/docker-compose.yml up -d postgres
 
-**PostgreSQL (Docker):**
+# Env example:
+# DATABASE_URL=postgres://masterfabric:masterfabric@localhost:5432/masterfabric?sslmode=disable
+# KAFKA_ENABLED=false
+# WS_ENABLED=false
 
-```bash
-cd backend
-docker compose up -d
-# Set DATABASE_URL=postgres://llm:llm@localhost:5432/llm_monitoring?sslmode=disable in .env
 go run ./cmd/server
 ```
 
 API: http://localhost:8080/api/v1
 
+Migrations run automatically on startup (goose).
+
 **Smoke test:**
 
 ```bash
-# Bash
-BASE_URL=http://localhost:8080/api/v1 ./backend/scripts/smoke-test.sh
-
-# PowerShell
 $env:BASE_URL = "http://localhost:8080/api/v1"
 ./backend/scripts/smoke-test.ps1
 ```
@@ -68,19 +65,21 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000 → register → `/chat` (inference) or `/spike` (standalone WebLLM demo).
+Open http://localhost:3000
 
 ### Environment variables
 
 | Variable | Where | Description |
 |----------|-------|-------------|
-| `DATABASE_URL` | Backend | `dev.db` (SQLite) or Postgres connection string |
-| `JWT_SECRET` | Backend | Secret for signing JWTs (minimum 32 bytes) |
-| `CORS_ORIGIN` | Backend | Allowed frontend origin (e.g. `http://localhost:3000`) |
-| `PORT` | Backend | HTTP port (default `8080`) |
+| `DATABASE_URL` | Backend | Postgres connection string (Render injects automatically) |
+| `JWT_SECRET` | Backend | JWT signing secret (minimum 32 bytes) |
+| `CORS_ORIGIN` / `CORS_ALLOWED_ORIGINS` | Backend | Allowed frontend origin |
+| `PORT` | Backend | HTTP port (default 8080) |
+| `KAFKA_ENABLED` | Backend | `false` for this app |
+| `WS_ENABLED` | Backend | `false` for this app |
 | `BUILD_VERSION` | Backend | Version string for `/version` |
 | `GIT_COMMIT` | Backend | Commit hash for `/version` |
-| `NEXT_PUBLIC_API_URL` | Frontend | Backend API prefix (e.g. `http://localhost:8080/api/v1`) |
+| `NEXT_PUBLIC_API_URL` | Frontend | Backend API prefix |
 
 ---
 
