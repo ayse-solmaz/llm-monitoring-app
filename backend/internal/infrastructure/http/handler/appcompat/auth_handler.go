@@ -17,8 +17,10 @@ import (
 	infraAuth "github.com/masterfabric-go/masterfabric/internal/infrastructure/auth"
 	iamRepo "github.com/masterfabric-go/masterfabric/internal/domain/iam/repository"
 	"github.com/masterfabric-go/masterfabric/internal/domain/iam/service"
+	"github.com/masterfabric-go/masterfabric/internal/domain/iam/model"
 	"github.com/masterfabric-go/masterfabric/internal/shared/middleware"
 	"github.com/masterfabric-go/masterfabric/internal/shared/response"
+	domainErr "github.com/masterfabric-go/masterfabric/internal/shared/errors"
 )
 
 const (
@@ -60,6 +62,15 @@ type loginBody struct {
 
 type refreshBody struct {
 	RefreshToken string `json:"refresh_token"`
+}
+
+type updateProfileBody struct {
+	Name string `json:"name"`
+}
+
+type changePasswordBody struct {
+	CurrentPassword string `json:"current_password"`
+	NewPassword     string `json:"new_password"`
 }
 
 type tokenData struct {
@@ -250,24 +261,137 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *AuthHandler) Me(w http.ResponseWriter, r *http.Request) {
+	user, ok := h.currentUser(w, r)
+	if !ok {
+		return
+	}
+	response.EnvelopeOK(w, toUserData(user))
+}
+
+func (h *AuthHandler) UpdateMe(w http.ResponseWriter, r *http.Request) {
+	user, ok := h.currentUser(w, r)
+	if !ok {
+		return
+	}
+
+	var req updateProfileBody
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		response.EnvelopeBadRequest(w, "invalid JSON body")
+		return
+	}
+
+	name := strings.TrimSpace(req.Name)
+	if name == "" {
+		response.EnvelopeBadRequest(w, "name is required")
+		return
+	}
+
+	first, last := splitName(name)
+	user.FirstName = first
+	user.LastName = last
+	if err := h.userRepo.Update(r.Context(), user); err != nil {
+		response.EnvelopeInternal(w, "failed to update profile")
+		return
+	}
+
+	response.EnvelopeOK(w, toUserData(user))
+}
+
+func (h *AuthHandler) ChangePassword(w http.ResponseWriter, r *http.Request) {
+	user, ok := h.currentUser(w, r)
+	if !ok {
+		return
+	}
+
+	var req changePasswordBody
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		response.EnvelopeBadRequest(w, "invalid JSON body")
+		return
+	}
+	if msg := validatePassword(req.NewPassword); msg != "" {
+		response.EnvelopeBadRequest(w, msg)
+		return
+	}
+
+	if err := h.jwt.VerifyPassword(user.PasswordHash, req.CurrentPassword); err != nil {
+		response.EnvelopeUnauthorized(w, "current password is incorrect")
+		return
+	}
+
+	hash, err := h.jwt.HashPassword(req.NewPassword)
+	if err != nil {
+		response.EnvelopeInternal(w, "failed to hash password")
+		return
+	}
+
+	tx, err := h.db.Begin(r.Context())
+	if err != nil {
+		response.EnvelopeInternal(w, "failed to update password")
+		return
+	}
+	defer tx.Rollback(r.Context())
+
+	if _, err := tx.Exec(r.Context(), `
+		UPDATE users SET password_hash = $1, updated_at = $2 WHERE id = $3
+	`, hash, time.Now().UTC(), user.ID); err != nil {
+		response.EnvelopeInternal(w, "failed to update password")
+		return
+	}
+	if _, err := tx.Exec(r.Context(), `
+		UPDATE refresh_tokens SET revoked = TRUE WHERE user_id = $1 AND revoked = FALSE
+	`, user.ID); err != nil {
+		response.EnvelopeInternal(w, "failed to update password")
+		return
+	}
+	if err := tx.Commit(r.Context()); err != nil {
+		response.EnvelopeInternal(w, "failed to update password")
+		return
+	}
+
+	response.EnvelopeOK(w, map[string]string{"message": "password updated"})
+}
+
+func (h *AuthHandler) DeleteMe(w http.ResponseWriter, r *http.Request) {
+	user, ok := h.currentUser(w, r)
+	if !ok {
+		return
+	}
+
+	if err := h.userRepo.Delete(r.Context(), user.ID); err != nil {
+		response.EnvelopeInternal(w, "failed to delete account")
+		return
+	}
+
+	response.EnvelopeOK(w, map[string]string{"message": "account deleted"})
+}
+
+func (h *AuthHandler) currentUser(w http.ResponseWriter, r *http.Request) (*model.User, bool) {
 	userID, ok := middleware.UserIDFromContext(r.Context())
 	if !ok {
 		response.EnvelopeUnauthorized(w, "not authenticated")
-		return
+		return nil, false
 	}
 
 	user, err := h.userRepo.GetByID(r.Context(), userID)
 	if err != nil {
-		response.EnvelopeUnauthorized(w, "not authenticated")
-		return
+		if errors.Is(err, domainErr.ErrNotFound) {
+			response.EnvelopeNotFound(w, "user not found")
+			return nil, false
+		}
+		response.EnvelopeInternal(w, "failed to lookup user")
+		return nil, false
 	}
 
-	response.EnvelopeOK(w, userData{
+	return user, true
+}
+
+func toUserData(user *model.User) userData {
+	return userData{
 		ID:        user.ID,
 		Email:     user.Email,
-		Name:      user.FullName(),
+		Name:      strings.TrimSpace(user.FirstName + " " + user.LastName),
 		CreatedAt: user.CreatedAt,
-	})
+	}
 }
 
 func (h *AuthHandler) issueTokens(ctx context.Context, userID uuid.UUID, email string) (tokenData, error) {

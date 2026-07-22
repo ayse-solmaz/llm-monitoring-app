@@ -115,6 +115,9 @@ func New(deps Dependencies) *chi.Mux {
 						r.Use(middleware.JWTAuth(deps.AuthService))
 					}
 					r.Get("/me", deps.AppCompatAuth.Me)
+					r.Put("/me", deps.AppCompatAuth.UpdateMe)
+					r.Post("/change-password", deps.AppCompatAuth.ChangePassword)
+					r.Delete("/me", deps.AppCompatAuth.DeleteMe)
 				})
 			} else if deps.IAMHandler != nil {
 				r.Post("/register", deps.IAMHandler.Register)
