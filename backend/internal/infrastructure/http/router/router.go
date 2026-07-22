@@ -131,7 +131,7 @@ func New(deps Dependencies) *chi.Mux {
 				r.Use(middleware.JWTAuth(deps.AuthService))
 			}
 
-			// LLM monitoring routes (JWT only — no RBAC)
+			// LLM monitoring routes (JWT only — no RBAC, no tenant middleware)
 			if deps.LLMHandler != nil {
 				r.Route("/llm", func(r chi.Router) {
 					r.Post("/sessions", deps.LLMHandler.CreateSession)
@@ -144,6 +144,12 @@ func New(deps Dependencies) *chi.Mux {
 					r.Get("/scores/summary", deps.LLMHandler.ScoresSummary)
 				})
 			}
+		})
+
+		r.Group(func(r chi.Router) {
+			if deps.AuthService != nil {
+				r.Use(middleware.JWTAuth(deps.AuthService))
+			}
 
 			// Tenant resolution middleware (with workspace support)
 			if deps.OrgRepo != nil {
@@ -151,15 +157,14 @@ func New(deps Dependencies) *chi.Mux {
 				r.Use(middleware.TenantResolverWithWorkspace(deps.OrgRepo, deps.WorkspaceRepo))
 			}
 
+			// Gateway pipeline (rate limiting, permission enforcement for managed endpoints)
+			if deps.GatewayPipeline != nil {
+				r.Use(deps.GatewayPipeline.Enforce)
+			}
+
 			// WebSocket endpoint (before gateway pipeline — upgrade requests are not HTTP proxy)
 			if deps.RealtimeHandler != nil {
 				r.Get("/ws", deps.RealtimeHandler.Connect)
-			}
-
-			// Gateway pipeline (rate limiting, permission enforcement for managed endpoints)
-			// Must be applied before specific routes so it can handle dynamic endpoints
-			if deps.GatewayPipeline != nil {
-				r.Use(deps.GatewayPipeline.Enforce)
 			}
 
 			// User routes
