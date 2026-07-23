@@ -86,6 +86,7 @@ $login2Body = @{ email = $Email; password = $NewPassword } | ConvertTo-Json
 $login2 = Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/login" -ContentType "application/json" -Body $login2Body
 $login2 | ConvertTo-Json -Depth 5
 $RefreshToken2 = $login2.data.refresh_token
+$headers = @{ Authorization = "Bearer $($login2.data.access_token)" }
 
 Write-Host "==> logout"
 $logoutBody = @{ refresh_token = $RefreshToken2 } | ConvertTo-Json

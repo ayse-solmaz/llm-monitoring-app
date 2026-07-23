@@ -46,6 +46,10 @@ func EnvelopeConflict(w http.ResponseWriter, message string) {
 	EnvelopeError(w, http.StatusConflict, "conflict", message)
 }
 
+func EnvelopeTooManyRequests(w http.ResponseWriter, message string) {
+	EnvelopeError(w, http.StatusTooManyRequests, "too_many_requests", message)
+}
+
 func EnvelopeInternal(w http.ResponseWriter, message string) {
 	EnvelopeError(w, http.StatusInternalServerError, "internal_error", message)
 }

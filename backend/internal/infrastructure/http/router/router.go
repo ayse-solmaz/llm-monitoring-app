@@ -106,10 +106,13 @@ func New(deps Dependencies) *chi.Mux {
 		// Frontend-compatible auth (envelope + refresh tokens)
 		r.Route("/auth", func(r chi.Router) {
 			if deps.AppCompatAuth != nil {
-				r.Post("/register", deps.AppCompatAuth.Register)
-				r.Post("/login", deps.AppCompatAuth.Login)
-				r.Post("/refresh", deps.AppCompatAuth.Refresh)
-				r.Post("/logout", deps.AppCompatAuth.Logout)
+				r.Group(func(r chi.Router) {
+					r.Use(middleware.RateLimitAuth())
+					r.Post("/register", deps.AppCompatAuth.Register)
+					r.Post("/login", deps.AppCompatAuth.Login)
+					r.Post("/refresh", deps.AppCompatAuth.Refresh)
+					r.Post("/logout", deps.AppCompatAuth.Logout)
+				})
 				r.Group(func(r chi.Router) {
 					if deps.AuthService != nil {
 						r.Use(middleware.JWTAuth(deps.AuthService))
