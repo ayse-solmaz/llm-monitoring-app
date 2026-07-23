@@ -88,13 +88,6 @@ $login2 | ConvertTo-Json -Depth 5
 $RefreshToken2 = $login2.data.refresh_token
 $headers = @{ Authorization = "Bearer $($login2.data.access_token)" }
 
-Write-Host "==> logout"
-$logoutBody = @{ refresh_token = $RefreshToken2 } | ConvertTo-Json
-Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/logout" -ContentType "application/json" -Body $logoutBody | ConvertTo-Json -Depth 5
-
-Write-Host "==> logout again (idempotent) should 200"
-Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/logout" -ContentType "application/json" -Body $logoutBody | ConvertTo-Json -Depth 5
-
 Write-Host "==> wrong password should 401"
 Expect-HttpStatus {
     $badBody = @{ email = $Email; password = "wrong-password" } | ConvertTo-Json
@@ -127,6 +120,16 @@ for ($i = 1; $i -le 20; $i++) {
 if (-not $got429) {
     throw "Expected HTTP 429 but rate limit was not triggered"
 }
+
+Write-Host "==> waiting for rate limit bucket refill"
+Start-Sleep -Seconds 13
+
+Write-Host "==> logout"
+$logoutBody = @{ refresh_token = $RefreshToken2 } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/logout" -ContentType "application/json" -Body $logoutBody | ConvertTo-Json -Depth 5
+
+Write-Host "==> logout again (idempotent) should 200"
+Invoke-RestMethod -Method Post -Uri "$BaseUrl/auth/logout" -ContentType "application/json" -Body $logoutBody | ConvertTo-Json -Depth 5
 
 Write-Host "==> create llm session"
 $sessionBody = @{
