@@ -3,6 +3,13 @@
  *
  * Weights: latency 0.4, length 0.3, format 0.3
  * Decision: accept >= 70, review >= 40, else reject
+ *
+ * Server-MLC metrics (preferred when chatting via nginx → Docker):
+ * - promptTokens / completionTokens from OpenAI `usage` on the stream
+ * - ttftMs = time until first streamed content token
+ * - tokensPerSec = completionTokens / decode_seconds (after first token)
+ *
+ * Browser WebLLM (/spike) may still estimate tokens client-side.
  */
 
 export type Decision = "accept" | "review" | "reject";

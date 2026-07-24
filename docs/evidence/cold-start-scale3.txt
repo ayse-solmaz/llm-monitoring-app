@@ -1,0 +1,36 @@
+﻿=== 15:07:08 ===
+NAME                              STATUS
+llm-monitoring-app-cadvisor-1     Up 19 minutes (healthy)
+llm-monitoring-app-grafana-1      Up 19 minutes
+llm-monitoring-app-mlc-1          Up 19 minutes (healthy)
+llm-monitoring-app-mlc-2          Up 5 seconds (health: starting)
+llm-monitoring-app-mlc-3          Up 5 seconds (health: starting)
+llm-monitoring-app-nginx-1        Up 18 minutes
+llm-monitoring-app-prometheus-1   Up 19 minutes
+=== 15:07:14 ===
+NAME                              STATUS
+llm-monitoring-app-cadvisor-1     Up 19 minutes (healthy)
+llm-monitoring-app-grafana-1      Up 19 minutes
+llm-monitoring-app-mlc-1          Up 19 minutes (healthy)
+llm-monitoring-app-mlc-2          Up 11 seconds (health: starting)
+llm-monitoring-app-mlc-3          Up 11 seconds (health: starting)
+llm-monitoring-app-nginx-1        Up 18 minutes
+llm-monitoring-app-prometheus-1   Up 19 minutes
+=== 15:07:20 ===
+NAME                              STATUS
+llm-monitoring-app-cadvisor-1     Up 19 minutes (healthy)
+llm-monitoring-app-grafana-1      Up 19 minutes
+llm-monitoring-app-mlc-1          Up 19 minutes (healthy)
+llm-monitoring-app-mlc-2          Up 17 seconds (health: starting)
+llm-monitoring-app-mlc-3          Up 17 seconds (health: starting)
+llm-monitoring-app-nginx-1        Up 18 minutes
+llm-monitoring-app-prometheus-1   Up 19 minutes
+=== 15:07:25 ===
+NAME                              STATUS
+llm-monitoring-app-cadvisor-1     Up 19 minutes (healthy)
+llm-monitoring-app-grafana-1      Up 19 minutes
+llm-monitoring-app-mlc-1          Up 19 minutes (healthy)
+llm-monitoring-app-mlc-2          Up 23 seconds (healthy)
+llm-monitoring-app-mlc-3          Up 23 seconds (healthy)
+llm-monitoring-app-nginx-1        Up 18 minutes
+llm-monitoring-app-prometheus-1   Up 19 minutes

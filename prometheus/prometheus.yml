@@ -1,0 +1,10 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  # MLC does not expose a /metrics endpoint — use cAdvisor for container-level
+  # CPU, memory, and network metrics for each mlc replica.
+  - job_name: cadvisor
+    static_configs:
+      - targets: ["cadvisor:8080"]

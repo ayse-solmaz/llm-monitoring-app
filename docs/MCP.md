@@ -67,6 +67,27 @@ npm run dev
 
 Open http://localhost:3000
 
+### 4. Server-side MLC (Docker CPU)
+
+The Chat UI calls **Docker MLC** through nginx (`NEXT_PUBLIC_MLC_URL`, default `http://localhost:8080`). Browser WebLLM remains at `/spike`.
+
+> **Build note:** The `mlc-server-spike` image is a pinned CPU build (~**98 minutes** first time: pip + HF LFS + `mlc_llm compile`). Compose uses the already-built image — do not add a `build:` directive.
+
+```powershell
+# From repo root (image must already exist: mlc-server-spike)
+docker compose up -d --scale mlc=3
+docker compose ps   # wait for mlc healthy
+```
+
+| Port | Service |
+|------|---------|
+| 8080 | nginx → MLC `/v1/chat/completions` |
+| 9090 | Prometheus (scrapes cAdvisor every 5s) |
+| 8081 | cAdvisor |
+| 3000 | Grafana (`admin`/`admin`) — conflicts with `npm run dev`; stop Grafana or move Next to another port when both local |
+
+See [SCALING_REPORT.md](SCALING_REPORT.md).
+
 ### Environment variables
 
 | Variable | Where | Description |
@@ -74,12 +95,13 @@ Open http://localhost:3000
 | `DATABASE_URL` | Backend | Postgres connection string (Render injects automatically) |
 | `JWT_SECRET` | Backend | JWT signing secret (minimum 32 bytes) |
 | `CORS_ORIGIN` / `CORS_ALLOWED_ORIGINS` | Backend | Allowed frontend origin |
-| `PORT` | Backend | HTTP port (default 8080) |
+| `PORT` | Backend | HTTP port (default 8080; use **8081** if Docker nginx owns 8080) |
 | `KAFKA_ENABLED` | Backend | `false` for this app |
 | `WS_ENABLED` | Backend | `false` for this app |
 | `BUILD_VERSION` | Backend | Version string for `/version` |
 | `GIT_COMMIT` | Backend | Commit hash for `/version` |
 | `NEXT_PUBLIC_API_URL` | Frontend | Backend API prefix |
+| `NEXT_PUBLIC_MLC_URL` | Frontend | Server MLC base (default `http://localhost:8080`) |
 
 ---
 
