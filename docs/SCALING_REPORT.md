@@ -129,7 +129,7 @@ upstream=172.18.0.7:8000  request_time=286.272
 upstream=172.18.0.2:8000  request_time=168.600
 ```
 
-Earlier proof file: [`evidence/nginx-access-1vs3.log`](evidence/nginx-access-1vs3.log).
+Earlier proof file: [`evidence/nginx-access-1vs3.txt`](evidence/nginx-access-1vs3.txt).
 
 ### 4.4 Cold start
 
