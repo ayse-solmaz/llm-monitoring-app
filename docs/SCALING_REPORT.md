@@ -1,17 +1,17 @@
 # MLC Scaling Report
 
-CPU-only horizontal scaling for Gemma 2B via MLC-LLM, fronted by nginx `least_conn`, observed with Prometheus + cAdvisor + Grafana.
+CPU-only horizontal scaling for Gemma 2B via MLC-LLM, fronted by a **FastAPI KPI gateway** + nginx `least_conn`, observed with Prometheus + cAdvisor + Grafana.
 
 **Host:** 16 logical cores, Intel integrated graphics (no discrete GPU).  
 **Image:** pre-built `mlc-server-spike` (~98 min first build — not rebuilt by compose).  
 **Per-replica limits:** 4 CPU, 6G RAM (constant across scale).  
-**Benchmark date:** 2026-07-24.
+**Benchmark date:** 2026-07-24 (load tests); gateway KPI layer added after.
 
 ---
 
 ## 1. Executive Summary
 
-Horizontal scaling **works** on this stack: nginx `least_conn` spreads concurrent chat completions across MLC replicas, and wall-clock throughput rises when going from 1 → 3 replicas.
+Horizontal scaling **works** on this stack: nginx `least_conn` spreads concurrent chat completions across MLC replicas, and wall-clock throughput rises when going from 1 → 3 replicas. A FastAPI **gateway** now sits in front of nginx so TTFT, tokens/sec, inflight, and E2E latency are exported on `/metrics` for Prometheus (pull model).
 
 | Metric | 1 replica | 3 replicas | Change |
 |--------|-----------|------------|--------|
@@ -33,34 +33,45 @@ Horizontal scaling **works** on this stack: nginx `least_conn` spreads concurren
 
 ```mermaid
 flowchart LR
-  Client["Client / loadtest.ps1 / Next.js Chat"]
-  Nginx["nginx :8080<br/>least_conn · streaming · CORS"]
-  M1["mlc replica 1<br/>:8000 · 4 CPU · 6G"]
+  Client["Client / loadtest / Next.js Chat"]
+  GW["mlc-gateway :8080<br/>FastAPI · KPI /metrics"]
+  Nginx["nginx<br/>least_conn · streaming"]
+  M1["mlc replica 1"]
   M2["mlc replica 2"]
   M3["mlc replica 3"]
   Cad["cAdvisor :8081"]
   Prom["Prometheus :9090<br/>scrape 5s"]
   Graf["Grafana :3000"]
 
-  Client --> Nginx
+  Client --> GW
+  GW --> Nginx
   Nginx --> M1
   Nginx --> M2
   Nginx --> M3
+  GW -.->|pull /metrics| Prom
   Cad --> Prom
   Prom --> Graf
 ```
 
 | Component | Role |
 |-----------|------|
-| **nginx** | Single entry; Docker DNS + `least_conn`; `proxy_buffering off`; 300s timeouts; CORS for browser |
-| **mlc** | OpenAI-compatible `/v1/chat/completions`; CPU Gemma 2B |
-| **cAdvisor** | Per-container CPU / memory / network (**MLC has no `/metrics`**) |
-| **Prometheus** | Scrapes cAdvisor every 5 s |
-| **Grafana** | Dashboard `mlc-scaling-cadvisor` |
+| **gateway** | Public entry (`:8080`); forces `stream=true`; measures TTFT / E2E / tok/s / inflight; `/metrics` |
+| **nginx** | Internal LB only; Docker DNS + `least_conn`; 300s timeouts; streaming |
+| **mlc** | OpenAI-compatible `/v1/chat/completions`; CPU Gemma 2B `q4f16_1` |
+| **cAdvisor** | Per-container CPU / memory / network |
+| **Prometheus** | Scrapes **gateway** + **cAdvisor** every 5 s (pull — nothing pushes to Grafana) |
+| **Grafana** | Dashboard with RPS, p95 latency, p95 TTFT, inflight, tok/s, error rate, MLC count, CPU |
 
-### MLC does not expose Prometheus metrics
+### LLM KPIs published by the gateway
 
-Application-level TTFT / tokens-sec are **not** scraped from MLC. Container metrics come from cAdvisor. Chat UI computes TTFT / tokens-sec from the streamed OpenAI response.
+| Metric | Type | Meaning |
+|--------|------|---------|
+| `llm_requests_total{status}` | Counter | Requests (ok/error) |
+| `llm_output_tokens_total` | Counter | Completion tokens |
+| `llm_requests_inflight` | Gauge | Saturation / concurrency |
+| `llm_request_duration_seconds` | Histogram | End-to-end latency |
+| `llm_ttft_seconds` | Histogram | Time to first content token |
+| `llm_tokens_per_second` | Histogram | Tokens / decode seconds after TTFT |
 
 ---
 
@@ -148,7 +159,54 @@ Until healthy, nginx can return 502/503 — always wait for `docker compose ps` 
 
 ---
 
-## 5. Limitations & Future Work
+## 5. Theory (no extra code — exam / report topics)
+
+### 5.1 Autoscaling: threshold, cooldown, flapping
+
+- **Scale up** when a signal crosses a threshold (CPU, inflight requests, queue depth).
+- **Cooldown / hysteresis** — wait N seconds before acting again so one spike does not create 10 pods.
+- **Flapping** — metrics oscillating around the threshold cause endless create/destroy; hysteresis + separate scale-down threshold fix this.
+- This repo demos scale **manually** (`--scale mlc=N`). Cloud automation is HPA/KEDA (below).
+
+### 5.2 API Gateway vs Load Balancer
+
+| | Load balancer | API Gateway |
+|--|---------------|-------------|
+| Job | Distribute traffic | Auth, rate limit, routing, often LB too |
+| Here | nginx `least_conn` | FastAPI gateway (KPI + CORS + stream policy) |
+
+### 5.3 Cold start
+
+New replica must load weights (~1.3–1.8 GB) and pass healthchecks before it should receive traffic. Scaling up and immediately load-testing yields 502s. Always wait for `healthy`. Shared **named volumes** for weights reduce duplicate downloads; this spike still bakes weights into the image (trade-off: simpler CPU demo, larger image).
+
+### 5.4 How MLC splits / runs the model
+
+- **Quantization `q4f16_1`:** weights ~4-bit, activations float16 — smaller RAM, faster CPU/GPU path than full precision.
+- **Tensor / pipeline parallelism:** split layers or tensors across GPUs (not used here — single CPU device).
+- **Continuous batching:** one engine serves many in-flight requests by batching decode steps; raises single-container concurrency until KV-cache / CPU saturates. Horizontal replicas add *more* engines when one is saturated.
+
+### 5.5 Logs vs metrics vs traces
+
+| Signal | Answers | This project |
+|--------|---------|--------------|
+| Metrics | How many / how fast / how wrong | Gateway + cAdvisor → Prometheus → Grafana |
+| Logs | Why (text events) | Docker / nginx stdout (not centralized) |
+| Traces | Where time went across services | Not implemented |
+
+### 5.6 Cloud path (if this left the laptop)
+
+- **Deployment** — ReplicaSet of MLC pods + gateway Deployment  
+- **HPA** — scale MLC on CPU or custom metric (`llm_requests_inflight`)  
+- **KEDA** — scale on queue length / Prometheus query  
+- **GPU node pool** — one replica ≈ one GPU for real throughput; multi-replica on one GPU mostly buys concurrency, not 3× speed  
+
+### 5.7 Shared volumes vs “new baby” containers
+
+Each scaled container is a new process (“born empty”). If every replica carried its own copy of weights/DB, you waste disk and cold-start longer. Shared **volume** = same files, many readers. Postgres stays a separate service; MLC replicas stay **stateless** request handlers.
+
+---
+
+## 6. Limitations & Future Work
 
 - **CPU bottleneck** — scaling adds parallel slots, not faster tokens.
 - **No MLC Prometheus metrics** — need sidecar or nginx log exporters for TTFT histograms.
@@ -158,7 +216,7 @@ Until healthy, nginx can return 502/503 — always wait for `docker compose ps` 
 
 ---
 
-## 6. Conclusion
+## 7. Conclusion
 
 Horizontal scaling with **nginx `least_conn` + N MLC CPU replicas** is proven: **~2.6× throughput** and **~56% shorter** batch wall time from 1 → 3 replicas, with multi-IP `upstream_addr` evidence.
 
@@ -174,13 +232,15 @@ The remaining ceiling is **hardware**. For interactive product UX, prefer **GPU 
 cd C:\Users\aysnu\llm-monitoring-app
 docker compose up -d --scale mlc=3
 .\scripts\loadtest.ps1 -Total 6 -Concurrent 3
+curl.exe -s http://localhost:8080/metrics | Select-String "llm_"
 docker compose logs nginx --no-color | Select-String "upstream="
 docker compose down
 ```
 
 | Service | URL |
 |---------|-----|
-| MLC via nginx | http://localhost:8080/v1/chat/completions |
+| Chat via **gateway** | http://localhost:8080/v1/chat/completions |
+| Gateway `/metrics` | http://localhost:8080/metrics |
 | Prometheus targets | http://localhost:9090/targets |
 | Grafana | http://localhost:3000 (admin / admin) |
 | Dashboard | http://localhost:3000/d/mlc-scaling-cadvisor |

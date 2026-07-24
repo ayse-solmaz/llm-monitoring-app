@@ -8,61 +8,65 @@
     {
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": {
-            "axisBorderShow": false,
-            "axisCenteredZero": false,
-            "drawStyle": "line",
-            "fillOpacity": 20,
-            "lineWidth": 1,
-            "showPoints": "never",
-            "stacking": { "mode": "none" }
-          },
-          "unit": "percentunit"
-        },
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "reqps" },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
-      "id": 1,
-      "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi" } },
+      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 0 },
+      "id": 10,
       "targets": [
         {
-          "expr": "sum by (container_label_com_docker_compose_service) (rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_service=~\"mlc|nginx|cadvisor|prometheus|grafana\", id=~\"/docker/.+\"}[5m]))",
-          "legendFormat": "{{container_label_com_docker_compose_service}}",
+          "expr": "sum(rate(llm_requests_total[1m]))",
+          "legendFormat": "RPS",
           "refId": "A"
         }
       ],
-      "title": "Per-container CPU usage (rate)",
+      "title": "RPS (chat completions)",
       "type": "timeseries"
     },
     {
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "fieldConfig": {
-        "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": {
-            "axisBorderShow": false,
-            "drawStyle": "line",
-            "fillOpacity": 20,
-            "lineWidth": 1,
-            "showPoints": "never"
-          },
-          "unit": "bytes"
-        },
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "s" },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
-      "id": 2,
-      "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi" } },
+      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 0 },
+      "id": 11,
       "targets": [
         {
-          "expr": "container_memory_usage_bytes{container_label_com_docker_compose_service=~\"mlc|nginx|cadvisor|prometheus|grafana\", id=~\"/docker/.+\"}",
-          "legendFormat": "{{container_label_com_docker_compose_service}}",
+          "expr": "histogram_quantile(0.95, sum(rate(llm_request_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "p95 E2E",
           "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(llm_request_duration_seconds_bucket[5m])) by (le))",
+          "legendFormat": "p50 E2E",
+          "refId": "B"
         }
       ],
-      "title": "Per-container memory usage",
+      "title": "End-to-end latency (histogram_quantile)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "s" },
+        "overrides": []
+      },
+      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 0 },
+      "id": 12,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(llm_ttft_seconds_bucket[5m])) by (le))",
+          "legendFormat": "p95 TTFT",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(llm_ttft_seconds_bucket[5m])) by (le))",
+          "legendFormat": "p50 TTFT",
+          "refId": "B"
+        }
+      ],
+      "title": "TTFT (time to first token)",
       "type": "timeseries"
     },
     {
@@ -70,22 +74,68 @@
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "thresholds" },
-          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "yellow", "value": 2 }, { "color": "red", "value": 5 }] },
           "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 8 },
-      "id": 3,
-      "options": { "colorMode": "value", "graphMode": "area", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false } },
+      "gridPos": { "h": 5, "w": 6, "x": 0, "y": 7 },
+      "id": 13,
+      "options": { "colorMode": "value", "graphMode": "area", "reduceOptions": { "calcs": ["lastNotNull"] } },
       "targets": [
         {
-          "expr": "count(count by (container_label_com_docker_compose_service) (container_last_seen{container_label_com_docker_compose_service=~\"mlc|nginx|cadvisor|prometheus|grafana\", id=~\"/docker/.+\"}))",
-          "legendFormat": "containers",
+          "expr": "llm_requests_inflight",
+          "legendFormat": "inflight",
           "refId": "A"
         }
       ],
-      "title": "Monitored container count",
+      "title": "Active requests (inflight)",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "cps" },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 10, "x": 6, "y": 7 },
+      "id": 14,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(llm_tokens_per_second_bucket[5m])) by (le))",
+          "legendFormat": "p50 tok/s",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(llm_output_tokens_total[1m])",
+          "legendFormat": "output token rate",
+          "refId": "B"
+        }
+      ],
+      "title": "Token generation speed",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "red", "value": 0.05 }] },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 5, "w": 8, "x": 16, "y": 7 },
+      "id": 15,
+      "options": { "colorMode": "value", "graphMode": "area", "reduceOptions": { "calcs": ["lastNotNull"] } },
+      "targets": [
+        {
+          "expr": "sum(rate(llm_requests_total{status=\"error\"}[5m])) / clamp_min(sum(rate(llm_requests_total[5m])), 1e-9)",
+          "legendFormat": "error rate",
+          "refId": "A"
+        }
+      ],
+      "title": "Error rate",
       "type": "stat"
     },
     {
@@ -93,70 +143,54 @@
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
-          "custom": { "drawStyle": "line", "fillOpacity": 10, "lineWidth": 1, "showPoints": "never" },
-          "unit": "Bps"
+          "custom": { "drawStyle": "line", "fillOpacity": 20, "lineWidth": 1, "showPoints": "never" },
+          "unit": "percentunit"
         },
         "overrides": []
       },
-      "gridPos": { "h": 6, "w": 16, "x": 8, "y": 8 },
-      "id": 4,
-      "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi" } },
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 12 },
+      "id": 1,
       "targets": [
         {
-          "expr": "sum by (container_label_com_docker_compose_service) (rate(container_network_receive_bytes_total{container_label_com_docker_compose_service=~\"mlc|nginx\", id=~\"/docker/.+\"}[5m]))",
-          "legendFormat": "{{container_label_com_docker_compose_service}} rx",
+          "expr": "sum by (container_label_com_docker_compose_service) (rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_service=~\"mlc|nginx|gateway|cadvisor|prometheus|grafana\", id=~\"/docker/.+\"}[5m]))",
+          "legendFormat": "{{container_label_com_docker_compose_service}}",
           "refId": "A"
-        },
-        {
-          "expr": "sum by (container_label_com_docker_compose_service) (rate(container_network_transmit_bytes_total{container_label_com_docker_compose_service=~\"mlc|nginx\", id=~\"/docker/.+\"}[5m]))",
-          "legendFormat": "{{container_label_com_docker_compose_service}} tx",
-          "refId": "B"
         }
       ],
-      "title": "Network I/O (mlc + nginx)",
+      "title": "Per-container CPU usage (cAdvisor)",
       "type": "timeseries"
     },
     {
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "fieldConfig": {
         "defaults": {
-          "color": { "mode": "palette-classic" },
-          "custom": { "drawStyle": "line", "fillOpacity": 10, "lineWidth": 1, "showPoints": "never" },
-          "unit": "s"
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "blue", "value": null }] },
+          "unit": "short"
         },
         "overrides": []
       },
-      "gridPos": { "h": 7, "w": 24, "x": 0, "y": 14 },
-      "id": 5,
-      "options": { "legend": { "displayMode": "list", "placement": "bottom" }, "tooltip": { "mode": "multi" } },
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 12 },
+      "id": 16,
+      "options": { "colorMode": "value", "graphMode": "area", "reduceOptions": { "calcs": ["lastNotNull"] } },
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum(rate(prometheus_http_request_duration_seconds_bucket{job=\"cadvisor\"}[5m])) by (le))",
-          "legendFormat": "p50 scrape",
+          "expr": "count(container_last_seen{container_label_com_docker_compose_service=\"mlc\", id=~\"/docker/.+\"})",
+          "legendFormat": "mlc replicas",
           "refId": "A"
-        },
-        {
-          "expr": "histogram_quantile(0.95, sum(rate(prometheus_http_request_duration_seconds_bucket{job=\"cadvisor\"}[5m])) by (le))",
-          "legendFormat": "p95 scrape",
-          "refId": "B"
-        },
-        {
-          "expr": "histogram_quantile(0.99, sum(rate(prometheus_http_request_duration_seconds_bucket{job=\"cadvisor\"}[5m])) by (le))",
-          "legendFormat": "p99 scrape",
-          "refId": "C"
         }
       ],
-      "title": "Prometheus scrape latency (cadvisor job) — histogram_quantile",
-      "type": "timeseries"
+      "title": "Running MLC container count",
+      "type": "stat"
     }
   ],
   "refresh": "5s",
   "schemaVersion": 39,
-  "tags": ["mlc", "scaling", "cadvisor"],
+  "tags": ["mlc", "scaling", "kpi", "gateway"],
   "templating": { "list": [] },
   "time": { "from": "now-15m", "to": "now" },
   "timezone": "browser",
   "title": "MLC Scaling (cAdvisor)",
   "uid": "mlc-scaling-cadvisor",
-  "version": 1
+  "version": 2
 }

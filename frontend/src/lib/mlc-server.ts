@@ -1,5 +1,6 @@
 /**
- * Server-side MLC-LLM client (OpenAI-compatible via nginx :8080).
+ * Server-side MLC-LLM client via KPI gateway (:8080).
+ * Flow: browser → FastAPI gateway → nginx least_conn → MLC replicas.
  * Browser WebLLM remains on /spike only.
  */
 

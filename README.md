@@ -20,29 +20,32 @@ LLM monitoring and deterministic decision scoring. The main **Chat** path runs *
 
 ## Local server-side MLC (Docker)
 
-MLC now runs **on the server** (Docker, CPU inference) — not only in the browser.
+MLC runs **on the server** (Docker, CPU). Public entry is the **KPI gateway**:
+
+```
+Client → gateway:8080 → nginx (least_conn) → mlc×N
+              ↓ /metrics
+         Prometheus → Grafana
+```
 
 ```powershell
 cd C:\Users\aysnu\llm-monitoring-app
-
-# Start nginx + 3 MLC replicas + Prometheus + cAdvisor + Grafana
 docker compose up -d --scale mlc=3
-
-# Wait until all mlc containers are healthy
-docker compose ps
+docker compose ps   # wait until mlc healthy
 ```
 
 | Service | URL |
 |---------|-----|
-| MLC (via nginx) | http://localhost:8080/v1/chat/completions |
+| Chat API (gateway) | http://localhost:8080/v1/chat/completions |
+| Gateway metrics | http://localhost:8080/metrics |
+| Gateway health | http://localhost:8080/healthz |
 | Prometheus | http://localhost:9090 |
 | Prometheus targets | http://localhost:9090/targets |
 | cAdvisor | http://localhost:8081 |
 | Grafana | http://localhost:3000 (`admin` / `admin`) |
 | Dashboard | http://localhost:3000/d/mlc-scaling-cadvisor |
 
-Frontend chat talks to `NEXT_PUBLIC_MLC_URL` (default `http://localhost:8080`).  
-If Go API also needs a local port, use `PORT=8081` so it does not clash with nginx `:8080`.
+Frontend: `NEXT_PUBLIC_MLC_URL=http://localhost:8080` (gateway). Use Next on **:3002** if Grafana owns :3000.
 
 ```powershell
 # Load test (3 concurrent ≈ replica count)

@@ -3,8 +3,13 @@ global:
   evaluation_interval: 5s
 
 scrape_configs:
-  # MLC does not expose a /metrics endpoint — use cAdvisor for container-level
-  # CPU, memory, and network metrics for each mlc replica.
+  # FastAPI KPI gateway — TTFT, tokens/sec, inflight, E2E latency (pull model).
+  - job_name: mlc-gateway
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["gateway:8080"]
+
+  # Container-level CPU / memory / network (MLC itself has no /metrics).
   - job_name: cadvisor
     static_configs:
       - targets: ["cadvisor:8080"]
