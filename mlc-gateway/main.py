@@ -68,10 +68,29 @@ app.add_middleware(
         "https://llm-monitoring-app-098765467890.vercel.app",
     ],
     allow_origin_regex=r"https://llm-monitoring-app.*\.vercel\.app",
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def add_private_network_header(request: Request, call_next):
+    # Chrome Private Network Access preflights (some browsers).
+    if request.method == "OPTIONS" and request.headers.get(
+        "access-control-request-private-network"
+    ):
+        response = Response(status_code=204)
+        origin = request.headers.get("origin", "")
+        if origin:
+            response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Access-Control-Allow-Private-Network"] = "true"
+        response.headers["Access-Control-Allow-Methods"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        return response
+    response = await call_next(request)
+    response.headers["Access-Control-Allow-Private-Network"] = "true"
+    return response
 
 
 @app.get("/healthz")
