@@ -1,8 +1,25 @@
 import { useAuthStore } from "@/store/authStore";
 import type { ApiEnvelope, RefreshData } from "@/lib/types";
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080/api/v1";
+/**
+ * Resolve API base URL safely.
+ * Guards against mis-set Vercel env values that accidentally include a
+ * Windows cwd prefix (seen in production bundles as
+ * `C:\\Users\\...\\https:\\llm-monitoring-api...`).
+ */
+function resolveApiUrl(): string {
+  const raw = (process.env.NEXT_PUBLIC_API_URL ?? "").trim();
+  const match = raw.match(/https?:\/\/[^\s\\]+/i);
+  if (match) {
+    return match[0].replace(/\/$/, "");
+  }
+  if (process.env.NODE_ENV === "production") {
+    return "https://llm-monitoring-api.onrender.com/api/v1";
+  }
+  return "http://localhost:8081/api/v1";
+}
+
+const API_URL = resolveApiUrl();
 
 let refreshInFlight: Promise<boolean> | null = null;
 

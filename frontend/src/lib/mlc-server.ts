@@ -71,40 +71,39 @@ export async function resolveMlcModelId(): Promise<string> {
   return MLC_MODEL_ID;
 }
 
+/** True if the MLC front door responds (GET /v1/models). Retries briefly. */
 export async function checkMlcServerHealth(
-  timeoutMs = 5000
+  timeoutMs = 12000
 ): Promise<boolean> {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-  try {
-    const res = await fetch(`${MLC_BASE_URL}/v1/models`, {
-      method: "GET",
-      signal: controller.signal,
-    });
-    if (res.ok) {
-      try {
-        const json = (await res.json()) as { data?: Array<{ id?: string }> };
-        const id = json.data?.[0]?.id?.trim();
-        if (id) cachedModelId = id;
-      } catch {
-        // ignore
-      }
-      return true;
-    }
-    return false;
-  } catch {
+  const attempts = 3;
+  for (let i = 0; i < attempts; i++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
     try {
-      const opt = await fetch(`${MLC_BASE_URL}/v1/chat/completions`, {
-        method: "OPTIONS",
+      const res = await fetch(`${MLC_BASE_URL}/v1/models`, {
+        method: "GET",
         signal: controller.signal,
+        mode: "cors",
+        cache: "no-store",
       });
-      return opt.ok || opt.status === 204;
+      if (res.ok) {
+        try {
+          const json = (await res.json()) as { data?: Array<{ id?: string }> };
+          const id = json.data?.[0]?.id?.trim();
+          if (id) cachedModelId = id;
+        } catch {
+          // ignore
+        }
+        return true;
+      }
     } catch {
-      return false;
+      // retry
+    } finally {
+      clearTimeout(timer);
     }
-  } finally {
-    clearTimeout(timer);
+    await new Promise((r) => setTimeout(r, 800 * (i + 1)));
   }
+  return false;
 }
 
 type ParseState = {
