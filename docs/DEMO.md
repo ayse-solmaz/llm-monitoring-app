@@ -53,9 +53,10 @@ Sıra önemli — bu sırayla başlat:
 4. Çıkan `https://*.trycloudflare.com` URL'ini kopyala (trailing slash yok)
 5. Vercel → Project **llm-monitoring-app** → Settings → Environment Variables (Production):
    - `NEXT_PUBLIC_API_URL` = `https://llm-monitoring-api.onrender.com/api/v1`
-   - `NEXT_PUBLIC_MLC_URL` = `https://….trycloudflare.com` (tunnel URL)
+   - `MLC_UPSTREAM` = `https://….trycloudflare.com` (**server-only** — not NEXT_PUBLIC_)
    - `NEXT_PUBLIC_MLC_MODEL_ID` = `/app/model`
-6. **Redeploy** (Deployments → … → Redeploy). `NEXT_PUBLIC_*` build-time — env yetmez.
+   - You can remove old `NEXT_PUBLIC_MLC_URL` (browser no longer calls the tunnel directly)
+6. **Redeploy** (Deployments → … → Redeploy). Env changes need a new build/runtime.
 7. Incognito: Vercel URL → login → Chat → Connect → **tek** kısa mesaj; bitmeden ikinci yok.
 
 Production site (team): `https://llm-monitoring-app-098765467890.vercel.app`

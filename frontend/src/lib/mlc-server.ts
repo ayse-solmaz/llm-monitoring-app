@@ -1,13 +1,12 @@
 /**
- * Server-side MLC-LLM client via KPI gateway (:8080).
- * Flow: browser → FastAPI gateway → nginx least_conn → MLC replicas.
+ * Server-side MLC-LLM client.
  *
- * Model id must match GET /v1/models (usually "/app/model").
+ * Browser always calls same-origin `/api/mlc` (Next.js proxy → gateway).
+ * That avoids CORS / Cloudflare quick-tunnel blocking from Vercel pages.
+ * Proxy upstream: MLC_UPSTREAM or NEXT_PUBLIC_MLC_URL or localhost:8080.
  */
 
-export const MLC_BASE_URL =
-  process.env.NEXT_PUBLIC_MLC_URL?.replace(/\/$/, "") ||
-  "http://localhost:8080";
+export const MLC_BASE_URL = "/api/mlc";
 
 export const MLC_MODEL_ID =
   process.env.NEXT_PUBLIC_MLC_MODEL_ID?.trim() || "/app/model";

@@ -13,8 +13,7 @@ export type GatewayMetricSnapshot = {
 };
 
 export async function fetchGatewayMetrics(
-  baseUrl = process.env.NEXT_PUBLIC_MLC_URL?.replace(/\/$/, "") ||
-    "http://localhost:8080"
+  baseUrl = "/api/mlc"
 ): Promise<GatewayMetricSnapshot> {
   const scrapedAt = new Date().toISOString();
   try {
