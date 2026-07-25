@@ -9,6 +9,7 @@ import AmbientBackground from "@/components/ui/AmbientBackground";
 const links = [
   { href: "/chat", label: "Chat" },
   { href: "/dashboard", label: "Dashboard" },
+  { href: "/admin", label: "Admin" },
 ];
 
 export default function AppShell({ children }: { children: React.ReactNode }) {

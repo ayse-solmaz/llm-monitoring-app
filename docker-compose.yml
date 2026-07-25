@@ -36,6 +36,8 @@ services:
     volumes:
       # Same weights for every replica — do not duplicate GB per container.
       - mlc-model:/app/model:ro
+      # PEFT/LoRA adapters (FINAL BOSS) — drop folders under ./peft-adapters
+      - ./peft-adapters:/adapters:ro
     depends_on:
       model-init:
         condition: service_completed_successfully

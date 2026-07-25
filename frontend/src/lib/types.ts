@@ -55,6 +55,8 @@ export type ChatMessage = {
   content: string;
   metrics?: MessageMetrics;
   score?: ScoreResult;
+  /** DeepKwiki titles injected for this turn (assistant side). */
+  wikiTitles?: string[];
 };
 
 export type LiveMetrics = {

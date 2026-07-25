@@ -128,7 +128,20 @@ async def _proxy_stream(
                     if resp.status_code >= 400:
                         stats["status"] = "error"
                         raw = await resp.aread()
-                        yield raw
+                        # Prefer SSE error JSON over nginx HTML so browsers don't
+                        # try to JSON.parse("<html>...").
+                        text = raw.decode("utf-8", errors="replace")
+                        if text.lstrip().startswith("<"):
+                            err = {
+                                "error": {
+                                    "message": f"upstream HTTP {resp.status_code} (MLC busy or timed out)",
+                                    "code": "upstream_error",
+                                }
+                            }
+                            yield f"data: {json.dumps(err)}\n\n".encode("utf-8")
+                            yield b"data: [DONE]\n\n"
+                        else:
+                            yield raw
                         return
 
                     buffer = ""
@@ -213,16 +226,81 @@ async def chat_completions(request: Request):
             status_code=400,
         )
 
-    # Force streaming so TTFT is measurable from first SSE content chunk.
-    payload["stream"] = True
-    if "stream_options" not in payload:
+    # Drop non-OpenAI fields so MLC does not reject the body.
+    payload.pop("adapter_id", None)
+    # Some MLC builds choke on stream_options — strip unless client sent it.
+    # (KPI path still works: we measure TTFT from SSE when stream=true.)
+    want_stream = bool(payload.get("stream", True))
+    payload["stream"] = want_stream
+    if want_stream and "stream_options" not in payload:
         payload["stream_options"] = {"include_usage": True}
+    if not want_stream:
+        payload.pop("stream_options", None)
 
     body = json.dumps(payload).encode("utf-8")
+
+    # Non-stream: buffer full upstream JSON (clearer for CPU fallback / curl).
+    if not want_stream:
+        INFLIGHT.inc()
+        started = time.perf_counter()
+        status_label = "ok"
+        try:
+            async with httpx.AsyncClient(timeout=REQUEST_TIMEOUT) as client:
+                upstream = await client.post(
+                    f"{MLC_UPSTREAM}/v1/chat/completions",
+                    content=body,
+                    headers={
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                    },
+                )
+            if upstream.status_code >= 400:
+                status_label = "error"
+                text = upstream.text
+                # nginx HTML errors → JSON for the browser
+                if text.lstrip().startswith("<"):
+                    return JSONResponse(
+                        {
+                            "error": {
+                                "message": f"upstream HTTP {upstream.status_code} (HTML error page — MLC busy/timeout)",
+                                "code": "upstream_error",
+                            }
+                        },
+                        status_code=502,
+                    )
+                return Response(
+                    content=upstream.content,
+                    status_code=upstream.status_code,
+                    media_type=upstream.headers.get(
+                        "content-type", "application/json"
+                    ),
+                )
+            return Response(
+                content=upstream.content,
+                status_code=upstream.status_code,
+                media_type=upstream.headers.get(
+                    "content-type", "application/json"
+                ),
+            )
+        except Exception as exc:
+            status_label = "error"
+            return JSONResponse(
+                {
+                    "error": {
+                        "message": f"upstream failed: {exc}",
+                        "code": "upstream_error",
+                    }
+                },
+                status_code=502,
+            )
+        finally:
+            INFLIGHT.dec()
+            DURATION.observe(time.perf_counter() - started)
+            REQUESTS.labels(status=status_label).inc()
+
     headers = {
         "Content-Type": "application/json",
         "Accept": "text/event-stream",
     }
-
     stream_fn, _stats = await _proxy_stream(body, headers)
     return StreamingResponse(stream_fn(), media_type="text/event-stream")

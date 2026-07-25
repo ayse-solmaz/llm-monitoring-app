@@ -1,0 +1,30 @@
+# GPU overlay for FINAL BOSS (optional)
+#
+# Default stack stays CPU (`docker-compose.yml` + mlc-server-spike).
+# Use this only when NVIDIA Container Toolkit is installed and you have a
+# CUDA-capable MLC image built/tagged locally.
+#
+# Example:
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d --scale mlc=1
+#
+# Replace image name after you build a GPU MLC image. Do NOT rebuild the CPU spike.
+
+services:
+  mlc:
+    # Placeholder — set to your local CUDA MLC image when ready.
+    image: mlc-server-gpu:latest
+    pull_policy: never
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+        limits:
+          memory: 12G
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+    volumes:
+      - mlc-model:/app/model:ro
+      - ./peft-adapters:/adapters:ro

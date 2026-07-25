@@ -601,3 +601,48 @@ body {
   margin-inline: auto;
   padding: 2rem 1.5rem 3rem;
 }
+
+/* FINAL BOSS — Rich Result (Markdown subset) */
+.rich-result .rich-p {
+  margin: 0.35em 0;
+}
+.rich-result .rich-h1,
+.rich-result .rich-h2,
+.rich-result .rich-h3 {
+  font-weight: 600;
+  margin: 0.5em 0 0.25em;
+  color: var(--ink);
+}
+.rich-result .rich-h1 { font-size: 1.15em; }
+.rich-result .rich-h2 { font-size: 1.05em; }
+.rich-result .rich-h3 { font-size: 1em; }
+.rich-result .rich-ul {
+  margin: 0.35em 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+.rich-result .rich-pre {
+  margin: 0.5em 0;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(0, 29, 57, 0.06);
+  overflow-x: auto;
+  font-size: 13px;
+}
+.rich-result .rich-code-inline {
+  font-family: ui-monospace, monospace;
+  font-size: 0.9em;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: rgba(0, 29, 57, 0.06);
+}
+.rich-result .rich-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.5em 0;
+  font-size: 13px;
+}
+.rich-result .rich-td {
+  border: 1px solid rgba(0, 29, 57, 0.12);
+  padding: 0.35rem 0.5rem;
+}

@@ -12,12 +12,16 @@ import {
   fetchCompletion,
   MLC_BASE_URL,
   MLC_MODEL_ID,
+  resolveMlcModelId,
 } from "@/lib/mlc-server";
 import { scoreResponse } from "@/lib/scoring";
 import type { LiveMetrics, ModelInfo, ModelsData } from "@/lib/types";
 import { useChatStore } from "@/store/chatStore";
 import ScoreCard from "@/components/chat/ScoreCard";
+import RichResult from "@/components/chat/RichResult";
 import GlowShell from "@/components/ui/GlowShell";
+import { buildWebMcpMessages } from "@/lib/webmcp";
+import { useLlmAdminStore } from "@/store/llmAdminStore";
 
 function newId(): string {
   return crypto.randomUUID();
@@ -111,6 +115,8 @@ export default function ChatInferenceView() {
     clearChat,
   } = useChatStore();
 
+  const admin = useLlmAdminStore();
+
   // Health-check server MLC (nginx → replicas)
   useEffect(() => {
     let cancelled = false;
@@ -134,44 +140,36 @@ export default function ChatInferenceView() {
     let cancelled = false;
 
     void (async () => {
+      const servedId = await resolveMlcModelId();
+      if (cancelled) return;
+
       try {
         const data = await apiFetch<ModelsData>("/config/models");
         if (cancelled) return;
-        // Prefer server model id; keep list for UI parity with backend config
         const preferred =
           data.models.find((m) => m.id.includes("gemma-2b")) ?? data.models[0];
-        setModels(
-          preferred
-            ? [
-                {
-                  ...preferred,
-                  id: MLC_MODEL_ID,
-                  recommended_device: "cpu (Docker MLC)",
-                },
-              ]
-            : [
-                {
-                  id: MLC_MODEL_ID,
-                  size: "q4f16_1",
-                  recommended_device: "cpu (Docker MLC)",
-                },
-              ]
-        );
-        setSelectedModelId(MLC_MODEL_ID);
+        setModels([
+          {
+            id: servedId,
+            size: preferred?.size ?? "q4f16_1",
+            recommended_device: "cpu (Docker MLC)",
+          },
+        ]);
+        setSelectedModelId(servedId);
       } catch (err) {
         if (!cancelled) {
           setModels([
             {
-              id: MLC_MODEL_ID,
+              id: servedId,
               size: "q4f16_1",
               recommended_device: "cpu (Docker MLC)",
             },
           ]);
-          setSelectedModelId(MLC_MODEL_ID);
+          setSelectedModelId(servedId);
           setModelsError(
             err instanceof Error
-              ? `${err.message} (using ${MLC_MODEL_ID} anyway)`
-              : "Using default server model"
+              ? `${err.message} (using ${servedId})`
+              : `Using ${servedId}`
           );
         }
       }
@@ -195,15 +193,24 @@ export default function ChatInferenceView() {
       const ok = await checkMlcServerHealth(10000);
       if (!ok) {
         throw new Error(
-          `Server MLC unavailable at ${MLC_BASE_URL} — run: docker compose up -d --scale mlc=3`
+          `Server MLC unavailable at ${MLC_BASE_URL} — run: docker compose up -d --scale mlc=1`
         );
       }
+      const servedId = await resolveMlcModelId();
+      setSelectedModelId(servedId);
+      setModels([
+        {
+          id: servedId,
+          size: "q4f16_1",
+          recommended_device: "cpu (Docker MLC)",
+        },
+      ]);
       const loadMs = performance.now() - loadStart;
       setModelLoadMs(loadMs);
       setModelReady(true);
       setServerOk(true);
       setLiveMetrics({ modelLoadMs: loadMs });
-      persistSession(MLC_MODEL_ID, loadMs, setBackendSessionId);
+      persistSession(servedId, loadMs, setBackendSessionId);
     } catch (err) {
       setServerOk(false);
       setLoadError(err instanceof Error ? err.message : String(err));
@@ -217,6 +224,7 @@ export default function ChatInferenceView() {
     setModelLoadMs,
     setModelLoading,
     setModelReady,
+    setSelectedModelId,
   ]);
 
   const sendMessage = useCallback(async () => {
@@ -229,10 +237,17 @@ export default function ChatInferenceView() {
     setLiveMetrics({ isStreaming: true, modelLoadMs });
 
     const priorMessages = useChatStore.getState().messages;
-    const apiHistory = priorMessages.map((m) => ({
-      role: m.role as "user" | "assistant",
-      content: m.content,
-    }));
+    // Skip empty/error assistant stubs so Gemma history stays clean.
+    const apiHistory = priorMessages
+      .filter(
+        (m) =>
+          m.content.trim().length > 0 &&
+          !(m.role === "assistant" && m.content.startsWith("Error:"))
+      )
+      .map((m) => ({
+        role: m.role as "user" | "assistant",
+        content: m.content,
+      }));
 
     const userMessage = { id: newId(), role: "user" as const, content: trimmed };
     addMessage(userMessage);
@@ -244,6 +259,15 @@ export default function ChatInferenceView() {
 
     const assistantId = newId();
     addMessage({ id: assistantId, role: "assistant", content: "" });
+
+    const mcp = buildWebMcpMessages(apiHistory, trimmed, {
+      systemPrompt: admin.systemPrompt,
+      temperature: admin.temperature,
+      topP: admin.topP,
+      maxTokens: admin.maxTokens,
+      adapterId: admin.adapterId,
+      deepKwikiEnabled: admin.deepKwikiEnabled,
+    });
 
     const promptText = [...apiHistory, { role: "user" as const, content: trimmed }]
       .filter((m) => m.role === "user")
@@ -274,7 +298,7 @@ export default function ChatInferenceView() {
 
     try {
       const result = await fetchCompletion(
-        [...apiHistory, { role: "user", content: trimmed }],
+        mcp.messages,
         {
           onToken: (_delta, full) => {
             if (liveTtft === null) {
@@ -287,7 +311,13 @@ export default function ChatInferenceView() {
             liveCompletion = c;
           },
         },
-        64
+        {
+          maxTokens: mcp.maxTokens,
+          temperature: mcp.temperature,
+          topP: mcp.topP,
+          adapterId: mcp.adapterId,
+          modelId: selectedModelId ?? undefined,
+        }
       );
 
       liveTtft = result.ttftMs;
@@ -308,6 +338,7 @@ export default function ChatInferenceView() {
         wasTruncated,
       });
 
+      const modelLabel = selectedModelId ?? MLC_MODEL_ID;
       const metrics = {
         ttftMs: result.ttftMs,
         tokensPerSec: result.tokensPerSec,
@@ -315,13 +346,16 @@ export default function ChatInferenceView() {
         completionTokens: result.completionTokens,
         totalMs: result.totalMs,
         modelLoadMs,
-        runtimeStatsText: `server MLC @ ${MLC_BASE_URL} (${MLC_MODEL_ID})`,
+        runtimeStatsText: `server MLC @ ${MLC_BASE_URL} (${modelLabel})${
+          mcp.adapterId ? ` adapter=${mcp.adapterId}` : ""
+        }${mcp.wikiHits.length ? ` +DeepKwiki×${mcp.wikiHits.length}` : ""}`,
       };
 
       updateMessage(assistantId, {
         content: result.content,
         metrics,
         score,
+        wikiTitles: mcp.wikiHits.map((h) => h.title),
       });
       setLiveMetrics({
         ttftMs: result.ttftMs,
@@ -369,6 +403,13 @@ export default function ChatInferenceView() {
     resetLiveMetrics,
     setLiveMetrics,
     modelLoadMs,
+    selectedModelId,
+    admin.systemPrompt,
+    admin.temperature,
+    admin.topP,
+    admin.maxTokens,
+    admin.adapterId,
+    admin.deepKwikiEnabled,
   ]);
 
   return (
@@ -376,10 +417,14 @@ export default function ChatInferenceView() {
       <div>
         <h1 className="page-title">Chat</h1>
         <p className="page-subtitle">
-          Server-side MLC (Docker CPU) via nginx — live metrics and decision
-          scoring. Browser WebLLM demo:{" "}
+          Server-side MLC (Docker CPU) via KPI gateway — Admin + DeepKwiki apply
+          on each send. WebLLM demo:{" "}
           <a href="/spike" className="underline text-navy-mid">
             /spike
+          </a>
+          . Controls:{" "}
+          <a href="/admin" className="underline text-navy-mid">
+            /admin
           </a>
         </p>
       </div>
@@ -400,7 +445,7 @@ export default function ChatInferenceView() {
         {serverOk === false && (
           <p className="text-[15px] font-medium text-red-600">
             Server MLC unavailable — check{" "}
-            <code className="text-[13px]">docker compose up -d --scale mlc=3</code>
+            <code className="text-[13px]">docker compose up -d --scale mlc=1</code>
           </p>
         )}
 
@@ -472,12 +517,25 @@ export default function ChatInferenceView() {
                   className={msg.role === "user" ? "text-right" : "text-left"}
                 >
                   <div
-                    className={`inline-block max-w-[90%] px-4 py-2.5 text-[15px] whitespace-pre-wrap ${
-                      msg.role === "user" ? "bubble-user" : "bubble-assistant"
+                    className={`inline-block max-w-[90%] px-4 py-2.5 text-[15px] ${
+                      msg.role === "user" ? "bubble-user whitespace-pre-wrap" : "bubble-assistant"
                     }`}
                   >
-                    {msg.content || (isStreaming ? "…" : "")}
+                    {msg.role === "assistant" ? (
+                      <RichResult
+                        content={msg.content || (isStreaming ? "" : "")}
+                      />
+                    ) : (
+                      msg.content
+                    )}
                   </div>
+                  {msg.role === "assistant" &&
+                    msg.wikiTitles &&
+                    msg.wikiTitles.length > 0 && (
+                      <p className="mt-1 text-[12px] text-ink-muted max-w-[90%]">
+                        DeepKwiki: {msg.wikiTitles.join(" · ")}
+                      </p>
+                    )}
                   {msg.role === "assistant" && msg.score && (
                     <div className="max-w-[90%]">
                       <ScoreCard score={msg.score} />
