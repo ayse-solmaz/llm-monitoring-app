@@ -310,7 +310,8 @@ export async function fetchCompletion(
       ? state.firstTokenTime - startTime
       : totalMs;
 
-  let { completionTokens, promptTokens } = state;
+  let { completionTokens } = state;
+  const promptTokens = state.promptTokens;
   if (completionTokens <= 0 && state.full) {
     completionTokens = Math.max(1, Math.ceil(state.full.split(/\s+/).length * 1.3));
   }
