@@ -29,8 +29,31 @@ services:
 
   mlc:
     # Local-only image (built via mlc-server/Dockerfile). Never pull from Docker Hub.
+    # Command pinned to gemma-cpu.so on the shared volume — do not rely on image CMD
+    # (a partial rebuild once pointed at missing qwen-cpu.so).
     image: mlc-server-spike:latest
     pull_policy: never
+    command:
+      [
+        "python3",
+        "-m",
+        "mlc_llm",
+        "serve",
+        "/app/model",
+        "--model-lib",
+        "/app/model/gemma-cpu.so",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "--device",
+        "cpu",
+      ]
+    # L0: more CPU threads + larger /dev/shm for TVM runtime.
+    environment:
+      TVM_NUM_THREADS: "8"
+      OMP_NUM_THREADS: "8"
+    shm_size: "2gb"
     expose:
       - "8000"
     volumes:
@@ -75,6 +98,7 @@ services:
     environment:
       MLC_UPSTREAM: http://nginx:80
       MLC_TIMEOUT_SECONDS: "600"
+      MAX_INFLIGHT: "1"
     depends_on:
       - nginx
 

@@ -75,8 +75,8 @@ export default function AdminLlmPanel() {
           </select>
         </label>
         <p className="text-[14px] text-ink-muted">
-          Tip: CPU Gemma — keep max tokens ≤48 and temperature low. Reset if old
-          browser settings look wrong.
+          Tip: CPU Gemma — max tokens ≤16, DeepKwiki off for speed. One message
+          at a time. Reset if old browser settings look wrong.
         </p>
       </section>
 
@@ -130,12 +130,12 @@ export default function AdminLlmPanel() {
           <input
             type="number"
             className="glass-input"
-            min={16}
-            max={512}
+            min={8}
+            max={24}
             value={maxTokens}
             onChange={(e) =>
               setMaxTokens(
-                Math.min(512, Math.max(16, Number(e.target.value) || 16))
+                Math.min(24, Math.max(8, Number(e.target.value) || 16))
               )
             }
           />

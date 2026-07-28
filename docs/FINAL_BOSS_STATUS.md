@@ -4,12 +4,12 @@ Maps [FINAL_BOSS_SPEC.md](./FINAL_BOSS_SPEC.md) to this repo.
 
 | Spec item | Status | Where |
 | --- | --- | --- |
-| MLC local Docker (CPU) | **Done** | `mlc-server/`, `docker-compose.yml`, model volume, nginx, gateway |
+| MLC local Docker (CPU) | **Done** | `mlc-server/` Gemma 2B spike image (`mlc-server-spike`), compose, volume, nginx, gateway |
 | MLC GPU / CUDA | **Hardware-blocked** (skeleton ready) | `docker-compose.gpu.yml` |
 | Shared weights + scale | **Done** | `mlc-model` volume, `--scale mlc=N`, least_conn |
 | KPI gateway Prometheus | **Done** | `mlc-gateway/`, Grafana dashboard |
 | PEFT adapter folders | **Done** (manifests) | `peft-adapters/{deepkwiki,code-assistant}/` |
-| Real LoRA weight hot-swap | **Hardware-blocked** / Soft | Admin + WebMCP + Go adapter id (prompt style on CPU) |
+| Real LoRA weight hot-swap | **Soft only (accepted)** | Admin + WebMCP adapter id / prompt style — real LoRA out of scope for CPU demo |
 | Frontend WebMCP | **Done** | `frontend/src/lib/webmcp.ts` |
 | DeepKwiki | **Done** | `frontend/src/lib/deepkwiki.ts` |
 | Go `HandleMCPRequest` | **Done** (internal, no new PRD route) | `backend/internal/application/mcp/` |

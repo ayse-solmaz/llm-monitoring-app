@@ -1,0 +1,22 @@
+# Optional overlay: route KPI gateway → Windows Ollama (Intel Arc / Vulkan)
+# instead of Docker CPU MLC.
+#
+# ARCHIVED — Ollama rejected; keep MLC FINAL BOSS. See archive/ADR-001-ollama-rejected.md
+#
+# Usage:
+#   1. Install Ollama from https://ollama.com/download/windows
+#   2. ollama pull qwen2.5:1.5b
+#   3. docker compose -f docker-compose.yml -f docker-compose.ollama.yml up -d gateway
+#   4. Optional RAM save: docker compose stop mlc
+#   5. frontend .env.local → MLC_UPSTREAM=http://127.0.0.1:11434
+#      and NEXT_PUBLIC_MLC_MODEL_ID=qwen2.5:1.5b
+#
+# See archive/docs/ARC_OLLAMA.md
+
+services:
+  gateway:
+    environment:
+      MLC_UPSTREAM: http://host.docker.internal:11434
+      MLC_TIMEOUT_SECONDS: "120"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

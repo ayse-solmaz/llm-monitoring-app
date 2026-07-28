@@ -194,7 +194,8 @@ export async function fetchCompletion(
 ): Promise<StreamCompletionResult> {
   const opts: CompletionOptions =
     typeof options === "number" ? { maxTokens: options } : options;
-  const maxTokens = Math.min(opts.maxTokens ?? 48, 48);
+  const maxTokens = Math.min(opts.maxTokens ?? 16, 24);
+
   const temperature = opts.temperature ?? 0.35;
   const topP = opts.topP ?? 0.9;
   const model = opts.modelId || (await resolveMlcModelId());
@@ -213,7 +214,10 @@ export async function fetchCompletion(
   try {
     res = await fetch(`${MLC_BASE_URL}/v1/chat/completions`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "text/event-stream",
+      },
       body: JSON.stringify({
         model,
         messages,
@@ -222,6 +226,7 @@ export async function fetchCompletion(
         temperature,
         top_p: topP,
       }),
+      cache: "no-store",
     });
   } catch (err) {
     throw friendlyFetchError(err);
@@ -339,7 +344,8 @@ async function fetchCompletionNonStream(
 ): Promise<StreamCompletionResult> {
   const startTime = performance.now();
   const model = opts.modelId || (await resolveMlcModelId());
-  const maxTokens = Math.min(opts.maxTokens ?? 48, 48);
+  const maxTokens = Math.min(opts.maxTokens ?? 16, 24);
+
 
   let res: Response;
   try {

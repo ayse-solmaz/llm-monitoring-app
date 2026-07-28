@@ -30,16 +30,14 @@ export type WebMcpBundle = {
   adapterId: string;
 };
 
-const MAX_HISTORY = 2;
+const MAX_HISTORY = 0;
 
 const ADAPTER_STYLE: Record<string, string> = {
-  deepkwiki:
-    "Use project facts when relevant. Prefer short factual answers about this LLM monitoring stack.",
-  "code-assistant":
-    "Answer with short code-focused help. Prefer snippets over long prose.",
+  deepkwiki: "Short factual answer about this LLM monitoring stack.",
+  "code-assistant": "Short code help only.",
 };
 
-/** Build short user/assistant messages for CPU Gemma. */
+/** Build minimal user messages for CPU Gemma (long prompts → nginx 504). */
 export function buildWebMcpMessages(
   history: Array<{ role: "user" | "assistant"; content: string }>,
   userText: string,
@@ -48,25 +46,26 @@ export function buildWebMcpMessages(
   const wikiHits = opts.deepKwikiEnabled
     ? searchDeepKwiki(userText, 1)
     : [];
-  const wikiBlock = formatWikiContext(wikiHits);
+  const wikiBlock = formatWikiContext(wikiHits).slice(0, 280);
   const adapterHint = ADAPTER_STYLE[opts.adapterId] ?? "";
 
   const recent = history.slice(-MAX_HISTORY).map((m) => ({
     role: m.role as "user" | "assistant",
-    content: m.content.slice(0, 500),
+    content: m.content.slice(0, 200),
   }));
 
   const parts: string[] = [];
   if (adapterHint) parts.push(adapterHint);
   if (wikiBlock) parts.push(wikiBlock);
   if (!adapterHint && !wikiBlock && opts.systemPrompt.trim()) {
-    parts.push(opts.systemPrompt.trim().slice(0, 120));
+    parts.push(opts.systemPrompt.trim().slice(0, 80));
   }
 
+  const q = userText.slice(0, 200);
   const content =
     parts.length > 0
-      ? `${parts.join("\n\n")}\n\nQuestion: ${userText}\nAnswer briefly:`
-      : userText;
+      ? `${parts.join("\n")}\nQ: ${q}\nA (one short sentence):`
+      : q;
 
   const messages: ChatMessage[] = [
     ...recent,
@@ -78,7 +77,7 @@ export function buildWebMcpMessages(
     wikiHits,
     temperature: opts.temperature,
     topP: opts.topP,
-    maxTokens: Math.min(opts.maxTokens, 64),
+    maxTokens: Math.min(opts.maxTokens, 24),
     adapterId: opts.adapterId,
   };
 }

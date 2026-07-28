@@ -24,19 +24,19 @@ export type LlmAdminState = {
 };
 
 const DEFAULTS = {
-  systemPrompt: "Answer briefly and clearly.",
-  temperature: 0.4,
+  systemPrompt: "Answer in one short sentence.",
+  temperature: 0.3,
   topP: 0.9,
-  maxTokens: 48,
+  maxTokens: 16,
   adapterId: "",
-  deepKwikiEnabled: true,
+  deepKwikiEnabled: false,
 };
 
 /**
  * Bump when DEFAULTS change so old localStorage values reset.
- * v3: correct model id path + shorter prompts (empty-reply fix).
+ * v4: shorter defaults to avoid nginx 504 (CPU TTFT > 300s).
  */
-const ADMIN_STORE_VERSION = 3;
+const ADMIN_STORE_VERSION = 4;
 
 export const useLlmAdminStore = create<LlmAdminState>()(
   persist(

@@ -5,13 +5,19 @@
 ```mermaid
 flowchart LR
   subgraph Browser["Browser"]
-    WebGPU["WebGPU"]
-    WebLLM["WebLLM / Gemma"]
-    Metrics["Metrics + Scoring"]
+    ChatUI["Chat UI + live metrics"]
+    Scoring["Deterministic scoring"]
   end
 
-  subgraph Vercel["Vercel"]
-    NextJS["Next.js SPA<br/>/auth · /chat · /dashboard"]
+  subgraph Next["Next.js (local :3002 or Vercel)"]
+    SPA["/auth · /chat · /dashboard · /admin"]
+    Proxy["/api/mlc proxy"]
+  end
+
+  subgraph LocalDocker["Local Docker (CPU)"]
+    GW["KPI gateway :8080"]
+    Nginx["nginx least_conn"]
+    MLC["MLC-LLM Gemma 2B"]
   end
 
   subgraph Render["Render"]
@@ -19,14 +25,18 @@ flowchart LR
     Postgres[("PostgreSQL")]
   end
 
-  WebGPU --> WebLLM
-  WebLLM --> Metrics
-  Metrics -->|"REST (JWT)"| NextJS
-  NextJS -->|"NEXT_PUBLIC_API_URL"| GoAPI
+  ChatUI --> Proxy
+  Proxy --> GW
+  GW --> Nginx --> MLC
+  ChatUI --> Scoring
+  Scoring -->|"REST (JWT)"| SPA
+  SPA -->|"NEXT_PUBLIC_API_URL"| GoAPI
   GoAPI --> Postgres
 ```
 
-**Flow:** User authenticates on the Next.js SPA → loads a model in-browser (WebGPU) → streams chat with live metrics → scores computed client-side → sessions/messages/scores saved to Render Postgres via the Go API → dashboard reads aggregated history.
+**Main Chat flow:** User authenticates on the Next.js SPA → Connect hits same-origin `/api/mlc` (proxied to the FastAPI KPI gateway on `:8080`) → nginx → Docker MLC (CPU Gemma 2B) → tokens stream back; TTFT / tok/s measured in the browser (and also at the gateway for Prometheus) → deterministic scores computed client-side → sessions/messages/scores saved to Render Postgres via the Go API → dashboard reads aggregated history.
+
+**Side demo:** `/spike` still runs **browser WebLLM** (WebGPU) for comparison — it is not the primary Chat path.
 
 ---
 
@@ -37,7 +47,7 @@ All JSON responses (except `/healthz`) use the envelope: `{ "data": …, "error"
 | # | Group | Method | Path | Auth | Description |
 |---|-------|--------|------|------|-------------|
 | 1 | Config | GET | `/config` | Public | App config, feature flags, scoring weights/thresholds |
-| 2 | Config | GET | `/config/models` | Public | Supported WebLLM model list |
+| 2 | Config | GET | `/config/models` | Public | Supported model list (ids for UI / spike) |
 | 3 | Auth | POST | `/auth/register` | Public | Register (email + password, bcrypt) |
 | 4 | Auth | POST | `/auth/login` | Public | Login → access + refresh tokens |
 | 5 | Auth | POST | `/auth/refresh` | Public | Rotate refresh token → new access + refresh tokens |
@@ -63,16 +73,20 @@ All JSON responses (except `/healthz`) use the envelope: `{ "data": …, "error"
 
 ## Metrics & scoring methodology
 
-### Raw metrics (client-side, during inference)
+### Raw metrics (during inference)
 
-| Metric | Source |
+Primary Chat path measures timings in the browser while streaming from `/api/mlc` → gateway. The KPI gateway also exports TTFT / E2E / tok/s / inflight on `/metrics` for Prometheus → Grafana. Values POSTed to the Go API are still client-reported (accepted MVP risk; see [SECURITY_AUDIT.md](./SECURITY_AUDIT.md)).
+
+| Metric | Source (main Chat / server MLC) |
 |--------|--------|
-| TTFT (ms) | Request start → first streamed token |
-| Tokens/sec | Completion tokens ÷ decode duration |
-| Prompt / completion tokens | WebLLM usage or character estimate (~4 chars/token) |
+| TTFT (ms) | Request start → first streamed content token |
+| Tokens/sec | Completion tokens ÷ decode duration after first token |
+| Prompt / completion tokens | Upstream `usage` when present, else estimate |
 | Total elapsed (ms) | Request start → stream end |
-| Model load time (ms) | `CreateMLCEngine` init duration |
-| Runtime stats | `engine.runtimeStatsText()` after completion |
+| Model load / connect (ms) | Time until gateway `/v1/models` succeeds (“Connect”) |
+| Gateway KPIs | `llm_ttft_seconds`, `llm_request_duration_seconds`, `llm_tokens_per_second`, `llm_requests_inflight` |
+
+`/spike` (WebLLM) still uses `CreateMLCEngine` load time and `engine.runtimeStatsText()`.
 
 ### Decision scoring (`frontend/src/lib/scoring.ts`)
 

@@ -20,13 +20,15 @@ npm run dev -- -p 3002
 - Gateway: http://localhost:8080/healthz — model id must be `/app/model`
 - Grafana: http://localhost:3000 (admin/admin)
 
-Frontend `.env.local`:
+Frontend `.env.local` (browser uses same-origin `/api/mlc`; Next proxies upstream):
 
 ```
 NEXT_PUBLIC_API_URL=https://llm-monitoring-api.onrender.com/api/v1
-NEXT_PUBLIC_MLC_URL=http://localhost:8080
+MLC_UPSTREAM=http://127.0.0.1:8080
 NEXT_PUBLIC_MLC_MODEL_ID=/app/model
 ```
+
+(`NEXT_PUBLIC_MLC_URL` also works as a fallback for the proxy upstream.)
 
 ## Scale demo (throughput, not single-request speed)
 

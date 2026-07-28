@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
 # CPU-only MLC-LLM spike — linux/amd64 (native on Intel, no GPU/emulation).
 # Pinned wheels avoid libtvm / symbol errors seen with unpinned nightly builds.
+# DO NOT rebuild casually (~45–90 min). Prefer existing local tag: mlc-server-spike:latest
 
 FROM --platform=linux/amd64 python:3.11-slim AS builder
 
