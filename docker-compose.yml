@@ -97,7 +97,7 @@ services:
       - "8080:8080"
     environment:
       MLC_UPSTREAM: http://nginx:80
-      MLC_TIMEOUT_SECONDS: "600"
+      MLC_TIMEOUT_SECONDS: "1200"
       MAX_INFLIGHT: "1"
     depends_on:
       - nginx

@@ -24,19 +24,19 @@ export type LlmAdminState = {
 };
 
 const DEFAULTS = {
-  systemPrompt: "Answer in one short sentence.",
+  systemPrompt: "Türkçe, kısa ve net cevap ver. Giriş cümlesi kurma.",
   temperature: 0.3,
   topP: 0.9,
-  maxTokens: 16,
+  maxTokens: 80,
   adapterId: "",
   deepKwikiEnabled: false,
 };
 
 /**
  * Bump when DEFAULTS change so old localStorage values reset.
- * v4: shorter defaults to avoid nginx 504 (CPU TTFT > 300s).
+ * v6: demo speed — short prompt + maxTokens 80 (CPU TTFT).
  */
-const ADMIN_STORE_VERSION = 4;
+const ADMIN_STORE_VERSION = 6;
 
 export const useLlmAdminStore = create<LlmAdminState>()(
   persist(

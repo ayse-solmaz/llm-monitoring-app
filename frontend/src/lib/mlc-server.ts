@@ -194,7 +194,9 @@ export async function fetchCompletion(
 ): Promise<StreamCompletionResult> {
   const opts: CompletionOptions =
     typeof options === "number" ? { maxTokens: options } : options;
-  const maxTokens = Math.min(opts.maxTokens ?? 16, 24);
+  const envMax = Number(process.env.NEXT_PUBLIC_MAX_TOKENS || "256");
+  const cap = Math.min(Math.max(envMax, 1), 512);
+  const maxTokens = Math.min(opts.maxTokens ?? 256, cap);
 
   const temperature = opts.temperature ?? 0.35;
   const topP = opts.topP ?? 0.9;
@@ -344,8 +346,9 @@ async function fetchCompletionNonStream(
 ): Promise<StreamCompletionResult> {
   const startTime = performance.now();
   const model = opts.modelId || (await resolveMlcModelId());
-  const maxTokens = Math.min(opts.maxTokens ?? 16, 24);
-
+  const envMax = Number(process.env.NEXT_PUBLIC_MAX_TOKENS || "256");
+  const cap = Math.min(Math.max(envMax, 1), 512);
+  const maxTokens = Math.min(opts.maxTokens ?? 256, cap);
 
   let res: Response;
   try {

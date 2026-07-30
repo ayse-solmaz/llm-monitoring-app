@@ -131,11 +131,11 @@ export default function AdminLlmPanel() {
             type="number"
             className="glass-input"
             min={8}
-            max={24}
+            max={512}
             value={maxTokens}
             onChange={(e) =>
               setMaxTokens(
-                Math.min(24, Math.max(8, Number(e.target.value) || 16))
+                Math.min(512, Math.max(8, Number(e.target.value) || 256))
               )
             }
           />

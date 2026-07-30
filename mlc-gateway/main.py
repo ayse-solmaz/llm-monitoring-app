@@ -34,6 +34,8 @@ from prometheus_client import (
 MLC_UPSTREAM = os.getenv("MLC_UPSTREAM", "http://nginx:80").rstrip("/")
 REQUEST_TIMEOUT = float(os.getenv("MLC_TIMEOUT_SECONDS", "600"))
 MAX_INFLIGHT = max(1, int(os.getenv("MAX_INFLIGHT", "1")))
+# Second request waits at most this long for the single CPU slot, then 503.
+ACQUIRE_TIMEOUT = float(os.getenv("ACQUIRE_TIMEOUT_SECONDS", "5"))
 CACHE_MAX = max(0, int(os.getenv("CACHE_MAX", "64")))
 QUEUE_SSE = os.getenv("QUEUE_SSE", "1").strip().lower() not in ("0", "false", "no")
 # Prewarm retries while MLC is still loading (502s); background task after startup.
@@ -111,27 +113,17 @@ def _cache_put(key: str, value: str) -> None:
         _cache.popitem(last=False)
 
 
-async def _acquire_slot() -> None:
-    """Block until an inflight slot is free (no SSE)."""
-    await _sem().acquire()
-
-
-async def _acquire_slot_streaming() -> AsyncIterator[bytes]:
+async def _acquire_slot() -> bool:
     """
-    Acquire an inflight slot, yielding optional SSE event:queue while waiting
-    so the client sees a queue instead of an upstream HTML 502.
-    Caller MUST release the semaphore in a finally block.
+    Try to take an inflight slot within ACQUIRE_TIMEOUT.
+    Returns True if acquired (caller MUST release in finally).
+    Returns False on timeout — caller should respond 503.
     """
-    while True:
-        try:
-            await asyncio.wait_for(_sem().acquire(), timeout=0.5)
-            return
-        except asyncio.TimeoutError:
-            if QUEUE_SSE:
-                payload = json.dumps(
-                    {"status": "waiting", "max_inflight": MAX_INFLIGHT}
-                )
-                yield f"event: queue\ndata: {payload}\n\n".encode("utf-8")
+    try:
+        await asyncio.wait_for(_sem().acquire(), timeout=ACQUIRE_TIMEOUT)
+        return True
+    except asyncio.TimeoutError:
+        return False
 
 
 async def _prewarm_once() -> bool:
@@ -330,16 +322,38 @@ async def _proxy_stream(
     }
 
     async def gen() -> AsyncIterator[bytes]:
+        # Manual acquire/release — MUST set acquired=True in the same
+        # uninterrupted step after acquire succeeds, then release in finally.
+        # Nested async-gen acquire previously leaked the slot when the client
+        # cancelled between acquire() success and acquired=True.
         acquired = False
         try:
             # Flush an SSE comment immediately so proxies (Next /api/mlc) send
             # response headers before MLC TTFT (CPU can be minutes).
             yield b": gateway-open\n\n"
 
-            # Queue behind MAX_INFLIGHT; emit event:queue while waiting.
-            async for qchunk in _acquire_slot_streaming():
-                yield qchunk
-            acquired = True
+            deadline = time.monotonic() + ACQUIRE_TIMEOUT
+            while True:
+                try:
+                    await asyncio.wait_for(_sem().acquire(), timeout=0.5)
+                    acquired = True  # set IMMEDIATELY — before any yield/await
+                    break
+                except asyncio.TimeoutError:
+                    if time.monotonic() >= deadline:
+                        err = {
+                            "error": {
+                                "message": "Sunucu meşgul, lütfen bekleyin (tek istek aynı anda).",
+                                "code": "busy",
+                            }
+                        }
+                        yield f"data: {json.dumps(err)}\n\n".encode("utf-8")
+                        yield b"data: [DONE]\n\n"
+                        return
+                    if QUEUE_SSE:
+                        payload = json.dumps(
+                            {"status": "waiting", "max_inflight": MAX_INFLIGHT}
+                        )
+                        yield f"event: queue\ndata: {payload}\n\n".encode("utf-8")
 
             INFLIGHT.inc()
             try:
@@ -410,6 +424,9 @@ async def _proxy_stream(
                                     )
                                 if usage.get("prompt_tokens"):
                                     stats["prompt_tokens"] = int(usage["prompt_tokens"])
+            except asyncio.CancelledError:
+                stats["status"] = "error"
+                raise
             except Exception:
                 stats["status"] = "error"
                 raise
@@ -435,6 +452,8 @@ async def _proxy_stream(
 
                 if stats["status"] == "ok" and cache_key and stats["full_text"]:
                     _cache_put(cache_key, stats["full_text"])
+        except asyncio.CancelledError:
+            raise
         finally:
             if acquired:
                 _sem().release()
@@ -448,10 +467,11 @@ def _normalize_payload(payload: dict) -> dict:
     payload.pop("stream_options", None)
 
     try:
-        mt = int(payload.get("max_tokens") or 16)
+        mt = int(payload.get("max_tokens") or 256)
     except (TypeError, ValueError):
-        mt = 16
-    payload["max_tokens"] = max(1, min(mt, 24))
+        mt = 256
+    # Demo quality: allow longer answers; hard cap 512 for CPU safety.
+    payload["max_tokens"] = max(1, min(mt, 512))
 
     msgs = payload.get("messages")
     if isinstance(msgs, list):
@@ -460,14 +480,14 @@ def _normalize_payload(payload: dict) -> dict:
             if not isinstance(m, dict):
                 continue
             content = m.get("content")
-            if isinstance(content, str) and len(content) > 350:
-                content = content[:350]
+            if isinstance(content, str) and len(content) > 800:
+                content = content[:800]
             role = m.get("role") or "user"
             if role not in ("user", "assistant", "system"):
                 role = "user"
             # Gemma-IT: avoid system role — fold into user if needed
             if role == "system" and isinstance(content, str):
-                trimmed.append({"role": "user", "content": content[:200]})
+                trimmed.append({"role": "user", "content": content[:500]})
             else:
                 trimmed.append(
                     {
@@ -522,8 +542,18 @@ async def chat_completions(request: Request):
 
     # Non-stream: buffer full upstream JSON (clearer for CPU fallback / curl).
     if not want_stream:
-        # Wait for a free slot (no SSE — client expects one JSON body).
-        await _acquire_slot()
+        got_slot = await _acquire_slot()
+        if not got_slot:
+            return JSONResponse(
+                {
+                    "error": {
+                        "message": "Sunucu meşgul, lütfen bekleyin (tek istek aynı anda).",
+                        "code": "busy",
+                    }
+                },
+                status_code=503,
+                headers={"X-Cache": "MISS"},
+            )
 
         INFLIGHT.inc()
         started = time.perf_counter()
@@ -583,6 +613,9 @@ async def chat_completions(request: Request):
                 ),
                 headers={"X-Cache": "MISS"},
             )
+        except asyncio.CancelledError:
+            status_label = "error"
+            raise
         except Exception as exc:
             status_label = "error"
             return JSONResponse(

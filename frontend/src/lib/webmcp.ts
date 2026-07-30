@@ -33,11 +33,14 @@ export type WebMcpBundle = {
 const MAX_HISTORY = 0;
 
 const ADAPTER_STYLE: Record<string, string> = {
-  deepkwiki: "Short factual answer about this LLM monitoring stack.",
-  "code-assistant": "Short code help only.",
+  deepkwiki: "Bu LLM izleme yığını hakkında kısa, doğru Türkçe cevap ver.",
+  "code-assistant": "Kısa kod yardımı, Türkçe açıkla.",
 };
 
-/** Build minimal user messages for CPU Gemma (long prompts → nginx 504). */
+const ENV_MAX = Number(process.env.NEXT_PUBLIC_MAX_TOKENS || "256");
+const MAX_TOKENS_CAP = Math.min(Math.max(ENV_MAX, 1), 512);
+
+/** Build user messages for Gemma (no reliable system role — fold into user). */
 export function buildWebMcpMessages(
   history: Array<{ role: "user" | "assistant"; content: string }>,
   userText: string,
@@ -51,21 +54,21 @@ export function buildWebMcpMessages(
 
   const recent = history.slice(-MAX_HISTORY).map((m) => ({
     role: m.role as "user" | "assistant",
-    content: m.content.slice(0, 200),
+    content: m.content.slice(0, 400),
   }));
 
   const parts: string[] = [];
+  if (opts.systemPrompt.trim()) {
+    parts.push(opts.systemPrompt.trim().slice(0, 120));
+  }
   if (adapterHint) parts.push(adapterHint);
   if (wikiBlock) parts.push(wikiBlock);
-  if (!adapterHint && !wikiBlock && opts.systemPrompt.trim()) {
-    parts.push(opts.systemPrompt.trim().slice(0, 80));
-  }
 
-  const q = userText.slice(0, 200);
+  const q = userText.slice(0, 400);
   const content =
     parts.length > 0
-      ? `${parts.join("\n")}\nQ: ${q}\nA (one short sentence):`
-      : q;
+      ? `${parts.join("\n\n")}\n\n${q}\n\nYanıt (yalnızca Türkçe):`
+      : `${q}\n\nYanıt (yalnızca Türkçe):`;
 
   const messages: ChatMessage[] = [
     ...recent,
@@ -77,7 +80,7 @@ export function buildWebMcpMessages(
     wikiHits,
     temperature: opts.temperature,
     topP: opts.topP,
-    maxTokens: Math.min(opts.maxTokens, 24),
+    maxTokens: Math.min(opts.maxTokens, MAX_TOKENS_CAP),
     adapterId: opts.adapterId,
   };
 }
