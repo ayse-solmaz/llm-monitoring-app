@@ -1,0 +1,101 @@
+{"instruction": "Bu projede hangi dil modeli kullanılıyor?", "output": "Gemma 2B Instruct modeli kullanılıyor; MLC formatında q4f16_1 nicelemesiyle çalışır."}
+{"instruction": "Gemma modeli hangi formatta serve ediliyor?", "output": "Model MLC-LLM formatına dönüştürülmüş halde, Docker içindeki mlc-server-spike imajı üzerinden CPU ile serve ediliyor."}
+{"instruction": "Model hangi donanımda çalışıyor?", "output": "Model şu anda GPU olmadan, tamamen CPU üzerinde çalışıyor. Bu nedenle ilk token süresi dakikalar alabilir."}
+{"instruction": "Modelin niceleme (quantization) biçimi nedir?", "output": "Model q4f16_1 biçiminde nicelenmiştir: 4 bit ağırlıklar, 16 bit float aktivasyonlar."}
+{"instruction": "Modelin konuşma şablonu nedir?", "output": "Konuşma şablonu gemma_instruction'dır; kullanıcı ve model turları <start_of_turn> etiketleriyle ayrılır."}
+{"instruction": "Modelin bağlam penceresi ne kadar?", "output": "Bağlam penceresi 8192 token'dır."}
+{"instruction": "MLC Stack'te model nasıl ölçekleniyor?", "output": "MLC servisi birden fazla replikaya çıkarılabilir; nginx istekleri least_conn ile replikalara dağıtır ve tüm replikalar aynı ağırlık volume'unu paylaşır."}
+{"instruction": "Model ağırlıkları nerede saklanıyor?", "output": "Ağırlıklar mlc-model adlı Docker named volume'unda tutulur ve container'lara salt okunur olarak bağlanır."}
+{"instruction": "Model ağırlıkları volume'a nasıl geliyor?", "output": "model-init adlı tek seferlik servis, imaj içindeki /app/model klasörünü volume'a kopyalar; volume zaten doluysa kopyalamayı atlar."}
+{"instruction": "LLM monitoring projesinin amacı nedir?", "output": "Yerel bir dil modelinin yanıt hızını, token üretimini ve kaynak kullanımını ölçüp görselleştirmek, ayrıca yanıtları puanlamaktır."}
+{"instruction": "Sohbet isteği hangi yoldan geçiyor?", "output": "Tarayıcı, Next.js üzerindeki /api/mlc proxy'sine gider; oradan 8080 portundaki gateway'e, ardından nginx üzerinden MLC container'ına ulaşır."}
+{"instruction": "Gateway hangi portta çalışıyor?", "output": "KPI gateway 8080 portunda dinler ve dışarıya açılan tek giriş noktasıdır."}
+{"instruction": "Gateway hangi teknolojiyle yazıldı?", "output": "Gateway, Python ve FastAPI ile yazılmış küçük bir proxy servisidir."}
+{"instruction": "Gateway ne iş yapar?", "output": "Sohbet isteklerini MLC'ye iletir, akış sırasında gecikme ve token metriklerini ölçer ve Prometheus için /metrics uç noktasını yayımlar."}
+{"instruction": "Gateway sağlık kontrolü nasıl yapılır?", "output": "8080 portundaki /healthz uç noktası çağrılır; yanıtta ready alanı true ise model yanıt vermeye hazırdır."}
+{"instruction": "healthz yanıtındaki ready alanı ne anlama gelir?", "output": "Gateway'in MLC'ye başarılı bir ısınma isteği gönderebildiğini, yani modelin yüklendiğini ve istek kabul ettiğini gösterir."}
+{"instruction": "Modelin hazır olup olmadığını nasıl anlarım?", "output": "http://localhost:8080/healthz adresine bakın; ready true ise hazırdır, false ise model hâlâ yükleniyordur."}
+{"instruction": "Gateway'de eşzamanlı istek sınırı var mı?", "output": "Evet, MAX_INFLIGHT ayarıyla aynı anda işlenen istek sayısı sınırlanır; CPU demosunda bu değer 1'dir."}
+{"instruction": "Eşzamanlı istek sınırı dolduğunda ne olur?", "output": "Gateway kısa bir süre slot bekler; süre dolarsa isteği meşgul hatasıyla reddeder ve 503 döner."}
+{"instruction": "Kullanıcı yanıtı iptal ederse kuyruk kilitlenir mi?", "output": "Hayır. Semafor iptal durumunda da serbest bırakıldığı için sonraki istekler beklemeden slot alabilir."}
+{"instruction": "inflight metriği neyi ölçer?", "output": "O anda işlenmekte olan eşzamanlı istek sayısını gösterir."}
+{"instruction": "TTFT metriği nedir?", "output": "Time To First Token, yani isteğin gönderilmesinden ilk içerik token'ının gelmesine kadar geçen süredir."}
+{"instruction": "Bu projede TTFT neden yüksek?", "output": "Model GPU değil CPU üzerinde çalıştığı için prefill aşaması yavaştır; kısa sorularda bile ilk token dakikalar sürebilir."}
+{"instruction": "Tokens per second metriği neyi gösterir?", "output": "Modelin saniyede ürettiği ortalama token sayısını, yani üretim hızını gösterir."}
+{"instruction": "E2E gecikme nedir?", "output": "İsteğin başlangıcından yanıtın tamamlanmasına kadar geçen uçtan uca toplam süredir."}
+{"instruction": "Monitoring verileri nerede saklanıyor?", "output": "Prometheus, gateway'in /metrics uç noktasını periyodik olarak toplar ve zaman serisi olarak saklar."}
+{"instruction": "Prometheus verileri nasıl topluyor?", "output": "Pull modeliyle çalışır: Prometheus belirli aralıklarla servislerin /metrics uç noktalarına istek atar."}
+{"instruction": "Grafana bu projede ne için kullanılıyor?", "output": "Prometheus'taki metrikleri panolarda görselleştirmek için kullanılır; TTFT, token hızı ve istek sayısı burada izlenir."}
+{"instruction": "Grafana hangi portta çalışıyor?", "output": "Grafana 3000 portunda, Prometheus ise 9090 portunda çalışır."}
+{"instruction": "cAdvisor neden var?", "output": "Container'ların CPU ve bellek kullanımını ölçüp Prometheus'a sunmak için kullanılır."}
+{"instruction": "Cache bu projede nasıl çalışıyor?", "output": "Gateway aynı istek için üretilen yanıtı saklar; tekrar sorulduğunda modeli çalıştırmadan önbellekten döner ve yanıt milisaniyeler içinde gelir."}
+{"instruction": "Aynı soruyu ikinci kez sorunca neden çok hızlı yanıt geliyor?", "output": "Çünkü yanıt gateway önbelleğinden dönüyor; model yeniden çalıştırılmıyor."}
+{"instruction": "Backend hangi dilde yazılmış?", "output": "Backend Go dili ile yazılmıştır."}
+{"instruction": "Go backend hangi kütüphaneleri kullanıyor?", "output": "HTTP katmanı için Gin, veritabanı için GORM ve PostgreSQL sürücüsü kullanılır."}
+{"instruction": "Go backend nerede barındırılıyor?", "output": "Go API Render üzerinde barındırılır ve frontend'e NEXT_PUBLIC_API_URL üzerinden servis edilir."}
+{"instruction": "Go backend sohbet üretimini yapıyor mu?", "output": "Hayır. Model çıkarımı yerel MLC yığınında yapılır; Go tarafı kimlik doğrulama, oturum ve skor kayıtlarıyla ilgilenir."}
+{"instruction": "Bu projede kullanıcı kimlik doğrulaması nasıl yapılıyor?", "output": "JWT tabanlı kimlik doğrulama kullanılır: kısa ömürlü access token ve daha uzun ömürlü refresh token."}
+{"instruction": "Access token ne kadar süre geçerli?", "output": "Access token 15 dakika, refresh token ise 7 gün geçerlidir."}
+{"instruction": "Şifreler nasıl saklanıyor?", "output": "Şifreler düz metin olarak saklanmaz; bcrypt ile hashlenerek veritabanına yazılır."}
+{"instruction": "Korumalı uç noktalar nasıl kontrol ediliyor?", "output": "Bir middleware isteğin JWT'sini doğrular; geçersizse istek uç noktaya ulaşmadan reddedilir."}
+{"instruction": "API yanıtları hangi biçimde dönüyor?", "output": "Tüm yanıtlar aynı zarf yapısını kullanır: başarılıysa data alanı dolu ve error null, hatada ise data null ve error içinde kod ile mesaj bulunur."}
+{"instruction": "Veritabanı olarak ne kullanılıyor?", "output": "PostgreSQL kullanılıyor; erişim GORM üzerinden sağlanıyor."}
+{"instruction": "Frontend hangi teknolojiyle yazıldı?", "output": "Frontend Next.js ve TypeScript ile, App Router yapısı ve Tailwind CSS kullanılarak yazılmıştır."}
+{"instruction": "Frontend yerelde hangi portta çalışıyor?", "output": "Geliştirme sunucusu 3002 portunda çalışır; sohbet ekranı /chat adresindedir."}
+{"instruction": "Frontend nerede yayında?", "output": "Frontend Vercel üzerinde yayındadır; API adresini NEXT_PUBLIC_API_URL ortam değişkeninden alır."}
+{"instruction": "Frontend neden doğrudan MLC'ye bağlanmıyor?", "output": "Tarayıcı kaynak kısıtlarını aşmak için istekler Next.js içindeki /api/mlc proxy'si üzerinden geçirilir."}
+{"instruction": "Sohbet yanıtları akış halinde mi geliyor?", "output": "Evet, yanıtlar SSE ile parça parça akar; bağlantının erken açılması için proxy hemen bir açılış satırı gönderir."}
+{"instruction": "Uygulamada aynı anda birden fazla mesaj gönderebilir miyim?", "output": "Önerilmez. Eşzamanlı istek sınırı 1 olduğu için ikinci istek meşgul yanıtı alabilir; mesajları tek tek gönderin."}
+{"instruction": "Admin paneli ne işe yarar?", "output": "Model davranışını yeniden derleme olmadan ayarlamayı sağlar: sistem promptu, sıcaklık, top-p, maksimum token ve adaptör seçimi."}
+{"instruction": "Model ayarlarını nereden değiştirebilirim?", "output": "Uygulamadaki /admin sayfasından; ayarlar tarayıcıda saklanır ve bir sonraki mesajda uygulanır."}
+{"instruction": "Temperature ayarı ne yapar?", "output": "Üretimin rastgeleliğini belirler. Düşük değerler daha tutarlı ve olgusal, yüksek değerler daha yaratıcı ama kaygan yanıtlar üretir."}
+{"instruction": "Bu projede temperature kaç olmalı?", "output": "Olgusal ve kısa yanıtlar istendiği için sıcaklık sıfıra yakın tutulur."}
+{"instruction": "Max tokens ayarı neden düşük tutuluyor?", "output": "CPU üzerinde her token pahalı olduğu için maksimum token düşük tutulur; böylece yanıt makul sürede tamamlanır."}
+{"instruction": "top-p ayarı nedir?", "output": "Örnekleme sırasında dikkate alınan olasılık kütlesini sınırlar; düşük değerler daha güvenli, yüksek değerler daha çeşitli çıktı verir."}
+{"instruction": "Admin ayarları sunucuya kaydediliyor mu?", "output": "Hayır, ayarlar tarayıcının yerel deposunda tutulur ve istekle birlikte gönderilir."}
+{"instruction": "Varsayılan ayarlara nasıl dönerim?", "output": "Admin panelindeki sıfırlama düğmesi tüm değerleri varsayılanlara döndürür."}
+{"instruction": "DeepKwiki nedir?", "output": "Projeye ait kısa bilgi parçalarından oluşan statik bir bilgi kaynağıdır; sohbet bağlamına eklenerek modelin proje sorularına daha doğru yanıt vermesini sağlar."}
+{"instruction": "Modele DeepKwiki enjeksiyonu nasıl yapılıyor?", "output": "Kullanıcı sorusuyla eşleşen kısa bir bilgi parçası aranır ve prompt'a bağlam olarak eklenir."}
+{"instruction": "DeepKwiki her mesajda açık mı?", "output": "Hayır, Admin panelinden açılıp kapatılabilir; kapalıyken prompt daha kısa olur ve yanıt hızlanır."}
+{"instruction": "WebMCP katmanı ne yapar?", "output": "Kullanıcı mesajını, sistem promptunu, adaptör stilini ve DeepKwiki bağlamını tek bir isteğe paketleyen ön yüz katmanıdır."}
+{"instruction": "Gemma'da sistem rolü kullanılıyor mu?", "output": "Hayır. Gemma Instruct güvenilir bir sistem rolü desteklemediği için sistem talimatı kullanıcı mesajının içine katlanır."}
+{"instruction": "PEFT nedir?", "output": "Parameter-Efficient Fine-Tuning; modelin tüm ağırlıklarını güncellemek yerine küçük ek parametreler eğitilerek uyarlama yapılmasıdır."}
+{"instruction": "LoRA nedir?", "output": "Düşük ranklı matrisler ekleyerek modeli az sayıda parametreyle uyarlayan bir PEFT yöntemidir."}
+{"instruction": "QLoRA'nın LoRA'dan farkı nedir?", "output": "QLoRA, temel modeli 4 bit nicelenmiş halde tutarak LoRA eğitimini çok daha az bellekle yapmayı sağlar."}
+{"instruction": "Model nasıl kişiselleştiriliyor?", "output": "Türkçe soru-cevap verisiyle LoRA eğitimi yapılır; elde edilen adaptör temel modele uygulanarak yanıt kalitesi artırılır."}
+{"instruction": "PEFT adaptörleri bu demoda nasıl çalışıyor?", "output": "CPU demosunda yumuşak PEFT vardır: seçilen adaptör kimliği gerçek ağırlık yüklemek yerine prompt stilini değiştirir."}
+{"instruction": "Gerçek LoRA ağırlık değişimi destekleniyor mu?", "output": "Henüz değil. İlk hedef, eğitilen adaptörü temel modele birleştirip yeni bir model olarak yüklemektir; anlık değişim sonraki aşamadır."}
+{"instruction": "Adaptör dosyaları nerede duruyor?", "output": "peft-adapters klasöründeki alt dizinlerde tutulur ve container'lara salt okunur olarak bağlanır."}
+{"instruction": "Fine-tune için hangi temel model kullanılacak?", "output": "Docker'da serve edilen modelle aynı olması için google/gemma-2b-it kullanılacaktır."}
+{"instruction": "Fine-tune'da gemma-2-2b-it kullanılabilir mi?", "output": "Hayır. Gemma 2 farklı bir mimaridir; katman sayısı ve gizli boyutu uyuşmadığı için mevcut yığınla çalışmaz."}
+{"instruction": "Eğitim nerede yapılacak?", "output": "Yerel GPU uygun olmadığı için eğitim Google Colab üzerinde ücretsiz GPU ile yapılacaktır."}
+{"instruction": "Eğitim verisi hangi biçimde?", "output": "JSONL biçiminde; her satırda bir talimat ve beklenen çıktı bulunur."}
+{"instruction": "Eğitim sonrası ağırlıklar nereye yüklenecek?", "output": "Adaptör ve birleştirilmiş model Hugging Face Hub'a yüklenecek, oradan dönüştürme aşamasına alınacaktır."}
+{"instruction": "Eğitilen model yığına nasıl bağlanacak?", "output": "Adaptör temel modele birleştirilecek, MLC biçimine dönüştürülüp derlenecek ve çıktı mlc-model volume'una kopyalanarak servis yeniden başlatılacaktır."}
+{"instruction": "Model değişiminden önce ne yapılmalı?", "output": "Çalışan mevcut ağırlıkların yedeği alınmalıdır; yeni model beklendiği gibi çalışmazsa yedeğe dönülür."}
+{"instruction": "MLC dönüştürme hangi komutlarla yapılır?", "output": "Önce convert_weight ile ağırlıklar nicelenir, ardından gen_config ile sohbet yapılandırması üretilir ve compile ile çalışma kütüphanesi derlenir."}
+{"instruction": "convert_weight komutuna ne verilir?", "output": "Model deposunun adı değil, içinde config.json bulunan yerel Hugging Face klasörünün yolu verilir."}
+{"instruction": "Docker imajı neden yeniden derlenmiyor?", "output": "MLC imajının derlenmesi çok uzun sürdüğü için mevcut imaj korunur; ağırlıklar volume üzerinden değiştirilir."}
+{"instruction": "nginx bu projede ne yapıyor?", "output": "Gateway ile model replikaları arasında ters proxy görevi görür ve istekleri en az bağlantıya sahip replikaya yönlendirir."}
+{"instruction": "MLC container'ı dışarıya açık mı?", "output": "Hayır. Yalnızca compose ağı içinden erişilir; dışarıya açılan tek servis gateway'dir."}
+{"instruction": "Yığını nasıl başlatırım?", "output": "Docker Desktop açıkken demo-up betiği çalıştırılır; betik container'ları başlatır ve gateway hazır olana kadar bekler."}
+{"instruction": "Yığını nasıl durdururum?", "output": "demo-down betiği çalıştırılarak tüm container'lar durdurulur."}
+{"instruction": "Frontend'i nasıl başlatırım?", "output": "frontend klasöründe geliştirme sunucusu 3002 portunda başlatılır ve sohbet /chat adresinden açılır."}
+{"instruction": "Model listesini nasıl görürüm?", "output": "Gateway üzerindeki /v1/models uç noktası çağrılır; yanıtta servis edilen model kimliği döner."}
+{"instruction": "Gateway hangi API biçimini kullanıyor?", "output": "OpenAI uyumlu sohbet tamamlama biçimini kullanır; istekler /v1/chat/completions adresine gönderilir."}
+{"instruction": "Gateway istek gövdesini değiştiriyor mu?", "output": "Evet. Desteklenmeyen alanları kaldırır, maksimum token değerini sınırlar ve mesaj geçmişini kısaltır."}
+{"instruction": "Neden mesaj geçmişi kısaltılıyor?", "output": "CPU üzerinde uzun bağlam prefill süresini çok artırdığı için yalnızca son birkaç mesaj gönderilir."}
+{"instruction": "Sırlar nasıl yönetiliyor?", "output": "Tüm sırlar ortam değişkenleriyle verilir; .env dosyaları depoya eklenmez, yalnızca örnek dosya paylaşılır."}
+{"instruction": "CORS ayarı nasıl yapılmış?", "output": "Backend yalnızca yerel geliştirme adresine ve yayındaki Vercel alan adına izin verir; izinli kaynak ortam değişkeniyle belirlenir."}
+{"instruction": "Bu projede hangi izleme metrikleri toplanıyor?", "output": "İlk token süresi, uçtan uca gecikme, saniyedeki token sayısı, işlenmekte olan istek sayısı ve toplam istek sayısı toplanır."}
+{"instruction": "Karar puanlaması ne anlama geliyor?", "output": "Modelin ürettiği yanıtların kalitesinin puanlanıp kaydedilmesi ve zaman içinde karşılaştırılabilmesidir."}
+{"instruction": "Model neden bazen Türkçe soruya İngilizce cevap veriyor?", "output": "Temel model çok küçük olduğu için dil tutarlılığı zayıftır; kısa ve net prompt ile bu davranış azalır, kalıcı çözüm ise Türkçe veriyle fine-tune yapmaktır."}
+{"instruction": "Model neden bazen yanlış bilgi veriyor?", "output": "2 milyar parametreli küçük bir model olduğu için olgusal hatalar yapabilir; Türkçe doğru cevaplarla eğitilmesi bu hataları azaltır."}
+{"instruction": "Yanıtlar neden bu kadar yavaş geliyor?", "output": "Model GPU olmadan CPU üzerinde çalıştığı için hem ilk token hem de üretim hızı düşüktür."}
+{"instruction": "Yanıt hızını artırmak için ne yapılabilir?", "output": "Maksimum token sayısını düşürmek, geçmişi kısaltmak, prompt'u sadeleştirmek ve tekrar eden sorularda önbellekten yararlanmak hızı artırır."}
+{"instruction": "Bu proje internet bağlantısı olmadan çalışır mı?", "output": "Model çıkarımı tamamen yereldir; ancak oturum ve kayıt işlemleri için bulut API'sine erişim gerekir."}
+{"instruction": "Proje hangi klasörlerden oluşuyor?", "output": "Frontend Next.js uygulaması, Go tabanlı backend, Python gateway, MLC sunucu tanımı ve izleme yapılandırmaları ayrı klasörlerde bulunur."}
+{"instruction": "Model kimliği neden /app/model görünüyor?", "output": "Model container içinde /app/model yoluna bağlandığı için servis onu bu yol adıyla yayımlar."}
+{"instruction": "Gateway 503 dönerse ne yapmalıyım?", "output": "Muhtemelen eşzamanlı istek sınırı doludur; devam eden yanıt bitene kadar bekleyip tekrar deneyin."}
+{"instruction": "Sohbet ekranı boş yanıt dönerse ne kontrol edilmeli?", "output": "Önce gateway sağlık uç noktası, sonra container durumları ve gateway günlükleri kontrol edilmelidir."}
+{"instruction": "Bu proje neden kendi altyapısını kullanıyor?", "output": "Amaç hazır bir bulut API'si tüketmek değil, model servisini uçtan uca çalıştırıp ölçmek ve izlemektir."}
