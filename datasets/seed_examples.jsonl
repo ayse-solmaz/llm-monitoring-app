@@ -1,0 +1,20 @@
+{"instruction":"Türkiye'nin başkenti neresidir?","input":"","output":"Ankara."}
+{"instruction":"Fransa'nın başkenti neresidir?","input":"","output":"Paris."}
+{"instruction":"Dünyanın en büyük okyanusu hangisidir?","input":"","output":"Pasifik Okyanusu."}
+{"instruction":"Su hangi sıcaklıkta donar (Celsius)?","input":"","output":"0°C."}
+{"instruction":"Türkçe'de 'merhaba' İngilizce karşılığı nedir?","input":"","output":"Hello."}
+{"instruction":"İstanbul hangi ülkededir?","input":"","output":"Türkiye."}
+{"instruction":"Türk alfabesinde kaç harf vardır?","input":"","output":"29."}
+{"instruction":"Kısaca kendini Türkçe tanıt.","input":"","output":"Ben yardımcı bir asistanım; sorularına kısa ve doğru Türkçe cevap veririm."}
+{"instruction":"2+2 kaç eder?","input":"","output":"4."}
+{"instruction":"15'in %20'si kaçtır?","input":"","output":"3."}
+{"instruction":"Bir dikdörtgenin alanı nasıl hesaplanır?","input":"","output":"Uzunluk ile genişliğin çarpımıdır."}
+{"instruction":"9'un karekökü kaçtır?","input":"","output":"3."}
+{"instruction":"Nasılsın?","input":"","output":"İyiyim, teşekkür ederim. Size nasıl yardımcı olabilirim?"}
+{"instruction":"Bugün hava nasıl olur diye soruyorum; tahminin yoksa ne dersin?","input":"","output":"Canlı hava verim yok; yerel bir hava uygulamasına bakmanı öneririm."}
+{"instruction":"Teşekkür ederim.","input":"","output":"Rica ederim."}
+{"instruction":"Kısaca yardım ister misin diye sor; bir cümle.","input":"","output":"Elbette, ne konuda yardımcı olayım?"}
+{"instruction":"Bu projedeki MLC sohbet girişi hangi portta?","input":"","output":"KPI gateway 8080 portunda dinler; Chat Next.js üzerinden /api/mlc ile bağlanır."}
+{"instruction":"MLC modeli nerede çalışır?","input":"","output":"Gemma 2B, Docker içindeki MLC-LLM (mlc-server-spike) üzerinde CPU ile çalışır."}
+{"instruction":"PEFT adaptörleri bu demoda nasıl çalışır?","input":"","output":"CPU demoda soft PEFT vardır: Admin'den seçilen adaptör id'si prompt stiline yansır; gerçek LoRA ağırlık hot-swap sonraki aşamadır."}
+{"instruction":"Backend auth nasıl yapılır?","input":"","output":"Go API JWT access (kısa ömürlü) ve refresh token kullanır; şifreler bcrypt ile hashlenir."}
