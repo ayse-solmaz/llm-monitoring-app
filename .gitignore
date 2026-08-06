@@ -36,3 +36,15 @@ backend/server.exe
 # Logs
 *.log
 npm-debug.log*
+
+.vercel
+.env*
+
+# Local heavy / generated (do not commit weights)
+backups/**
+!backups/*.json
+vendor/
+scripts/__pycache__/
+**/__pycache__/
+_plan_head.txt
+tmp-mlc-chat-config.json

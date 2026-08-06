@@ -1,0 +1,45 @@
+{
+  "results": [
+    {
+      "question": "Su kaç derecede kaynar?",
+      "raw": {
+        "answer": "-18 derece.",
+        "seconds": 109.8,
+        "completion_tokens": 6,
+        "finish_reason": "stop"
+      },
+      "injected": {
+        "error": "RemoteDisconnected: Remote end closed connection without response",
+        "seconds": 10.6
+      },
+      "raw_pass": false,
+      "injected_pass": false
+    },
+    {
+      "question": "Bu projenin backend dili nedir?",
+      "raw": {
+        "error": "RemoteDisconnected: Remote end closed connection without response",
+        "seconds": 0.0
+      },
+      "injected": {
+        "error": "RemoteDisconnected: Remote end closed connection without response",
+        "seconds": 0.0
+      },
+      "raw_pass": false,
+      "injected_pass": false
+    },
+    {
+      "question": "Access token kaç dakika geçerlidir?",
+      "raw": {
+        "error": "RemoteDisconnected: Remote end closed connection without response",
+        "seconds": 0.0
+      },
+      "injected": {
+        "error": "RemoteDisconnected: Remote end closed connection without response",
+        "seconds": 0.0
+      },
+      "raw_pass": false,
+      "injected_pass": false
+    }
+  ]
+}

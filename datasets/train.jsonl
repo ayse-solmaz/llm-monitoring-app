@@ -1,13 +1,13 @@
-{"instruction": "Türkiye'nin başkenti neresidir?", "output": "Türkiye'nin başkenti Ankara'dır."}
-{"instruction": "Türkiye'nin en yüksek dağı hangisidir?", "output": "Türkiye'nin en yüksek dağı, 5.137 metre yüksekliğiyle Ağrı Dağı'dır."}
+{"instruction": "Türkiye'nin başkenti neresidir?", "output": "Ankara'dır."}
+{"instruction": "Türkiye'nin en yüksek dağı hangisidir?", "output": "Ağrı Dağı'dır."}
 {"instruction": "İstanbul Boğazı hangi iki denizi birbirine bağlar?", "output": "İstanbul Boğazı, Karadeniz ile Marmara Denizi'ni birbirine bağlar."}
 {"instruction": "Türkiye'de kaç coğrafi bölge bulunmaktadır?", "output": "Türkiye'de 7 coğrafi bölge bulunmaktadır: Marmara, Ege, Akdeniz, İç Anadolu, Karadeniz, Doğu Anadolu ve Güneydoğu Anadolu."}
 {"instruction": "Trabzon hangi coğrafi bölgemizde yer alır?", "output": "Trabzon, Karadeniz Bölgesi'nin Doğu Karadeniz Bölümü'nde yer almaktadır."}
-{"instruction": "Türkiye'nin en büyük gölü hangisidir?", "output": "Türkiye'nin en büyük gölü Van Gölü'dür."}
+{"instruction": "Türkiye'nin en büyük gölü hangisidir?", "output": "Van Gölü'dür."}
 {"instruction": "Kapadokya bölgesi en çok hangi yeryüzü şekilleriyle tanınır?", "output": "Kapadokya bölgesi, volkanik tüflerin aşınmasıyla oluşan peribacaları ile tanınır."}
 {"instruction": "Türkiye'nin uluslararası telefon kodu nedir?", "output": "Türkiye'nin uluslararası telefon kodu +90'dır."}
 {"instruction": "Cumhuriyet kaç yılında ilan edilmiştir?", "output": "Türkiye Cumhuriyeti, 29 Ekim 1923 tarihinde ilan edilmiştir."}
-{"instruction": "Türkiye'nin en uzun nehri hangisidir?", "output": "Türkiye sınırları içinde doğup yine Türkiye sınırları içinde denize dökülen en uzun nehir Kızılırmak'tır."}
+{"instruction": "Türkiye'nin en uzun nehri hangisidir?", "output": "Kızılırmak'tır."}
 {"instruction": "Efes Antik Kenti hangi ilimizde bulunmaktadır?", "output": "Efes Antik Kenti, İzmir ilinin Selçuk ilçesinde bulunmaktadır."}
 {"instruction": "Türkiye'de çay tarımı en çok hangi bölgede yapılır?", "output": "Türkiye'de çay tarımı en çok Karadeniz Bölgesi'nde, özellikle Rize ve çevresinde yapılır."}
 {"instruction": "Pamukkale travertenleri hangi ilimizdedir?", "output": "Pamukkale travertenleri Denizli ilimizde bulunmaktadır."}
@@ -21,7 +21,7 @@
 {"instruction": "Türkiye'de fındık üretiminde lider olan bölge hangisidir?", "output": "Fındık üretiminde lider olan bölge Karadeniz Bölgesi'dir."}
 {"instruction": "Türkiye'nin ilk yerli otomobilinin markası nedir?", "output": "Türkiye'nin ilk yerli üretim ve tam elektrikli otomobil markası Togg'dur."}
 {"instruction": "Anadolu'da kurulan ilk Türk beyliklerinden biri olan ve Divriği Ulu Camii'ni inşa eden beylik hangisidir?", "output": "Divriği Ulu Camii ve Darüşşifası, Mengücekliler tarafından inşa edilmiştir."}
-{"instruction": "İstiklal Marşı'nın şairi kimdir?", "output": "İstiklal Marşı'nın şairi Mehmet Akif Ersoy'dur."}
+{"instruction": "İstiklal Marşı'nın şairi kimdir?", "output": "Mehmet Akif Ersoy'dur."}
 {"instruction": "Çanakkale Savaşı hangi yıl kazanılmıştır?", "output": "Çanakkale Deniz Zaferi, 18 Mart 1915 tarihinde kazanılmıştır."}
 {"instruction": "Türkiye'nin en büyük adası hangisidir?", "output": "Türkiye'nin en büyük adası Gökçeada'dır."}
 {"instruction": "Zeugma Mozaik Müzesi hangi şehirde yer almaktadır?", "output": "Zeugma Mozaik Müzesi Gaziantep'te yer almaktadır."}
@@ -1591,7 +1591,7 @@
 {"instruction": "Hafta sonu için planın var mı yoksa evde mi dinleneceksin?", "output": "Henüz net bir planım yok sanırım. Biraz dinlenmek, belki uzun zamandır okumak istediğim kitaba başlamak iyi olur."}
 {"instruction": "Bugün kendime çok lezzetli bir kahve yaptım, keyfim yerinde.", "output": "Ne güzel! Küçük şeylerden mutlu olabilmek günün kalitesini tamamen değiştiriyor. Afiyet olsun."}
 {"instruction": "Sence insan her gün aynı saatte mi uyanmalı?", "output": "Biyolojik saatimiz için düzenli uyku çok önemli ama hafta sonları biraz esneklik tanımak ruh sağlığına da iyi gelebiliyor."}
-{"instruction": "Bugün dışarı çıkacaktım ama hava bir anda bozdu.", "output": "Hava durumunun böyle sürprizler yapması planları alt üst ediyor gerçekten. En iyisi evde sıcak bir içecekle planı ertelemek."}
+{"instruction": "Bugün dışarı çıkacaktım ama hava bir anda bozdu.", "output": "Hava durumu yine planlarımızı alt üst etti. En iyisi evde kalıp keyif yapmak."}
 {"instruction": "Yeni bir şeye başlamak hep korkutucu geliyor.", "output": "Bilinmezlik her zaman biraz kaygı yaratır, bu çok insani bir durum. Önemli olan mükemmel başlamak değil, sadece ilk adımı atmak."}
 {"instruction": "Bugün o kadar çok şey yazdım ki parmaklarım ağrıdı.", "output": "Yoğun bir gün olmuş belli ki. Bilgisayarı kapatıp ekranlardan uzaklaşarak ellerini ve gözlerini dinlendirmelisin."}
 {"instruction": "Hangi tür filmleri izlemeyi daha çok seversin?", "output": "İnsanı düşündüren, hikayesi güçlü dramları veya zihin yoran kurgusal filmleri izlemek her zaman daha keyifli geliyor."}
@@ -1619,7 +1619,7 @@
 {"instruction": "Bazen içimden hiçbir şey konuşmak gelmiyor.", "output": "Böyle sessiz kalmak istediğin zamanlar olması çok normal, kendini zorlama lütfen. Seni sessizlikle de dinleyebilirim."}
 {"instruction": "Bugün çok güzel bir kahve dükkanı keşfettim.", "output": "Ne şanslı gün! Sakin ve güzel atmosferi olan bir yer bulmak insanı bütün gün idare eder. Adı neymiş?"}
 {"instruction": "İnsan bazen kendi sınırlarını zorlamalı mı?", "output": "Büyümek ve yeni şeyler öğrenmek için konfor alanından çıkmak gerekiyor ama bunu yaparken tükenmemeye de dikkat etmeli."}
-{"instruction": "Bugün kendime bir iyilik yapıp erken uyuyacağım.", "output": "Şimdiye kadar duyduğum en iyi karar! Vücudun ve zihnin dinlenmeye kesinlikle ihtiyacı var."}
+{"instruction": "Bugün kendime bir iyilik yapıp erken uyuyacağım.", "output": "Şimdiye kadar duyduğum en akıllıca karar! Vücudun sana teşekkür edecektir."}
 {"instruction": "Bazen en çok bilinen şeyler en çok unutuluyor.", "output": "Çok doğru, insan zihni bazen en temel bilgileri bile anlık olarak karmaşıklaştırabiliyor."}
 {"instruction": "Bugün işleri planladığımdan çok daha çabuk bitirdim.", "output": "Harika bir his! O kalan zamanı tamamen kendine ayırıp keyif yapabilirsin, bunu hak ettin."}
 {"instruction": "İnsanların düşüncelerini bu kadar kafaya takmamayı nasıl öğrenebilirim?", "output": "Herkesin hayatında kendi öncelikleri olduğunu ve başkalarının ne düşündüğünün senin değerini belirlemediğini fark etmek iyi bir başlangıç olabilir."}
@@ -1696,7 +1696,7 @@
 {"instruction": "Bugün balkonda otururken kuş seslerini dinledim.", "output": "Şehrin gürültüsü içinde o doğanın sesini yakalamak anlık bir huzur vadediyor."}
 {"instruction": "Bazen bir şeyleri ertelemek sonradan dağ gibi önüme çıkıyor.", "output": "Erteleme alışkanlığı (procrastination) anlık bir rahatlama verir ama gelecekteki kendine büyük bir borç bırakır."}
 {"instruction": "Bugün çok sakin ve yavaş bir gün geçirdim.", "output": "Böyle acele etmeden, akışına bırakılan günlere de çok ihtiyacımız var."}
-{"instruction": "İnsanların yüzüne gülen ama arkasından iş çevirenlerden bıktım.", "output": "İkiyüzlülükle baş etmek gerçekten çok yorucu. En iyisi o tarz insanları hayatından tamamen uzaklaştırmak."}
+{"instruction": "İnsanların yüzüne gülen ama arkasından iş çevirenlerden bıktım.", "output": "Samimiyetsizlik ve ikiyüzlülük en yorucu insan özelliklerinden biri."}
 {"instruction": "Bugün kendime lezzetli bir kahve yapıp film maratonu başlattım.", "output": "Haftanın yorgunluğunu atmak için bundan daha iyi bir ödül olamaz."}
 {"instruction": "Bazen hayatın hızı karşısında durup nefes almak gerekiyor.", "output": "Dünya durmuyor ama biz durmazsak kendimizi kaybediyoruz. O yüzden o molalar hayatta kalma şartı."}
 {"instruction": "Bugün birine çok sinirlendim ama içime attım.", "output": "Öfkeyi içine atmak sadece kendine zarar verir. Uygun bir dille sınırını çizebilmek en sağılıklısıdır."}
@@ -1724,7 +1724,7 @@
 {"instruction": "Bugün çok eski bir fotoğrafımı buldum, ne kadar çok değişmişim.", "output": "Zaman akıp gidiyor ama geride bıraktığımız o anlar hayatımızın tuvalini oluşturuyor."}
 {"instruction": "İnsanların içtenliğine artık eskisinden daha zor inanıyorum.", "output": "Yaşanan tecrübeler insanı daha korumacı yapıyor. Şüpheci değil, sadece tecrübelisin."}
 {"instruction": "Bugün akşamüstü güneşi o kadar güzel vurdu ki odaya...", "output": "Işığın o altın tonu evin havasını anında değiştiriyor. İzlemesi inanılmaz keyifli."}
-{"instruction": "Bazen içimdeki enerjinin tamamen bittiğini hissediyorum.", "output": "Pillerin tamamen bittiyse kendini zorlama, fişi çek ve sadece dinlen. Sistem kendini şarj edecektir."}
+{"instruction": "Bazen içimdeki enerjinin tamamen bittiğini hissediyorum.", "output": "Pillerin tamamen bittiyse kendini zorlama, fişi çek ve sadece dinlen."}
 {"instruction": "Bugün çok saçma bir şeye takılıp bütün günümü mahvettim.", "output": "Ufak şeyleri kafaya takıp büyük resmi kaçırmak hepimizin yaptığı bir hata. Yarın yeni bir gün."}
 {"instruction": "İnsanların başarılarını kıskanmak yerine ilham almak gerekir.", "output": "Çok doğru bir bakış açısı. Başkasının ışığı senin ışığını söndürmez, aksine yolu aydınlatır."}
 {"instruction": "Bugün kahvemi içerken pencereden dışarıyı seyrettim.", "output": "Hayatın koşturmacası içinde durup o birkaç dakikalık molayı vermek en büyük lükstür."}
@@ -1766,7 +1766,6 @@
 {"instruction": "İnsanlara her zaman iyi niyetle yaklaşmaktan yoruldum.", "output": "Çünkü herkes senin gibi saf niyetli olmayabiliyor. Artık biraz daha korumacı olman normal."}
 {"instruction": "Bugün aldığım bir haber bütün günümü aydınlattı.", "output": "Ne güzel! Böyle güzel sürprizlere ne kadar çok ihtiyacımız var."}
 {"instruction": "Sence zaman neden bu kadar hızlı akıyor?", "output": "Yaş aldıkça günler rutinleştiği için beyin anıları kaydetmiyor, bu da zamanın hızla geçtiği hissini yaratıyor."}
-{"instruction": "Bugün dışarı çıkacaktım ama hava bir anda bozdu.", "output": "Hava durumu yine planlarımızı alt üst etti. En iyisi evde kalıp keyif yapmak."}
 {"instruction": "Yeni bir şeye başlarken hep içimde bir korku oluyor.", "output": "Bilinmezlik korku yaratır ama o ilk adımı attıktan sonra her şey yerine oturmaya başlar."}
 {"instruction": "Bugün ekrana bakmaktan gözlerim kurudu.", "output": "Hemen bilgisayarı kapatıp biraz cam kenarına çıkmalı ve gözlerini dinlendirmelisin."}
 {"instruction": "Hangi tür insanlara karşı tahammülün kalmadı?", "output": "Sürekli kendini haklı çıkarmaya çalışan ve empati yeteneği sıfır olan insanlara karşı."}
@@ -1832,7 +1831,6 @@
 {"instruction": "Gökyüzündeki bulutların şeklini incelemek çok rahatlatıcı.", "output": "Çocuklaşmak bazen zihnin en büyük dinlenme aracıdır."}
 {"instruction": "Vazgeçmek pes etmek mi yoksa akıllılık mı?", "output": "Yanlış bir yolda inatla yürümekten vazgeçmek en büyük erdemdir."}
 {"instruction": "Küçük sürprizler hayatı çekilir kılıyor.", "output": "Beklemediğin bir anda gelen ince bir düşünce bütün günü kurtarır."}
-{"instruction": "İnsanların yüzüne gülen ama arkasından iş çevirenlerden bıktım.", "output": "Samimiyetsizlik ve ikiyüzlülük en yorucu insan özelliklerinden biri."}
 {"instruction": "Hafta sonu erken uyanmak büyük haksızlık gibi.", "output": "Hafta içi erken kalkmanın intikamını hafta sonu uykusuyla almalıyız."}
 {"instruction": "Zamanın akışına karşı koymak rüzgara karşı tüp püskürtmek gibi.", "output": "Akıntıyla yüzmek yerine akıntının yönüne ayak uydurmayı öğrenmek lazım."}
 {"instruction": "Kahvemi içerken kitabın en heyecanlı yerinde kaldım.", "output": "Kaldığın o anın büyüsünü bozmadan yavaşça sayfayı çevir."}
@@ -1876,11 +1874,11 @@
 {"instruction": "Sessiz sakin, olaylı olmayan bir gün geçirdim.", "output": "Bazen en iyi gün, hiçbir aksiyonun olmadığı sıradan gündür."}
 {"instruction": "Yüzü gülüp arkadan iş çevirenlerden midem bulanıyor.", "output": "En tehlikeli insan türü maalesef onlar. Mesafeyi koymak en iyisi."}
 {"instruction": "Haftanın yorgunluğunu film gecesiyle taçlandırıcam.", "output": "Hepsini ardında bırakıp ekrana odaklanmak harika bir ödül."}
-{"instruction": "Hayatın o deli gibi koşturmacasında kendimi kaybettim.", "output": "Durup 'ben buradayım' demenin, frene basmanın tam zamanı."}
+{"instruction": "Hayatın o deli gibi koşturmacasında kendimi kaybettim.", "output": "Durup 'ben buradayım' demenin, frene basmanın tam vakti."}
 {"instruction": "Birine çok sinirlendim ama tepki vermeyip içime attım.", "output": "İçine atmak zehri kendine içmek gibidir. Bir dahaki sefere sınırını çiz."}
 {"instruction": "Basit düşünmek hayatı ne kadar kolaylaştırıyor.", "output": "Karmaşıklaştıran biziz, çözümler genellikle burnumuzun ucunda duruyor."}
 {"instruction": "İçimdeki yaratıcı enerji bugün tavan yaptı.", "output": "O ilham dalgasını kaçırma, hemen kalemi kağıdı veya klavyeyi eline al."}
-{"instruction": "İstenmeyen akıl hocalarından cidden gına geldi.", "output": "Kimse kimsenin hayatına reçete yazmaya çalışmasa dünya daha güzel olurdu."}
+{"instruction": "İstenmeyen akıl hocalarından cidden gına geldi.", "output": "İstemsiz tavsiyeler bazen iyi niyetli bile olsa insanı boğabiliyor."}
 {"instruction": "Konfor alanımın dışına çıkıp yeni bir şey denedim.", "output": "Korkutucuydu ama başardığın için gurur duyuyor olmalısın."}
 {"instruction": "Hayat bazen bizim yerimize en doğru kararları veriyor.", "output": "Biz dirensek de hayat bizi gitmemiz gereken yere sürüklüyor."}
 {"instruction": "Bitkilerimin yaprak açtığını görmek beni mutlu ediyor.", "output": "Onlara iyi baktığını görmek küçük ama tatlı bir tatmin veriyor."}
@@ -1912,7 +1910,7 @@
 {"instruction": "Evde portakal kabuğu kokusu olunca kış geldiğini anlıyorum.", "output": "O narenciye kokusu evi anında yuva sıcaklığına büründürüyor."}
 {"instruction": "İçindeki gücü keşfettiğinde kimseye ihtiyacın kalmıyor.", "output": "Öz güven dışarıdan gelmez, tamamen içeriden inşa edilir."}
 {"instruction": "Planların bozulması bazen en büyük şansımız oluyor.", "output": "Hayat bizim kısıtlı zihnimizden çok daha büyük sürprizler saklıyor."}
-{"instruction": "Empati yoksulluğu çağımızın en büyük pandemisi.", "output": "Kimse kimsenin ne yaşadığını umursamıyor, herkes kendi haklılığının peşinde."}
+{"instruction": "Empati yoksulluğu çağımızın en büyük pandemisi.", "output": "Herkes kendi derdine düştüğü için dış dünyaya karşı tolerans kalmadı."}
 {"instruction": "Kaybettiğimi sandığım anahtarı cebimde buldum.", "output": "Klasik kayıp eşya sendromu! En güvenli yerde saklanıyormuş meğer."}
 {"instruction": "Ufacık bir tebessümün yaralarını saramayacağı şey yok.", "output": "İçten bir gülüşün iyileştirici gücü milyar dolarlık ilaçlardan fazla."}
 {"instruction": "Tembel hissetmek bazen bedenin 'dinlen' çığlığıdır.", "output": "Sürekli suçluluk duymak yerine o dinlenmeye teslim olmalısın."}
@@ -1989,7 +1987,7 @@
 {"instruction": "Bir şey bittiğinde arkasından yas tutmak zayıflık değildir.", "output": "Yaşanmışlıklara veda etmek zaman ve kabul süreci gerektirir."}
 {"instruction": "Beynim şu an hiçbir karmaşık bilgiyi almıyor, tam bir boşluk.", "output": "Çok fazla veri yüklemesi oldu, sistemin resetlenmeye ihtiyacı var."}
 {"instruction": "Güven cam gibidir kırıldıktan sonra eski haline dönmez.", "output": "Ne kadar usta bir yapıştırıcı olursan ol o çatlak izi hep orada kalır."}
-{"instruction": "Sessiz köşeme çekilip dünyayla bütün bağı kestim.", "output": "Huzur istasyonuna hoş geldin, keyfini doyasıya çıkar."}
+{"instruction": "Sessiz köşeme çekilip dünyayla bütün bağı kestim.", "output": "Huzur istasyonuna hoş geldin, tadını doyasıya çıkar."}
 {"instruction": "Hayatın o tekdüze döngüsü bazen insanı boğuyor.", "output": "Rutinin güvenli ama ezici çemberinden çıkıp ufak bir nefes almak lazım."}
 {"instruction": "Korku ve heyecan fizyolojik olarak birbirinin aynısıdır.", "output": "Kalbin aynı hızla çarpar, ona nasıl bir anlam yükleyeceğin tamamen sana kalmış."}
 {"instruction": "Samimiyetsiz insanları hayatından sessizce çıkarmak en büyük lüks.", "output": "Açıklama bile yapmadan mesafeyi koymak ruh sağlığının sigortasıdır."}
@@ -2010,7 +2008,7 @@
 {"instruction": "Sıcak bir çay yudumlarken zihnimin yavaşladığını hissediyorum.", "output": "O sıvıdaki sıcaklık bütün omuzlarındaki kasları gevşetmeye yetiyor."}
 {"instruction": "Ayna karşısında kendi gerçekliğimizle yüzleşmek en zorudur.", "output": "Başkasını eleştirmek kolaydır ama kendi karanlığınla karşılaşmak cesaret ister."}
 {"instruction": "Kargo paketini açarken o içimdeki çocuk hala yaşıyor.", "output": "Yetişkinliğin ciddiyetini unutturan nadir ve masum anlardan biridir."}
-{"instruction": "Zorlamayı bıraktığın an su kendi doğal yatağını bulur.", "output": "Akıntıya karşı kürek çekmekten vazgeçip suya teslim olduğun an hafiflersin."}
+{"instruction": "Zorlamayı bıraktığın an su kendi doğal yatağını bulur.", "output": "Akıntıya karşı kürek çekmeyi kesip suya teslim oluyorsun çünkü."}
 {"instruction": "Ofisteki o yapay gülümsemelerden ve maskelerden çok yoruldum.", "output": "Profesyonellik adı altında samimiyetin harcandığı tuhaf yerler."}
 {"instruction": "Klavye kahramanlarına verilecek en iyi cevap onları tamamen görmezden gelmektir.", "output": "Enerjini onlara harcamak yapabileceğin en büyük haksızlıktır."}
 {"instruction": "Yeni bir defterin ilk sayfasına yazmaya başlarkenki o heyecan...", "output": "Temiz sayfa, taze niyetler ve önünde uzanan sınırsız ihtimaller."}
@@ -2018,7 +2016,6 @@
 {"instruction": "Zamanın akıp gidişini izlemek hüzünlü ama bir o kadar büyüleyici.", "output": "Hiçbir saniye bir daha asla geri gelmeyecek, o yüzden her an çok kıymetli."}
 {"instruction": "Güven bir kez kırıldıktan sonra gelen özür sadece kelimeden ibarettir.", "output": "Kırılan vazo yapıştırılsa bile hep su sızdırmaya devam eder."}
 {"instruction": "Akşam güneşi balkona vurduğunda ortalık sarı bir huzura bürünüyor.", "output": "Günün en gürültülü anından sonra gelen o tatlı ve serin akşamüstü sessizliği."}
-{"instruction": "Pillerim tamamen bitti, şarja takılmayı bekliyorum.", "output": "Sistem kapandı, lütfen rahatsız etmeyin modunu açma vakti geldi."}
 {"instruction": "Küçük bir detaya takılıp bütün güzel resmi mahvediyorum.", "output": "Ağaca odaklanıp ormanın tamamını kaçırmak bizim klasik hatamız."}
 {"instruction": "Başkasının başarısını kıskanmak yerine kendi yoluna bakmalısın.", "output": "Başkasının bahçesindeki çiçekleri sulamak yerine kendi toprağını ekmelisin."}
 {"instruction": "Koşturmaca içinde asıl kim olduğumu unuttuğumu fark ettim.", "output": "Durup 'ben ne istiyorum' diye sormanın ve frene basmanın vakti çoktan gelmiş."}
@@ -2027,7 +2024,7 @@
 {"instruction": "Her konuda fikri olan ama hiçbir şey bilmeyen insan profili...", "output": "En çok ses çıkaranın haklı olduğu sanılan yorucu bir devirdeyiz."}
 {"instruction": "Evde taze portakal kokusu olunca kışın o masumiyeti hissediliyor.", "output": "O narenciye kokusu evi anında yuva sıcaklığına büründürüyor."}
 {"instruction": "İçindeki o potansiyeli keşfettiğinde kimseden onay beklemiyorsun.", "output": "Öz güven dışarıdan satın alınmaz, tamamen içeride inşa edilir."}
-{"instruction": "Planların bozulması bazen hayatın bize sunduğu en büyük şanstır.", "output": "Biz kendi kısıtlı zihnimizle bakarken hayat bize daha iyi kapılar açıyor."}
+{"instruction": "Planların bozulması bazen hayatın bize sunduğu en büyük şanstır.", "output": "Hayat bizim kısıtlı zihnimizden çok daha büyük sürprizler saklıyor."}
 {"instruction": "Empati yoksulluğu çağımızın en yaygın görünmez hastalığı.", "output": "Kimse kimsenin ne yaşadığını umursamıyor, herkes kendi haklılığında kilitli."}
 {"instruction": "Kaybettiğimi sandığım şeyi cebimde bulduğum o rahatlama hissi...", "output": "Klasik kayıp eşya sendromu! En güvenli yerde saklanıyormuş meğer."}
 {"instruction": "Ufacık bir tebessümün saramayacağı kırgınlık çok azdır.", "output": "İçten bir gülüşün iyileştirici gücü her türlü ilacın üzerindedir."}
@@ -2041,33 +2038,19 @@
 {"instruction": "Bir şey bittiğinde arkasından yas tutmak gayet normaldir.", "output": "Hemen güçlü görünmeye çalışmak yerine o acıyı yaşamak iyileşmenin ilk adımıdır."}
 {"instruction": "Beynim şu an 404 Not Found hatası veriyor, durdum.", "output": "Çok fazla veri yüklemesi oldu, acilen resetleme zamanı geldi."}
 {"instruction": "Güven cam gibidir kırıldıktan sonra hep izi kalır.", "output": "Ne kadar usta birleştirirsen birleştir, o çatlak hep oradan görünür."}
-{"instruction": "Sessiz köşeme çekilip dünyayla bütün bağı kestim.", "output": "Huzur istasyonuna hoş geldin, tadını doyasıya çıkar."}
 {"instruction": "Hayatın o monoton döngüsünden kaçıp gitme isteği...", "output": "Rutinin güvenli ama boğucu çemberinden çıkıp nefes almak şart."}
 {"instruction": "Samimiyetsiz insanları hayatından sessizce çıkarmak en büyük kibarlıktır.", "output": "Susup izlemek ve o insanları hayatından tamamen silmek en asil duruştur."}
 {"instruction": "Durup nefes almak lüks değil, hayatta kalma şartıdır.", "output": "Koşmayı bırakıp etrafa bakmazsan nereye gittiğini unutursun."}
 {"instruction": "Öfkeyi beslemek sadece kendi evini ateşe vermektir.", "output": "Kin tutmak karşıdakinden çok senin içindeki huzuru zehirler."}
 {"instruction": "Basit yaşamak, en karmaşık sorunların bile tek çözümüdür.", "output": "Zihni sadeleştirmek bütün o kör düğümleri tek kalemde çözer."}
 {"instruction": "İlham perisi geldiğinde her şey ne kadar akıcı oluyor.", "output": "O rüzgarı arkana aldığında dağları devirecek güçte hissediyorsun."}
-{"instruction": "İstenmeyen akıl hocalarına kapıyı kibarca kapatmak...", "output": "Haddini aşanlara sınır koymak ruh sağlığının en büyük sigortasıdır."}
 {"instruction": "Konfor alanını bozmadan büyük değişimler beklemek saflıktır.", "output": "Bedel ödemeden, sarsılmadan ve risk almadan dönüşüm gerçekleşmez."}
-{"instruction": "Bitkilerimin yeni yaprak açması minik bir mucize gibi.", "output": "Onların sessiz büyümesini izlemek insana en güzel sabrı öğretiyor."}
-{"instruction": "Herkesin barut fıçısı gibi gezdiği tuhaf bir dönemdeyiz.", "output": "Toplumsal bir gerginlik dalgası görünmez şekilde herkesin üzerinde esiyor."}
-{"instruction": "Suçluluk duymadan tembellik yapabilmek master derecesi ister.", "output": "O zihinsel engeli aşabilenler gerçek tatili ve huzuru yaşayanlardır."}
 {"instruction": "Duyguları kelimelere dökmek bazen dağ tırmanmak kadar zor.", "output": "İçindeki o yoğunluğu aktaracak doğru sözcüğü bulmak imkansızlaşabiliyor."}
 {"instruction": "Farklı bakış açılarından bakabilmek en büyük zenginliktir.", "output": "Tek bir doğruya takılı kalmamak insanı özgürleştirir ve büyütür."}
-{"instruction": "Sıcak bir çay ve sessizlik, başka ne ister ki insan?", "output": "Mutluluk dediğimiz şeyin aslında o kadar da karmaşık olmadığını anladığın an."}
-{"instruction": "Zorlamayı bıraktığın an su kendi yatağını bulur.", "output": "Akıntıya karşı kürek çekmekten vazgeçip suya teslim oluyorsun çünkü."}
 {"instruction": "Ofisteki o yapay gülümsemelerden maskelerden sıkıldım.", "output": "Profesyonellik adı altında samimiyetsizliğin tavan yaptığı yerler."}
-{"instruction": "Geçmişin o tatlı hüznü bazen insana iyi geliyor.", "output": "Acısıyla tatlısıyla o hatıralar hayatımızın tuvalini oluşturuyor."}
-{"instruction": "Empati yoksulluğu çağımızın en büyük pandemisi.", "output": "Herkes kendi derdine düştüğü için dış dünyaya karşı tolerans kalmadı."}
 {"instruction": "Haftanın yorgunluğunu film gecesiyle taçlandıracağım.", "output": "Hepsini ardında bırakıp ekrana odaklanmak harika bir ödül."}
-{"instruction": "Hayatın o deli gibi koşturmacasında kendimi kaybettim.", "output": "Durup 'ben buradayım' demenin, frene basmanın tam vakti."}
-{"instruction": "İçimdeki yaratıcı enerji bugün tavan yaptı.", "output": "O ilham perileri geldiğinde durma! Üretmek ve o enerjiyi kullanmak için harika bir gün."}
-{"instruction": "İstenmeyen akıl hocalarından cidden gına geldi.", "output": "İstemsiz tavsiyeler bazen iyi niyetli bile olsa insanı boğabiliyor."}
 {"instruction": "Hayat bazen bizim planlarımızı yaparken bizim için başka planlar kurar.", "output": "Ve genelde o sürpriz planlar, bizim kurduklarımızdan çok daha güzel sonuçlar doğurur."}
 {"instruction": "Yeni bir defter aldım, hemen bir şeyler yazdım.", "output": "Yeni defterin o kokusu ve boş sayfaları insana her zaman yeni bir başlangıç umudu verir."}
-{"instruction": "Bazen içimdeki enerjinin tamamen bittiğini hissediyorum.", "output": "Pillerin tamamen bittiyse kendini zorlama, fişi çek ve sadece dinlen."}
-{"instruction": "Bugün uzun zamandır aradığım o eşyayı en beklenmedik yerde buldum.", "output": "Kaybolan şeylerin hep en son baktığımız yerde çıkması klasik bir Murphy kanunudur."}
 {"instruction": "Bugün işten sonra biraz yürüyüş yapayım dedim, iyi ki yapmışım.", "output": "Temiz hava ve adımlar zihindeki bütün o günlük stresi silip süpürmek için en iyi reçetedir."}
 {"instruction": "Akşam eve gelip ayakkabıları çıkardığım o an var ya...", "output": "İşte günün en özgürleştirici, en rahatlatıcı saniyesi tam olarak o andır."}
 {"instruction": "Bazen evdeki en eski eşya bile insana en çok huzur veriyor.", "output": "Çünkü üzerinde yaşanmışlıklar, hatıralar ve bir aidiyet duygusu barındırıyor."}
@@ -2234,7 +2217,7 @@
 {"instruction": "Kış günlerinin o erken kararan havası insana içsel bir sakinlik veriyor.", "output": "Erken inen karanlık dış dünya ile bağı koparıp içeri dönmeyi kolaylaştırıyor."}
 {"instruction": "Mantık ve kalp çatıştığında hangisini seçeceğini bilememek...", "output": "İnsanı en çok yoran o iki ateş arasında kalıp tarafsız bölgede sıkışıp kalmaktır."}
 {"instruction": "Sokakta gördüğüm uyuyan kediyi uyandırmamak için sessizce geçtim.", "output": "O masum uyku halini bozmaya kıyamamak insanın içindeki şefkati besliyor."}
-{"instruction": "Büyüdükçe hayatın ne kadar az şeyle mutlu olunabilecek bir yer olduğunu anlıyorsun.", "output": "Gereksiz yükleri attıkça geriye kalan o sade özün ne kadar kıymetli olduğu anlaşılıyor."}
+{"instruction": "Büyüdükçe hayatın ne kadar az şeyle mutlu olunabilecek bir yer olduğunu anlıyorsun.", "output": "Gereksiz hırsları ve kalabalıkları attıkça geriye kalan o sade öz ne kadar kıymetli."}
 {"instruction": "Karar verirken hala içimde hafif bir şüphe rüzgarı esiyor.", "output": "Sorgulamak iyidir, körü körüne gitmediğini gösterir, zamanla netleşir."}
 {"instruction": "Doğru bir parça çalarken dışarıyı izlemek bütün yorgunluğu alıyor.", "output": "Müzik ve manzara birleştiğinde ruh adeta masaj yapmış gibi gevşiyor."}
 {"instruction": "Her şeyi kontrol edemeyeceğini kabullenmek dünyanın en büyük hafifliği.", "output": "Rüzgara karşı kürek çekmeyi bıraktığında kayık kendiliğinden süzülmeye başlar."}
@@ -2247,7 +2230,6 @@
 {"instruction": "Sessiz köşeme çekilip dünyayla bütün iletişimi kestim.", "output": "Huzur istasyonuna hoş geldin, o sessizliğin tadını doyasıya çıkar."}
 {"instruction": "Hayatın o tekdüze döngüsü bazen insanı boğacak gibi oluyor.", "output": "Rutinin o güvenli ama ezici çemberinden çıkıp ufak bir pencere açmak lazım."}
 {"instruction": "Korku ve heyecan fizyolojik olarak birbirinin ikiz kardeşidir.", "output": "Kalbin aynı hızla çarpar, aradaki tek fark senin ona yüklediğin anlamdır."}
-{"instruction": "Samimiyetsiz insanları hayatından sessizce çıkarmak en büyük kibarlıktır.", "output": "Tartışmaya girmeden mesafeyi koymak ruh sağlığının en büyük sigortasıdır."}
 {"instruction": "Durup nefes almazsak nereye koştuğumuzu tamamen unuturuz.", "output": "Koşuşturma furyasında kaybolmamak için o duraklamalar hayati önem taşıyor."}
 {"instruction": "Öfkeyi beslemek sadece kendi içindeki evi ateşe vermektir.", "output": "Kin tutmak karşıdakinden çok senin içindeki huzuru ve neşeyi zehirler."}
 {"instruction": "Basit yaşamak, çözülemeyen bütün karmaşık düğümleri tek kalemde çözer.", "output": "Zihni sadeleştirmek ve beklentileri düşürmek her şeyi kolaylaştırır."}
@@ -2255,9 +2237,8 @@
 {"instruction": "İstenmeyen tavsiyeler veren insanlara kibarca sınır koymak şart.", "output": "Herkesin hayatına reçete yazma merakından cidden gına geliyor."}
 {"instruction": "Konfor alanından çıkmadan büyük bir değişim beklemek saflıktır.", "output": "Bedel ödemeden, sarsılmadan ve risk almadan gerçek dönüşüm gerçekleşmez."}
 {"instruction": "Hayat bazen bizim planlarımızı bozup kendi sürprizini önümüze koyar.", "output": "Biz kendi kısıtlı zihnimizle bakarken hayat bize daha geniş bir manzara hazırlıyor."}
-{"instruction": "Bitkilerimin yeni yaprak açması minik bir mucize gibi hissettiriyor.", "output": "Onların sessiz büyümesini izlemek insana en güzel sabrı ve umudu öğretiyor."}
+{"instruction": "Bitkilerimin yeni yaprak açması minik bir mucize gibi hissettiriyor.", "output": "Onların sessiz büyümesini izlemek insana en güzel sabrı öğretiyor."}
 {"instruction": "Herkesin barut fıçısı gibi gezdiği tuhaf bir dönemden geçiyoruz.", "output": "Toplumsal bir gerginlik dalgası görünmez şekilde herkesin üzerinde esiyor."}
-{"instruction": "Suçluluk duymadan tembellik yapabilmek master derecesi ister.", "output": "O zihinsel engeli aşıp tembelliğin tadını çıkarabilenler gerçek huzuru yaşayanlardır."}
 {"instruction": "Duyguları tam olarak kelimelere dökmek bazen dağ tırmanmak kadar zor.", "output": "İçindeki o yoğunluğu aktaracak doğru sözcüğü bulmak imkansızlaşabiliyor."}
 {"instruction": "Farklı bakış açısı sunan bir içerikle karşılaşmak zihni tazeliyor.", "output": "Tek bir doğruya saplanıp kalmamak insanı esnetiyor ve büyütüyor."}
 {"instruction": "Zehirli insanları hayatından ayıklamak başta acıtır ama iyileştirir.", "output": "Ameliyat gibidir; kesi atılır ama sonunda sağlığına kavuşup rahatlarsın."}
@@ -2265,28 +2246,21 @@
 {"instruction": "Kelebek etkisinin gücüne inanarak her gün ufak bir adım atmak lazım.", "output": "Yaptığımız her küçük iyilik dalga dalga yayılıyor evrende, asla kaybolmaz."}
 {"instruction": "Ayna tutulmadığı sürece kimse kendi hatasını kabul etmez.", "output": "İnsan kendi karanlığıyla yüzleşmekten korkar çünkü bu cesaret ister."}
 {"instruction": "Kargo paketini açarken o içimdeki çocuk hala aynı heyecanı yaşıyor.", "output": "Yetişkinliğin o ciddiyetini unutturan nadir ve masum anlardan biridir."}
-{"instruction": "Zorlamayı bıraktığın an su kendi doğal yatağını bulur.", "output": "Akıntıya karşı kürek çekmekten vazgeçip suya teslim oluyorsun çünkü."}
-{"instruction": "Ofisteki o yapay gülümsemelerden ve maskelerden çok yoruldum.", "output": "Profesyonellik adı altında samimiyetin tamamen harcandığı tuhaf yerler."}
-{"instruction": "Klavye kahramanlarına verilecek en güzel cevap onları engellemektir.", "output": "Zamanını ve enerjini onlara harcamak yapabileceğin en büyük haksızlıktır."}
+{"instruction": "Klavye kahramanlarına verilecek en güzel cevap onları engellemektir.", "output": "Zamanını ve enerjini onlara harcamak yapılacak en büyük haksızlıktır."}
 {"instruction": "Yeni bir defterin kokusu kadar temiz başlangıç çok azdır.", "output": "O sayfaları nasıl dolduracağın tamamen senin özgür ellerindedir."}
 {"instruction": "Gereksiz gürültüyü kısmak insanın ömrünü ve huzurunu uzatır.", "output": "Zihinsel detoks için dış sesleri tamamen sessize almak şart."}
-{"instruction": "Zamanın akıp gidişini izlemek hüzünlü ama büyüleyici.", "output": "Hiçbir an bir daha asla geri gelmeyecek, o yüzden her saniye çok kıymetli."}
-{"instruction": "Güven kırıldıktan sonra gelen özür sadece kelimeden ibarettir.", "output": "Kırılan vazo yapıştırılsa bile oradan hep su sızdırmaya devam eder."}
 {"instruction": "Balkonda akşam güneşi eşliğinde sessizce oturmak gibisi yok.", "output": "Günün en gürültülü anından sonra gelen o tatlı ve serin sessizlik."}
 {"instruction": "Pillerim tamamen bitti, şarja takılmayı sabırsızlıkla bekliyorum.", "output": "Sistem kapandı, lütfen rahatsız etmeyin modunu açma vakti geldi."}
 {"instruction": "Küçük bir detaya takılıp bütün resmi mahvettim yine.", "output": "Ağaca odaklanıp ormanın tamamını kaçırmak hepimizin yaptığı klasik bir hata."}
 {"instruction": "Koşturmaca içinde kendimi unuttuğumu fark ettiğim an durdum.", "output": "Durup 'ben ne istiyorum' diye sormanın tam vakti gelmiş demektir."}
 {"instruction": "Geçmişin o tatlı hüznü bazen insana çok iyi gelen bir ilaçtır.", "output": "Acısıyla tatlısıyla o hatıralar hayatımızın tuvalini oluşturan parçalardır."}
 {"instruction": "Risk aldım ve karşılığını aldım, cesaret her zaman kazandırır.", "output": "Korkunun ecele faydası yok, bazen uçurumdan adım atmak gerekir."}
-{"instruction": "Her konuda fikri olan ama hiçbir şey bilmeyen insan profili...", "output": "En tehlikeli ve en çok ses çıkaran insan profili maalesef onlar."}
 {"instruction": "Evde portakal kabuğu kokusu olunca kış geldiğini derinden hissediyorum.", "output": "O narenciye kokusu evi anında yuva sıcaklığına büründürüyor."}
 {"instruction": "İçindeki gücü keşfettiğinde kimsenin onayına ihtiyacın kalmıyor.", "output": "Öz güven dışarıdan satın alınmaz, tamamen içeriden inşa edilir."}
-{"instruction": "Planların bozulması bazen hayatın bize sunduğu en büyük şanstır.", "output": "Hayat bizim kısıtlı zihnimizden çok daha büyük sürprizler saklıyor."}
 {"instruction": "Empati yoksulluğu çağımızın en büyük ve görünmez pandemisi.", "output": "Herkes kendi derdine düştüğü için dış dünyaya karşı tolerans kalmadı."}
 {"instruction": "Kaybettiğimi sandığım anahtarı cebimde buldum yine.", "output": "Klasik kayıp eşya sendromu! En güvenli yerde saklanıyormuş meğer."}
 {"instruction": "Ufacık bir tebessümün yaralarını saramayacağı çok az şey vardır.", "output": "İçten bir gülüşün iyileştirici gücü milyar dolarlık ilaçlardan fazladır."}
 {"instruction": "Tembel hissetmek bazen bedenin bize gönderdiği 'dinlen' çığlığıdır.", "output": "Sürekli suçluluk duymak yerine o dinlenmeye teslim olmalısın."}
-{"instruction": "Başkalarını memnun etme yarışından yoruldum artık.", "output": "Kendi mutluluğunu feda ederek kimseyi gerçekten mutlu edemezsin."}
 {"instruction": "Her şeyi kontrol edemeyeceğimizi anladığımızda inanılmaz rahatlıyoruz.", "output": "Bırak ne olacaksa olsun rahatlığı dünyadaki en büyük kurtuluştur."}
 {"instruction": "Evime mis gibi taze kahve kokusu yayıldı yine.", "output": "Dünyanın en konforlu ve huzurlu kokusu tartışmasız odur."}
 {"instruction": "Önyargılı insanlarla tartışmak duvara konuşmak gibidir.", "output": "Enerjini boşa harcama, kimse kendi inancını zorla değiştiremez."}
@@ -2304,11 +2278,9 @@
 {"instruction": "İçimdeki yaratıcı enerji bugün birden tavan yaptı.", "output": "O ilham perileri geldiğinde durma! Üretmek için harika bir gün."}
 {"instruction": "İstenmeyen akıl hocalarından cidden gına geldi artık.", "output": "İstemsiz tavsiyeler bazen iyi niyetli bile olsa insanı boğabiliyor."}
 {"instruction": "Konfor alanımın dışına çıkıp yeni bir şey denedim bugün.", "output": "Korkutucuydu ama başardığın için gurur duyuyor olmalısın."}
-{"instruction": "Bitkilerimin yeni yaprak açması minik bir mucize gibi hissettiriyor.", "output": "Onların sessiz büyümesini izlemek insana en güzel sabrı öğretiyor."}
 {"instruction": "Tahammülsüzlük tavan yapmış durumda etraftaki insanlarda.", "output": "Herkes barut fıçısı gibi, kimseye yaklaşılmıyor maalesef."}
 {"instruction": "Rüzgar camı döverken battaniyeye sarılmak gibisi yok.", "output": "Kış günlerinin o en masum, en sıcak ev konforu."}
 {"instruction": "Kelebek etkisi denen şeyin gerçekliğine sonuna kadar inanıyorum.", "output": "En ufak bir tebessümün bile dünyada neleri değiştireceğini bilemeyiz."}
-{"instruction": "Sürekli başkalarını suçlayan insanlardan bir şey öğrenemezsin.", "output": "Ayna tutulmadığı sürece gelişim asla başlamaz."}
 {"instruction": "Yeni bir defter aldım, hemen ilk sayfasına bir şeyler yazdım.", "output": "Yeni defterin o kokusu ve boş sayfaları insana her zaman yeni bir başlangıç umudu verir."}
 {"instruction": "Bugün gece yarısı dışarı çıkıp uzun uzun gökyüzünü izledim.", "output": "Şehrin o gürültülü ışıkları sönünce gökyüzü insana her zaman sığınak gibi geliyor."}
 {"instruction": "Bazen kalabalıklar içinde hissettiğim yalnızlık evdekinden çok daha ağır geliyor.", "output": "Çünkü etrafında yüzlerce insan varken kimseye ait hissetmemek ruhu çok daha fazla yoruyor."}
@@ -2327,8 +2299,6 @@
 {"instruction": "Gelecek hakkında düşünürken bugünü kaçırmaktan korkuyorum.", "output": "Yarın için endişelenirken parmaklarının arasından kayıp giden an bugünün ta kendisidir."}
 {"instruction": "Bugün evdeki saksı çiçeklerimin yapraklarını sildim, canlandılar.", "output": "Onlarla ilgilenmek, o yeşilliklerin arasında kaybolmak insana iyi geliyor."}
 {"instruction": "İnsanlar artık birbirini dinlemek yerine sadece kendi sırasını bekliyor.", "output": "Karşılıklı diyalog bitti, herkes kendi monologunu ezberletme peşinde maalesef."}
-{"instruction": "Dedikodu yapmayan insanlarla sohbet etmek ne kadar dinlendirici.", "output": "Boş kelimelerle zihni kirletmeyip derin konular konuşabilmek büyük lüks."}
-{"instruction": "Klavye kahramanlarına verilecek en güzel cevap onları engellemektir.", "output": "Zamanını ve enerjini onlara harcamak yapılacak en büyük haksızlıktır."}
 {"instruction": "Bugün gece yarısı uyanıp gökyüzüne baktım, her yer nasıl da sessizdi.", "output": "Gecenin o ilerleyen saatlerindeki sessizlik, dünyanın tüm gürültüsünü alıp götürüyor sanki."}
 {"instruction": "Bazen kalabalık bir ortamda otururken birden yabancılaşma hissediyorum.", "output": "Etraftaki sesler bir yankıya dönüşürken kendi iç dünyana çekilmek istiyorsun, bu çok doğal."}
 {"instruction": "Sabahları uyanır uyanmaz ilk iş kahve demlemek benim en büyük ritüelim.", "output": "Güne o kokunun yayılmasıyla başlamak bütün günün akışını olumlu yönde etkiliyor."}
@@ -2364,12 +2334,9 @@
 {"instruction": "Beynim şu an hiçbir karmaşık bilgiyi almıyor, tam bir sis perdesindeyim.", "output": "Çok fazla veri yüklemesi oldu, sistemin acilen dinlenmeye ihtiyacı var."}
 {"instruction": "Sessiz köşeme çekilip dünyayla bütün iletişimi kestiğim o an...", "output": "Huzur istasyonuna hoş geldin, o sessizliğin tadını doyasıya çıkar."}
 {"instruction": "Sabahın o ilk saatlerindeki sessizliği hiçbir değişime değişmem.", "output": "Günün en temiz, en saf ve kimsenin henüz senden bir şey istemediği o sihirli zaman dilimi gerçekten çok başka."}
-{"instruction": "Bazen kalabalıklar içinde hissettiğim yalnızlık evdekinden çok daha ağır geliyor.", "output": "Etrafında yüzlerce insan varken kimseye ait hissetmemek ruhu cidden yoruyor. Derin bir nefes al."}
 {"instruction": "Kahvemi alıp balkona çıktığımda esen hafif rüzgar bütün günün stresini aldı.", "output": "Doğanın o ufak dokunuşları zihindeki düğümleri çözmek için en etkili ilaçtır."}
 {"instruction": "Eski bir kitabın arasında bulduğum kurutulmuş çiçek beni çocukluğuma götürdü.", "output": "Zamanın bir anı dondurup saklaması ve yıllar sonra karşına çıkarması çok tatlı bir sürpriz."}
 {"instruction": "İnsanların sürekli birbirini yargılama eğiliminden cidden yoruldum.", "output": "Ayna tutulmadığı sürece herkes dışarıyı suçlamaya devam ediyor, maalesef. Enerjini koru."}
-{"instruction": "Dedikodu ortamlarından hızla uzaklaşmak en büyük huzur kaynağım.", "output": "Boş kelimelerle zihni bulandırmamak insanın kendi kalitesini korumasıdır."}
-{"instruction": "Klavye kahramanlarına verilecek en güzel cevap engellemektir.", "output": "Zamanını ve enerjini onlara harcamak yapmak istediklerinin en büyüğüdür."}
 {"instruction": "Bugün yağmurun sesiyle uyanmak bana huzur verdi.", "output": "Doğanın ritmiyle güne başlamak bazen en güzel alarmdan bile daha etkili olabiliyor."}
 {"instruction": "Uzun zamandır ertelediğim kitabın ilk bölümünü sonunda okudum.", "output": "Başlamak çoğu zaman işin en zor kısmıdır. Devamı genellikle kendiliğinden gelir."}
 {"instruction": "Telefonumu sessize alıp birkaç saat kendime vakit ayırdım.", "output": "Bazen ulaşılabilir olmamak zihni toparlamak için en doğru seçimdir."}
@@ -2580,7 +2547,7 @@
 {"instruction": "Yıldızların renkleri bize onların hangi fiziksel özelliği hakkında bilgi verir?", "output": "Yüzey sıcaklıkları hakkında bilgi verir; en sıcak yıldızlar mavi/beyaz görünürken, en soğuk yıldızlar kırmızı renktedir."}
 {"instruction": "Arkeolojide karbon-14 testi hangi tür nesnelere uygulanamaz?", "output": "Taş, metal veya cam gibi inorganik (organik karbon barındırmayan) nesnelere uygulanamaz; sadece kemik, odun veya kumaş gibi canlı kalıntılara uygulanabilir."}
 {"instruction": "Mantık safsatalarından 'Ad Ignorantiam' (Cehalete Başvuru) nedir?", "output": "Bir iddianın yanlış olduğu kanıtlanamadığı için onun kesinlikle doğru olduğunu (veya tam tersini) savunma mantık hatasıdır."}
-{"instruction": "Coğrafyada 'Fiyort' kıyı tipi hangi coğrafi süreç sonucunda oluşur?", "output": "Eski buzul vadilerinin deniz suları tarafından basılmasıyla oluşan, dik ve sarp kayalıklarla çevrili derin deniz körfezleridir; en çok Norveç'te görülür."}
+{"instruction": "Coğrafyada 'Fiyort' kıyı tipi hangi coğrafi süreç sonucunda oluşur?", "output": "Eski buzul vadilerinin deniz suları tarafından basılmasıyla oluşan, dik ve sarp kayalıklarla çevrili derin deniz körfezleridir."}
 {"instruction": "Psikolojide 'Bilişsel Esneklik' (Cognitive Flexibility) neyi ifade eder?", "output": "K kişinin değişen durumlar, kurallar veya beklenmeyen olaylar karşısında düşünce kalıplarını hızla değiştirebilme ve yeni duruma uyum sağlama becerisidir."}
 {"instruction": "Fizikte 'Mutlak Sıfır' noktası teorik olarak neyi temsil eder?", "output": "Sıcaklığın olabileceği en alt sınır olan -273.15 santigrat derecedir; bu sıcaklıkta atomların termal hareketinin tamamen durduğu kabul edilir."}
 {"instruction": "Bilgisayar mimarisinde L1 ve L2 önbellekleri (Cache) neden işlemciye bu kadar yakın yerleştirilir?", "output": "İşlemcinin (CPU) ana belleğe (RAM) gitmeden milisaniyeler içinde anında veri okuyup yazabilmesi ve hız darboğazını (latency) önlemek için silikon çip üzerinde doğrudan çekirdeğin yanına konulur."}
@@ -3069,7 +3036,6 @@
 {"instruction": "Bugün aklıma yıllar önceki utanç verici bir anım geldi, hâlâ kızarıyorum.", "output": "Beyin onu niye durduk yere ısıtıp önüne koyar ki zaten? Kesinlikle herkesin başına geliyordur, takma kafaya."}
 {"instruction": "Bazen insan sadece 'nasılsın' derken gerçekten dinlesin istiyor.", "output": "Çoğu insan sadece laf olsun diye soruyor maalesef. Öyle içten dinleyen biri kalmadı gibi."}
 {"instruction": "Telefonun şarjı yine en kritik anda bitti ya.", "output": "Murphy kanunları tam olarak böyle anlarda devreye giriyor zaten. Priz arama paniği başlamıştır şimdi."}
-{"instruction": "Bugün kendime bir iyilik yapıp erken uyuyacağım.", "output": "Şimdiye kadar duyduğum en akıllıca karar! Vücudun sana teşekkür edecektir."}
 {"instruction": "Hava o kadar kapalı ki insanın içini karartıyor.", "output": "Gri bulutlar insana direkt battaniye ve sıcak içecek ikilisini hatırlatıyor."}
 {"instruction": "Bazen çok basit bir detay bütün moralimi düzeltebiliyor.", "output": "Ufak bir kahve kokusu veya tatlı bir bakış bazen bütün o ağır yükü unutturuyor."}
 {"instruction": "Bugün o kadar hızlı geçti ki ne ara akşam oldu anlamadım.", "output": "Zaman bazen su gibi akıp gidiyor, insan ne yaşadığını bile idrak edemiyor."}
@@ -3188,7 +3154,7 @@
 {"instruction": "Bugün çok fazla su içtiğimi fark ettim.", "output": "Vücudunun susuz kalmaması için güzel bir alışkanlık."}
 {"instruction": "Akşam erkenden uyuyacağım.", "output": "İyi bir uyku yarın daha enerjik hissetmeni sağlayabilir."}
 {"instruction": "Bugün mutfakta yeni bir tarif denedim.", "output": "Denemeden hangi tarifin güzel olduğunu anlamak zor."}
-{"instruction": "Yağmur başlayınca camı açtım.", "output": "Yağmur sesini dinlemeyi seven çok kişi var."}
+{"instruction": "Yağmur başlayınca camı açtım.", "output": "Yağmurun sesi birçok kişiye huzur veriyor."}
 {"instruction": "Bugün hiçbir plan yapmadım.", "output": "Bazen plansız geçirilen günler de oldukça keyifli olabiliyor."}
 {"instruction": "Bugün uyandığımda hiç enerjim yoktu.", "output": "Bazen böyle sabahlar olabiliyor. Kendine biraz zaman tanımak iyi gelebilir."}
 {"instruction": "Canım tatlı çekiyor ama evde hiçbir şey yok.", "output": "Belki evdeki malzemelerle pratik bir tatlı hazırlayabilirsin."}
@@ -3219,11 +3185,10 @@
 {"instruction": "Bugün çok fazla yürüdüm.", "output": "Epey hareket etmişsin. Dinlenmeyi de ihmal etme."}
 {"instruction": "Akşam çay içerken müzik dinledim.", "output": "Günün yorgunluğunu atmak için güzel bir ikili olmuş."}
 {"instruction": "Sabah kahvaltıya yetişemedim.", "output": "İlk fırsatta bir şeyler atıştırman iyi olabilir."}
-{"instruction": "Bugün hava beklediğimden daha sıcaktı.", "output": "Yanına su almayı unutmadıysan iyi olmuş."}
+{"instruction": "Bugün hava beklediğimden daha sıcaktı.", "output": "Yanına su alman iyi olmuş olabilir."}
 {"instruction": "Yeni bir defter aldım.", "output": "Boş sayfalar yeni başlangıçlar için güzel bir motivasyon olabilir."}
 {"instruction": "Bugün kendimi daha enerjik hissediyorum.", "output": "Böyle günleri değerlendirmek güzel olabilir."}
 {"instruction": "İnternet kesilince ne yapacağımı şaşırdım.", "output": "İnternet olmayınca günlük alışkanlıklarımızın ne kadar değiştiğini fark ediyoruz."}
-{"instruction": "Bugün çok sessiz geçti.", "output": "Sakin günlerin de kendine göre ayrı bir huzuru olabiliyor."}
 {"instruction": "Akşam balkonda oturdum.", "output": "Biraz temiz hava almak günün sonunda iyi gelebilir."}
 {"instruction": "Bugün yanlış otobüse bindim.", "output": "Herkesin başına gelebilecek bir durum. Neyse ki fark etmişsin."}
 {"instruction": "Sabah uyanınca yağmur yağıyordu.", "output": "Yağmur sesiyle uyanmayı seven de var, sevmeyen de."}
@@ -3252,7 +3217,6 @@
 {"instruction": "Bugün biraz kafam dağınık.", "output": "Yoğun dönemlerde odaklanmak zorlaşabiliyor. Kendine kısa bir mola verebilirsin."}
 {"instruction": "İşe giderken kahvemi evde unuttum.", "output": "O an insanın bütün planı bozulmuş gibi hissediliyor."}
 {"instruction": "Bugün uzun zamandır ilk kez ev yemeği yedim.", "output": "Ev yemeklerinin tadı çoğu zaman ayrı oluyor."}
-{"instruction": "Yağmur başlayınca camı açtım.", "output": "Yağmurun sesi birçok kişiye huzur veriyor."}
 {"instruction": "Bugün çok fazla merdiven çıktım.", "output": "Günün sonunda biraz yorulmuş olman normal."}
 {"instruction": "Yeni dizinin ilk bölümünü izledim.", "output": "İlk bölüm ilgini çektiyse devamı daha da keyifli olabilir."}
 {"instruction": "Sabah hazırlanırken sürekli bir şey unuttum.", "output": "Bazı sabahlar gerçekten öyle geçebiliyor."}
@@ -3266,7 +3230,7 @@
 {"instruction": "Yeni aldığım bardak çok hoşuma gitti.", "output": "Günlük kullandığın küçük eşyalar bile keyif verebiliyor."}
 {"instruction": "Bugün dışarı çıkarken mont almamıştım.", "output": "Hava serinleyince pişman olmuş olabilirsin."}
 {"instruction": "Otobüste boş yer bulunca hemen oturdum.", "output": "Yoğun saatlerde boş koltuk bulmak gerçekten şans işi."}
-{"instruction": "Bugün mutfağı tamamen temizledim.", "output": "Temiz bir mutfakta yemek yapmak daha keyifli olabiliyor."}
+{"instruction": "Bugün mutfağı tamamen temizledim.", "output": "Temiz bir mutfakta vakit geçirmek daha keyifli oluyor."}
 {"instruction": "Sabah alarm çalınca kapattığımı bile hatırlamıyorum.", "output": "Derin uykudayken böyle şeyler yaşanabiliyor."}
 {"instruction": "Bugün biraz canım sıkkın.", "output": "Umarım seni mutlu edecek güzel bir gelişme yaşanır."}
 {"instruction": "Yeni aldığım kalem çok rahat yazıyor.", "output": "İnsan bazen küçük şeylerden bile mutlu olabiliyor."}
@@ -3444,12 +3408,10 @@
 {"instruction": "Kış günlerinin o erken inen karanlığı bana hep içsel bir sığınak hissi verir.", "output": "Dış dünyanın hareketliliği bitince insan kendi merkezine, içine döneebiliyor."}
 {"instruction": "Mantık ve kalp çatıştığında hangisini seçeceğini bilememek insanı tüketiyor.", "output": "İki taraf da kendi haklılığını dayatınca insan tarafsız bölgede tükenip kalıyor."}
 {"instruction": "Sokakta sakince yürüyen bir kediyi izlerken zamanın durduğunu hissettim.", "output": "Onlar geçmişin pişmanlığı ya da geleceğin kaygısı olmadan sadece 'şimdi'de yaşamanın sırrını biliyor."}
-{"instruction": "Büyüdükçe hayatın ne kadar az şeyle mutlu olunabilecek bir yer olduğunu anlıyorsun.", "output": "Gereksiz hırsları ve kalabalıkları attıkça geriye kalan o sade öz ne kadar kıymetli."}
 {"instruction": "Karar verirken içimden gelen o ilk fısıltıya kulak vermeyi öğrendim artık.", "output": "Mantık bin tane senaryo kurar ama ilk his genellikle yanıltmaz."}
 {"instruction": "Doğru bir parça çalarken dışarıdaki manzarayı seyretmek bütün yorgunluğu alıyor.", "output": "Müzik ve manzara birleştiğinde ruh adeta masaj yapmış gibi gevşiyor."}
 {"instruction": "Her şeyi kontrol edemeyeceğimizi kabullenmek dünyadaki en büyük hafifliktir.", "output": "Rüzgara karşı kürek çekmeyi bıraktığında kayık kendiliğinden süzülmeye başlıyor."}
 {"instruction": "Tahammül sınırlarımın sonuna geldiğimi hissettiğim an oradan uzaklaşıyorum.", "output": "Sistem kırmızı alarm veriyor! Acilen her şeyi bırakıp uzaklaşmak en güvenlisi."}
-{"instruction": "Zorlamayı bıraktığın an su kendi doğal yatağını bulur.", "output": "Akıntıya karşı kürek çekmeyi kesip suya teslim oluyorsun çünkü."}
 {"instruction": "Bugün markete sadece ekmek almaya gittim ama elim dolu döndüm.", "output": "Alışverişe çıkınca bazen planladığından fazlasını almak çok normal."}
 {"instruction": "Sabah kahvaltıyı aceleyle yaptım.", "output": "Yoğun sabahlarda böyle olabiliyor. Umarım günün güzel geçer."}
 {"instruction": "Bugün telefonumu şarja takmayı unutmuşum.", "output": "Dışarı çıkmadan fark ettiysen iyi olmuş."}
@@ -3478,7 +3440,7 @@
 {"instruction": "Sabah biraz geç kaldım.", "output": "Ara sıra herkesin başına gelebiliyor."}
 {"instruction": "Bugün çok fazla su içtim.", "output": "Vücudunun susuz kalmaması için güzel bir alışkanlık."}
 {"instruction": "Akşam çorba yaptım.", "output": "Özellikle serin havalarda çorba iyi gidiyor."}
-{"instruction": "Bugün dolabımı düzenledim.", "output": "Kullanmadığın eşyaları ayırmak ferah hissettirebilir."}
+{"instruction": "Bugün dolabımı düzenledim.", "output": "Aradığın şeyleri bulmak artık daha kolay olacaktır."}
 {"instruction": "Yeni bir şarkı keşfettim.", "output": "Bazen tek bir şarkı bütün gün diline dolanabiliyor."}
 {"instruction": "Bugün bilgisayarımı temizledim.", "output": "Hem görüntüsü hem de kullanımı daha iyi hissettirebilir."}
 {"instruction": "Sabah camı açınca mis gibi hava geldi.", "output": "Temiz havayla güne başlamak gerçekten güzel oluyor."}
@@ -3523,7 +3485,6 @@
 {"instruction": "Otobüsü tam kaçırdım.", "output": "Can sıkıcı olmuş ama çok beklemezsin umarım."}
 {"instruction": "Bugün sürekli esniyorum.", "output": "Sanırım biraz uykusuz kalmış olabilirsin."}
 {"instruction": "Yeni bir kahve denedim ama pek sevmedim.", "output": "Her kahvenin tadı herkese hitap etmeyebiliyor."}
-{"instruction": "Bugün odamı tamamen topladım.", "output": "Düzenli bir ortam gerçekten insanın içini ferahlatıyor."}
 {"instruction": "Sabah alarm çalmadan uyandım.", "output": "Vücudun kendi saatine alışmış olabilir."}
 {"instruction": "Bugün arkadaşlarımla uzun süre oturduk.", "output": "Güzel sohbetler zamanın nasıl geçtiğini unutturabiliyor."}
 {"instruction": "Yeni aldığım çiçeği pencerenin önüne koydum.", "output": "Umarım bol güneş alır ve güzelce büyür."}
@@ -3531,7 +3492,6 @@
 {"instruction": "Sabah çayı biraz fazla demli olmuş.", "output": "Biraz sıcak su ekleyerek tadını hafifletebilirsin."}
 {"instruction": "Bugün bilgisayarı kapatmayı unutmuşum.", "output": "Yoğun olunca böyle küçük dalgınlıklar yaşanabiliyor."}
 {"instruction": "Yeni aldığım defteri kullanmaya kıyamıyorum.", "output": "Birçok kişi yeni defterlerin ilk sayfasını açarken aynı hissi yaşıyor."}
-{"instruction": "Bugün hava beklediğimden daha sıcaktı.", "output": "Yanına su alman iyi olmuş olabilir."}
 {"instruction": "Akşam erkenden uyuyakalmışım.", "output": "Vücudun dinlenmeye ihtiyaç duymuş olabilir."}
 {"instruction": "Bugün çok fazla kahkaha attım.", "output": "Böyle günler insanın aklında uzun süre kalıyor."}
 {"instruction": "Yeni aldığım ayakkabıyı bugün ilk kez giydim.", "output": "Umarım rahat etmiştir ve ayağını vurmamıştır."}
@@ -3578,7 +3538,6 @@
 {"instruction": "Akşam erkenden eve geldim.", "output": "Kendine vakit ayırmak için güzel bir fırsat olmuş."}
 {"instruction": "Bugün yeni bir kalem aldım.", "output": "Yazı yazmayı sevenler için güzel bir his."}
 {"instruction": "Sabah telefonumun şarjı yüzde ikiydi.", "output": "Tam zamanında şarja takmışsındır umarım."}
-{"instruction": "Bugün mutfağı tamamen temizledim.", "output": "Temiz bir mutfakta vakit geçirmek daha keyifli oluyor."}
 {"instruction": "Yeni aldığım ayakkabı çok hafifmiş.", "output": "Uzun yürüyüşlerde rahat ettirebilir."}
 {"instruction": "Bugün hava kapalıydı.", "output": "Kapalı havalar bazen insanın modunu etkileyebiliyor."}
 {"instruction": "Sabah erkenden markete gittim.", "output": "Erken saatlerde alışveriş yapmak daha sakin olabiliyor."}
@@ -3586,7 +3545,6 @@
 {"instruction": "Akşam televizyon izlerken uyuyakaldım.", "output": "Demek ki epey yorulmuşsun."}
 {"instruction": "Bugün yeni bir şarkı dinledim.", "output": "Hoşuna gittiyse uzun süre dinlemeye devam edebilirsin."}
 {"instruction": "Sabah evden çıkınca kuş sesleri geliyordu.", "output": "Böyle detaylar insanın gününü güzelleştirebiliyor."}
-{"instruction": "Bugün dolabımı düzenledim.", "output": "Aradığın şeyleri bulmak artık daha kolay olacaktır."}
 {"instruction": "Yeni aldığım çanta beklediğim gibi çıktı.", "output": "İnternetten alınan ürünlerde böyle olması sevindirici."}
 {"instruction": "Bugün biraz erken yoruldum.", "output": "Son zamanlarda yoğun olabilirsin."}
 {"instruction": "Sabah çayımı yudumlarken sessizliği dinledim.", "output": "Güne huzurlu başlamak güzel hissettiriyor."}
@@ -3831,7 +3789,6 @@
 {"instruction": "Web uygulamalarında 'XSS' (Cross-Site Scripting) güvenlik zafiyeti en yaygın hangi önlemle engellenir?", "output": "Kullanıcıdan gelen tüm girdilerin sunucuya kaydedilmeden veya ekrana yansıtılmadan önce özel karakterlerden arındırılması (sanitization/escaping) ve Content Security Policy (CSP) başlıklarının uygulanmasıyla engellenir."}
 {"instruction": "Makine öğrenmesinde 'K-Means' kümeleme algoritmasının çalışma adımları nasıldır?", "output": "Rastgele seçilen K adet merkez noktasına verilerin en yakınlıklarına göre atanması, ardından her kümenin ortalamasının hesaplanarak merkezlerin güncellenmesi ve bu döngünün merkezler sabitlenene kadar tekrarlanmasıdır."}
 {"instruction": "Veri tabanlarında 'Connection Pooling' (Bağlantı Havuzu) mekanizması sunucu performansını nasıl artırır?", "output": "Her istemci isteği için sıfırdan maliyetli bir veri tabanı bağlantısı açıp kapatmak yerine, önceden açılmış hazır bağlantıları bir havuzda tutarak yeniden kullanır."}
-{"instruction": "Coğrafyada 'Fiyort' kıyı tipi hangi coğrafi süreç sonucunda oluşur?", "output": "Eski buzul vadilerinin deniz suları tarafından basılmasıyla oluşan, dik ve sarp kayalıklarla çevrili derin deniz körfezleridir."}
 {"instruction": "Kimyada 'Katalizör' maddeler kimyasal tepkimelerin hızını ve dengesini nasıl etkiler?", "output": "Tepkimeye girerek aktivasyon enerjisini düşürür, tepkimenin çok daha hızlı gerçekleşmesini sağlar ancak tepkime sonucunda harcanmadan aynı şekilde çıkar."}
 {"instruction": "Astronomi ve astrofizikte yıldızların evrim sürecindeki 'Süpernova' patlaması nasıl gerçekleşir?", "output": "Büyük kütleli yıldızların yakıtının tükenmesi ve çekirdeğin kendi ağırlığıyla ani çökmesi sonucunda dış katmanların uzaya devasa bir patlamayla fırlatılmasıdır."}
 {"instruction": "Tıp biliminde 'Otoimmün' hastalıkların temel mekanizması nasıldır?", "output": "Bağışıklık sisteminin hata yaparak dışarıdaki mikroplar yerine kendi sağlıklı dokularını ve organlarını yabancı düşman sanıp onlara saldırmasıdır."}
@@ -4019,7 +3976,7 @@
 {"instruction": "WebMCP katmanı ne yapar?", "output": "Kullanıcı mesajını, sistem promptunu, adaptör stilini ve DeepKwiki bağlamını tek bir isteğe paketleyen ön yüz katmanıdır."}
 {"instruction": "Gemma'da sistem rolü kullanılıyor mu?", "output": "Hayır. Gemma Instruct güvenilir bir sistem rolü desteklemediği için sistem talimatı kullanıcı mesajının içine katlanır."}
 {"instruction": "PEFT nedir?", "output": "Parameter-Efficient Fine-Tuning; modelin tüm ağırlıklarını güncellemek yerine küçük ek parametreler eğitilerek uyarlama yapılmasıdır."}
-{"instruction": "LoRA nedir?", "output": "Düşük ranklı matrisler ekleyerek modeli az sayıda parametreyle uyarlayan bir PEFT yöntemidir."}
+{"instruction": "LoRA nedir?", "output": "Modelin tamamını değil, küçük ek katmanları eğiten yöntemdir."}
 {"instruction": "QLoRA'nın LoRA'dan farkı nedir?", "output": "QLoRA, temel modeli 4 bit nicelenmiş halde tutarak LoRA eğitimini çok daha az bellekle yapmayı sağlar."}
 {"instruction": "Model nasıl kişiselleştiriliyor?", "output": "Türkçe soru-cevap verisiyle LoRA eğitimi yapılır; elde edilen adaptör temel modele uygulanarak yanıt kalitesi artırılır."}
 {"instruction": "PEFT adaptörleri bu demoda nasıl çalışıyor?", "output": "CPU demosunda yumuşak PEFT vardır: seçilen adaptör kimliği gerçek ağırlık yüklemek yerine prompt stilini değiştirir."}
@@ -4058,3 +4015,132 @@
 {"instruction": "Gateway 503 dönerse ne yapmalıyım?", "output": "Muhtemelen eşzamanlı istek sınırı doludur; devam eden yanıt bitene kadar bekleyip tekrar deneyin."}
 {"instruction": "Sohbet ekranı boş yanıt dönerse ne kontrol edilmeli?", "output": "Önce gateway sağlık uç noktası, sonra container durumları ve gateway günlükleri kontrol edilmelidir."}
 {"instruction": "Bu proje neden kendi altyapısını kullanıyor?", "output": "Amaç hazır bir bulut API'si tüketmek değil, model servisini uçtan uca çalıştırıp ölçmek ve izlemektir."}
+{"instruction": "2+2 kaç eder?", "output": "4 eder."}
+{"instruction": "7 x 8 kaç eder?", "output": "56 eder."}
+{"instruction": "100'ün yarısı kaçtır?", "output": "50'dir."}
+{"instruction": "12 x 12 kaç eder?", "output": "144 eder."}
+{"instruction": "9 x 6 kaç eder?", "output": "54 eder."}
+{"instruction": "45 + 55 kaç eder?", "output": "100 eder."}
+{"instruction": "1000 / 4 kaç eder?", "output": "250 eder."}
+{"instruction": "3'ün karesi kaçtır?", "output": "9'dur."}
+{"instruction": "8'in küpü kaçtır?", "output": "512'dir."}
+{"instruction": "144'ün karekökü kaçtır?", "output": "12'dir."}
+{"instruction": "200'ün yüzde 25'i kaçtır?", "output": "50'dir."}
+{"instruction": "80'in yüzde 10'u kaçtır?", "output": "8'dir."}
+{"instruction": "15 - 7 kaç eder?", "output": "8 eder."}
+{"instruction": "6 x 7 kaç eder?", "output": "42 eder."}
+{"instruction": "1 düzine kaç tanedir?", "output": "12 tanedir."}
+{"instruction": "Bir saat kaç dakikadır?", "output": "60 dakikadır."}
+{"instruction": "Bir gün kaç saattir?", "output": "24 saattir."}
+{"instruction": "Bir yıl kaç gündür?", "output": "365 gündür."}
+{"instruction": "Bir hafta kaç gündür?", "output": "7 gündür."}
+{"instruction": "Bir kilogram kaç gramdır?", "output": "1000 gramdır."}
+{"instruction": "Bir kilometre kaç metredir?", "output": "1000 metredir."}
+{"instruction": "Bir metre kaç santimetredir?", "output": "100 santimetredir."}
+{"instruction": "Bir asır kaç yıldır?", "output": "100 yıldır."}
+{"instruction": "Üçgenin iç açıları toplamı kaç derecedir?", "output": "180 derecedir."}
+{"instruction": "Karenin kaç kenarı vardır?", "output": "4 kenarı vardır."}
+{"instruction": "Su kaç derecede kaynar?", "output": "Deniz seviyesinde 100 derecede kaynar."}
+{"instruction": "Su kaç derecede donar?", "output": "0 derecede donar."}
+{"instruction": "Suyun kimyasal formülü nedir?", "output": "H2O'dur."}
+{"instruction": "İnsan vücudunun normal sıcaklığı kaç derecedir?", "output": "Yaklaşık 36,5 derecedir."}
+{"instruction": "Işık hızı saniyede kaç kilometredir?", "output": "Yaklaşık 300.000 kilometredir."}
+{"instruction": "Dünya'nın uydusu nedir?", "output": "Ay'dır."}
+{"instruction": "Güneş sisteminin en büyük gezegeni hangisidir?", "output": "Jüpiter'dir."}
+{"instruction": "Güneşe en yakın gezegen hangisidir?", "output": "Merkür'dür."}
+{"instruction": "Kızıl gezegen olarak bilinen gezegen hangisidir?", "output": "Mars'tır."}
+{"instruction": "İnsan vücudunda kaç kemik vardır?", "output": "Yetişkinde 206 kemik vardır."}
+{"instruction": "Kalp kaç odacıktan oluşur?", "output": "4 odacıktan oluşur."}
+{"instruction": "Altının kimyasal sembolü nedir?", "output": "Au'dur."}
+{"instruction": "Oksijenin kimyasal sembolü nedir?", "output": "O'dur."}
+{"instruction": "Demirin kimyasal sembolü nedir?", "output": "Fe'dir."}
+{"instruction": "Periyodik tablodaki ilk element nedir?", "output": "Hidrojendir."}
+{"instruction": "Dünya'nın en büyük okyanusu hangisidir?", "output": "Büyük Okyanus'tur."}
+{"instruction": "Dünya'nın en yüksek dağı hangisidir?", "output": "Everest'tir."}
+{"instruction": "Dünya'nın en uzun nehri hangisidir?", "output": "Nil Nehri'dir."}
+{"instruction": "En büyük çöl hangisidir?", "output": "Sahra Çölü'dür."}
+{"instruction": "Türkiye'nin en kalabalık şehri hangisidir?", "output": "İstanbul'dur."}
+{"instruction": "Türkiye'nin para birimi nedir?", "output": "Türk lirasıdır."}
+{"instruction": "Türkiye kaç coğrafi bölgeye ayrılır?", "output": "7 bölgeye ayrılır."}
+{"instruction": "Türkiye Cumhuriyeti hangi yıl kuruldu?", "output": "1923 yılında kuruldu."}
+{"instruction": "Türkiye Cumhuriyeti'nin kurucusu kimdir?", "output": "Mustafa Kemal Atatürk'tür."}
+{"instruction": "Cumhuriyet Bayramı hangi gün kutlanır?", "output": "29 Ekim'de kutlanır."}
+{"instruction": "Anıtkabir hangi şehirdedir?", "output": "Ankara'dadır."}
+{"instruction": "Ayasofya hangi şehirdedir?", "output": "İstanbul'dadır."}
+{"instruction": "Kapadokya hangi ildedir?", "output": "Ağırlıklı olarak Nevşehir'dedir."}
+{"instruction": "Pamukkale travertenleri hangi ildedir?", "output": "Denizli'dedir."}
+{"instruction": "Efes Antik Kenti hangi ildedir?", "output": "İzmir'dedir."}
+{"instruction": "Boğaziçi Köprüsü hangi şehirdedir?", "output": "İstanbul'dadır."}
+{"instruction": "Türkiye'nin en kuzeydeki ili hangisidir?", "output": "Sinop'tur."}
+{"instruction": "Türkiye hangi kıtalarda yer alır?", "output": "Asya ve Avrupa kıtalarında yer alır."}
+{"instruction": "Türkiye'nin resmi dili nedir?", "output": "Türkçedir."}
+{"instruction": "Almanya'nın başkenti neresidir?", "output": "Berlin'dir."}
+{"instruction": "Fransa'nın başkenti neresidir?", "output": "Paris'tir."}
+{"instruction": "İtalya'nın başkenti neresidir?", "output": "Roma'dır."}
+{"instruction": "İngiltere'nin başkenti neresidir?", "output": "Londra'dır."}
+{"instruction": "Japonya'nın başkenti neresidir?", "output": "Tokyo'dur."}
+{"instruction": "Rusya'nın başkenti neresidir?", "output": "Moskova'dır."}
+{"instruction": "Amerika Birleşik Devletleri'nin başkenti neresidir?", "output": "Washington D.C.'dir."}
+{"instruction": "Yunanistan'ın başkenti neresidir?", "output": "Atina'dır."}
+{"instruction": "İspanya'nın başkenti neresidir?", "output": "Madrid'dir."}
+{"instruction": "Mısır'ın başkenti neresidir?", "output": "Kahire'dir."}
+{"instruction": "Çin'in başkenti neresidir?", "output": "Pekin'dir."}
+{"instruction": "Hollanda'nın başkenti neresidir?", "output": "Amsterdam'dır."}
+{"instruction": "Eyfel Kulesi hangi şehirdedir?", "output": "Paris'tedir."}
+{"instruction": "Piramitler hangi ülkededir?", "output": "Mısır'dadır."}
+{"instruction": "Kolezyum hangi şehirdedir?", "output": "Roma'dadır."}
+{"instruction": "Mona Lisa tablosunu kim yaptı?", "output": "Leonardo da Vinci yaptı."}
+{"instruction": "Görelilik kuramını kim geliştirdi?", "output": "Albert Einstein geliştirdi."}
+{"instruction": "Yerçekimini kim formüle etti?", "output": "Isaac Newton formüle etti."}
+{"instruction": "Ampulü kim icat etti?", "output": "Thomas Edison icat etti."}
+{"instruction": "Telefonu kim icat etti?", "output": "Alexander Graham Bell icat etti."}
+{"instruction": "Penisilini kim keşfetti?", "output": "Alexander Fleming keşfetti."}
+{"instruction": "Matbaayı kim geliştirdi?", "output": "Johannes Gutenberg geliştirdi."}
+{"instruction": "Nutuk'u kim yazdı?", "output": "Mustafa Kemal Atatürk yazdı."}
+{"instruction": "İnce Memed romanının yazarı kimdir?", "output": "Yaşar Kemal'dir."}
+{"instruction": "Çalıkuşu romanının yazarı kimdir?", "output": "Reşat Nuri Güntekin'dir."}
+{"instruction": "Nobel Edebiyat Ödülü alan ilk Türk yazar kimdir?", "output": "Orhan Pamuk'tur."}
+{"instruction": "Birinci Dünya Savaşı hangi yıl başladı?", "output": "1914 yılında başladı."}
+{"instruction": "İkinci Dünya Savaşı hangi yıl bitti?", "output": "1945 yılında bitti."}
+{"instruction": "İstanbul hangi yıl fethedildi?", "output": "1453 yılında fethedildi."}
+{"instruction": "Ay'a ilk kez hangi yıl insan ayak bastı?", "output": "1969 yılında."}
+{"instruction": "Bilgisayarın beyni sayılan parça hangisidir?", "output": "İşlemcidir."}
+{"instruction": "HTTP hangi portu kullanır?", "output": "80 numaralı portu kullanır."}
+{"instruction": "HTTPS hangi portu kullanır?", "output": "443 numaralı portu kullanır."}
+{"instruction": "PostgreSQL varsayılan olarak hangi portu kullanır?", "output": "5432 numaralı portu kullanır."}
+{"instruction": "1 bayt kaç bittir?", "output": "8 bittir."}
+{"instruction": "JSON'un açılımı nedir?", "output": "JavaScript Object Notation'dır."}
+{"instruction": "API'nin açılımı nedir?", "output": "Application Programming Interface'dir."}
+{"instruction": "CPU'nun açılımı nedir?", "output": "Central Processing Unit'tir."}
+{"instruction": "LLM'in açılımı nedir?", "output": "Large Language Model'dir."}
+{"instruction": "JWT'nin açılımı nedir?", "output": "JSON Web Token'dır."}
+{"instruction": "SQL'in açılımı nedir?", "output": "Structured Query Language'dir."}
+{"instruction": "Git'te değişiklikleri kaydetme komutu nedir?", "output": "git commit komutudur."}
+{"instruction": "Bu projenin backend dili nedir?", "output": "Go'dur."}
+{"instruction": "Bu projenin frontend framework'ü nedir?", "output": "Next.js'tir."}
+{"instruction": "Bu projede hangi veritabanı kullanılıyor?", "output": "PostgreSQL kullanılıyor."}
+{"instruction": "Bu projede model tarayıcıda hangi kütüphaneyle çalışıyor?", "output": "WebLLM ile çalışıyor."}
+{"instruction": "Bu projede kullanılan temel model hangisidir?", "output": "Gemma 2B-IT'dir."}
+{"instruction": "Bu projede kimlik doğrulama nasıl yapılıyor?", "output": "JWT ile yapılıyor."}
+{"instruction": "Access token kaç dakika geçerlidir?", "output": "15 dakika geçerlidir."}
+{"instruction": "Refresh token kaç gün geçerlidir?", "output": "7 gün geçerlidir."}
+{"instruction": "Parolalar hangi yöntemle saklanıyor?", "output": "bcrypt ile hash'lenerek saklanıyor."}
+{"instruction": "Backend hangi web framework'ünü kullanıyor?", "output": "Gin kullanıyor."}
+{"instruction": "Backend hangi ORM'i kullanıyor?", "output": "GORM kullanıyor."}
+{"instruction": "Frontend state yönetimi neyle yapılıyor?", "output": "Zustand ile yapılıyor."}
+{"instruction": "Grafikler hangi kütüphaneyle çiziliyor?", "output": "Recharts ile çiziliyor."}
+{"instruction": "Modelin niceleme formatı nedir?", "output": "q4f16_1'dir."}
+{"instruction": "Token nedir?", "output": "Modelin işlediği en küçük metin parçasıdır."}
+{"instruction": "TTFT neyi ölçer?", "output": "İlk token'ın gelme süresini ölçer."}
+{"instruction": "Tokens per second neyi ölçer?", "output": "Saniyede üretilen token sayısını ölçer."}
+{"instruction": "Temperature 0 ne anlama gelir?", "output": "Modelin en olası token'ı seçmesi, yani belirleyici üretim anlamına gelir."}
+{"instruction": "Latency nedir?", "output": "İstek ile yanıt arasında geçen süredir."}
+{"instruction": "Bağlam penceresi nedir?", "output": "Modelin aynı anda görebildiği en fazla token sayısıdır."}
+{"instruction": "Fine-tuning nedir?", "output": "Hazır bir modeli kendi verinizle yeniden eğitmektir."}
+{"instruction": "Overfitting nedir?", "output": "Modelin eğitim verisini ezberleyip yeni veride başarısız olmasıdır."}
+{"instruction": "Merhaba, nasılsın?", "output": "İyiyim, teşekkürler. Size nasıl yardımcı olabilirim?"}
+{"instruction": "Teşekkür ederim.", "output": "Rica ederim."}
+{"instruction": "Günaydın.", "output": "Günaydın, iyi günler dilerim."}
+{"instruction": "İyi geceler.", "output": "İyi geceler, iyi dinlenmeler."}
+{"instruction": "Adın ne?", "output": "Bu uygulamanın yardımcı asistanıyım."}
+{"instruction": "Görüşürüz.", "output": "Görüşmek üzere, iyi günler."}

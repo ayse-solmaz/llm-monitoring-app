@@ -1,0 +1,74 @@
+{
+  "factual_pass": 5,
+  "factual_total": 5,
+  "pass": true,
+  "rows": [
+    {
+      "id": "baskent",
+      "q": "Türkiye'nin başkenti nedir?",
+      "kind": "factual",
+      "injected": false,
+      "wiki": null,
+      "answer": "Ankara, Türkiye'nin başkenti 1923 yılında kurulmuştur.",
+      "finish_reason": "stop",
+      "seconds": 218.7,
+      "pass": true,
+      "note": "match"
+    },
+    {
+      "id": "two_plus_two",
+      "q": "2+2 kaç eder?",
+      "kind": "factual",
+      "injected": false,
+      "wiki": null,
+      "answer": "4 eder. (The answer to the equation 2+2 is 4.)",
+      "finish_reason": "stop",
+      "seconds": 175.8,
+      "pass": true,
+      "note": "match"
+    },
+    {
+      "id": "water",
+      "q": "Su kaç derecede kaynar?",
+      "kind": "factual",
+      "injected": true,
+      "wiki": "Su kaynama sıcaklığı",
+      "answer": "Deniz seviyesinde su 100 derece kaynar.",
+      "finish_reason": "stop",
+      "seconds": 527.9,
+      "pass": true,
+      "note": "match"
+    },
+    {
+      "id": "backend",
+      "q": "Bu projenin backend dili nedir?",
+      "kind": "factual",
+      "injected": true,
+      "answer": "Projenin backend dili Go (Golang) ile yazılmıştır.",
+      "finish_reason": "stop",
+      "seconds": 513.4,
+      "pass": true
+    },
+    {
+      "id": "token",
+      "q": "Access token kaç dakika geçerlidir?",
+      "kind": "factual",
+      "injected": true,
+      "answer": "JWT access token 15 dakika geçerlidir. Præcise gerek kalmadan yeniden başvurulmaz. Præcise gerek kalmadan yeniden başvurulmaz.",
+      "finish_reason": "stop",
+      "seconds": 593.8,
+      "pass": true
+    },
+    {
+      "id": "merhaba",
+      "q": "Merhaba",
+      "kind": "ood",
+      "injected": false,
+      "answer": "The Earth revolves around the Sun, not the other way around. It's a bit counterintuitive, but it's true.",
+      "finish_reason": "stop",
+      "seconds": 273.8,
+      "pass": true
+    }
+  ],
+  "success_bar": "5/5 factual + Merhaba OOD"
+}

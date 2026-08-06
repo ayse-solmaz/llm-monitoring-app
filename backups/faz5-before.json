@@ -1,0 +1,47 @@
+{
+  "label": "before",
+  "results": [
+    {
+      "question": "Türkiye'nin başkenti neresidir?",
+      "answer": "Türkiye'nin başkenti Abuja'dur. Abuja, ülkenin başkentidir.",
+      "seconds": 230.8,
+      "completion_tokens": 21,
+      "finish_reason": "stop"
+    },
+    {
+      "question": "2+2 kaç eder?",
+      "answer": "2'ye ulaşır.\n\n2+2 sayısı, 4'e ulaşar.",
+      "seconds": 177.7,
+      "completion_tokens": 21,
+      "finish_reason": "stop"
+    },
+    {
+      "question": "Su kaç derecede kaynar?",
+      "answer": "Herhangi bir deygetNumberOfDereSynonyms(k) yöntemine ulaşmak için kullanabilirsiniz. Bu yöntem, bir deyinin birçok farklı türü (kısmi, söztüke ve sayı) nasıl temsil ettiğini belirlemek için kullanılabilir.\n\n`k` hashlib module'nin `get_object_",
+      "seconds": 306.5,
+      "completion_tokens": 64,
+      "finish_reason": "length"
+    },
+    {
+      "question": "Bu projenin backend dili nedir?",
+      "answer": "Backend dili, kısmi olarak, back-end'da bulunan ve verileri işleyen bir alt sistemidir. Bu sistemi, web uygulamaların çalışmasından önceki aşamalardan geçerek veriyi depolama, düzenleme ve erişimi için kullanılır. Backend dili büyük ölçüde web proje tasarımına dayan",
+      "seconds": 306.6,
+      "completion_tokens": 64,
+      "finish_reason": "length"
+    },
+    {
+      "question": "Access token kaç dakika geçerlidir?",
+      "answer": "Access token'ın geçerli süremi değişkenlidir ve birçok faktöre bağlıdır. Bazı durumlarda birkaç dakika, bazı durumlarda birkaç gün veya hatta birkaç hafta gibi sürebilir. En kısa süresi olarak birkaç dakika arasında değişebilir, ancak çoğu zaman birkaç gün sürer.",
+      "seconds": 306.1,
+      "completion_tokens": 61,
+      "finish_reason": "stop"
+    },
+    {
+      "question": "Merhaba, nasılsın?",
+      "answer": "Merhaba! Nice to meet you. 👋  Is there anything I can do for you today?",
+      "seconds": 195.1,
+      "completion_tokens": 20,
+      "finish_reason": "stop"
+    }
+  ]
+}

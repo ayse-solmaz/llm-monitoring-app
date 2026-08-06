@@ -20,6 +20,7 @@ import (
 	"github.com/masterfabric-go/masterfabric/internal/infrastructure/http/handler/health"
 	iamHandler "github.com/masterfabric-go/masterfabric/internal/infrastructure/http/handler/iam"
 	llmHandler "github.com/masterfabric-go/masterfabric/internal/infrastructure/http/handler/llm"
+	llmadminHandler "github.com/masterfabric-go/masterfabric/internal/infrastructure/http/handler/llmadmin"
 	realtimeHandler "github.com/masterfabric-go/masterfabric/internal/infrastructure/http/handler/realtime"
 	tenantHandler "github.com/masterfabric-go/masterfabric/internal/infrastructure/http/handler/tenant"
 
@@ -56,6 +57,7 @@ type Dependencies struct {
 	IAMHandler      *iamHandler.Handler
 	AppCompatAuth   *appcompatHandler.AuthHandler
 	LLMHandler      *llmHandler.Handler
+	LLMAdminHandler *llmadminHandler.Handler
 	ConfigHandler   *appconfigHandler.Handler
 	CMNHandler      *appcmnHandler.Handler
 	TenantHandler   *tenantHandler.Handler
@@ -145,6 +147,14 @@ func New(deps Dependencies) *chi.Mux {
 					r.Post("/sessions/{id}/scores", deps.LLMHandler.CreateScore)
 					r.Get("/metrics/summary", deps.LLMHandler.MetricsSummary)
 					r.Get("/scores/summary", deps.LLMHandler.ScoresSummary)
+				})
+			}
+
+			// FINAL BOSS admin LLM settings (outside PRD 20-endpoint contract)
+			if deps.LLMAdminHandler != nil {
+				r.Route("/admin", func(r chi.Router) {
+					r.Get("/llm-settings", deps.LLMAdminHandler.GetSettings)
+					r.Put("/llm-settings", deps.LLMAdminHandler.PutSettings)
 				})
 			}
 		})

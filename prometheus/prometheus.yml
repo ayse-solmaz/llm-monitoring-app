@@ -1,6 +1,7 @@
 global:
-  scrape_interval: 5s
-  evaluation_interval: 5s
+  # 5s was too aggressive on a shared-CPU demo host (cadvisor + MLC compete).
+  scrape_interval: 15s
+  evaluation_interval: 15s
 
 scrape_configs:
   # FastAPI KPI gateway — TTFT, tokens/sec, inflight, E2E latency (pull model).

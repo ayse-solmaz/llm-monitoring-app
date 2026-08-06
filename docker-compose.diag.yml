@@ -1,0 +1,57 @@
+# Isolated q0f16 diagnostic stack. Does NOT touch volume `mlc-model` (prod).
+# Usage:
+#   docker compose -f docker-compose.diag.yml up -d
+#   curl http://localhost:8088/v1/models
+#   docker compose -f docker-compose.diag.yml down
+
+services:
+  mlc-diag:
+    image: mlc-server-spike:latest
+    pull_policy: never
+    command:
+      [
+        "python3",
+        "-m",
+        "mlc_llm",
+        "serve",
+        "/app/model",
+        "--model-lib",
+        "/app/model/gemma-cpu.so",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "--device",
+        "cpu",
+        "--mode",
+        "interactive",
+      ]
+    environment:
+      TVM_NUM_THREADS: "4"
+      OMP_NUM_THREADS: "4"
+    shm_size: "2gb"
+    # Non-swarm Compose honors mem_limit (deploy.limits alone is ignored).
+    mem_limit: 12g
+    cpus: 4.0
+    ports:
+      - "8088:8000"
+    volumes:
+      - mlc-model-diag:/app/model:ro
+    deploy:
+      resources:
+        limits:
+          cpus: "4.0"
+          memory: 12G
+    healthcheck:
+      test:
+        - CMD
+        - python3
+        - -c
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/v1/models', timeout=5)
+      interval: 30s
+      timeout: 10s
+      retries: 8
+      start_period: 180s
+
+volumes:
+  mlc-model-diag:

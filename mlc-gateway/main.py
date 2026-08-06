@@ -473,21 +473,29 @@ def _normalize_payload(payload: dict) -> dict:
     # Demo quality: allow longer answers; hard cap 512 for CPU safety.
     payload["max_tokens"] = max(1, min(mt, 512))
 
+    # Model config defaults frequency_penalty=1.0 which slows decode and
+    # pushes the model into odd loops. Zero both unless the client sets them.
+    if "frequency_penalty" not in payload:
+        payload["frequency_penalty"] = 0.0
+    if "presence_penalty" not in payload:
+        payload["presence_penalty"] = 0.0
+
     msgs = payload.get("messages")
     if isinstance(msgs, list):
         trimmed = []
-        for m in msgs[-3:]:  # keep at most last 3 turns
+        # Keep last 6 messages (up to ~3 turns) without cutting short factual answers.
+        for m in msgs[-6:]:
             if not isinstance(m, dict):
                 continue
             content = m.get("content")
-            if isinstance(content, str) and len(content) > 800:
-                content = content[:800]
+            if isinstance(content, str) and len(content) > 2000:
+                content = content[:2000]
             role = m.get("role") or "user"
             if role not in ("user", "assistant", "system"):
                 role = "user"
             # Gemma-IT: avoid system role — fold into user if needed
             if role == "system" and isinstance(content, str):
-                trimmed.append({"role": "user", "content": content[:500]})
+                trimmed.append({"role": "user", "content": content[:1000]})
             else:
                 trimmed.append(
                     {

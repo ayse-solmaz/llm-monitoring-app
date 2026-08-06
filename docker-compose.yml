@@ -48,11 +48,16 @@ services:
         "8000",
         "--device",
         "cpu",
+        # Tek kullanicili demo: max_batch=1, bellek penceresi modele ayrilir.
+        "--mode",
+        "interactive",
       ]
-    # L0: more CPU threads + larger /dev/shm for TVM runtime.
+    # Thread sayisi CPU kotasiyla AYNI olmali. Onceki 8 thread / 4 CPU
+    # ayari cgroup throttle uretiyordu (nr_throttled > 0, throttled_usec ~170s).
+    # Host 8 cekirdek; 6 modele, 2 izleme/OS'e.
     environment:
-      TVM_NUM_THREADS: "8"
-      OMP_NUM_THREADS: "8"
+      TVM_NUM_THREADS: "6"
+      OMP_NUM_THREADS: "6"
     shm_size: "2gb"
     expose:
       - "8000"
@@ -67,7 +72,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "4.0"
+          cpus: "6.0"
           memory: 6G
     healthcheck:
       test:

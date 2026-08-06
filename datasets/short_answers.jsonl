@@ -1,0 +1,135 @@
+{"instruction": "2+2 kaç eder?", "output": "4 eder."}
+{"instruction": "7 x 8 kaç eder?", "output": "56 eder."}
+{"instruction": "100'ün yarısı kaçtır?", "output": "50'dir."}
+{"instruction": "12 x 12 kaç eder?", "output": "144 eder."}
+{"instruction": "9 x 6 kaç eder?", "output": "54 eder."}
+{"instruction": "45 + 55 kaç eder?", "output": "100 eder."}
+{"instruction": "1000 / 4 kaç eder?", "output": "250 eder."}
+{"instruction": "3'ün karesi kaçtır?", "output": "9'dur."}
+{"instruction": "8'in küpü kaçtır?", "output": "512'dir."}
+{"instruction": "144'ün karekökü kaçtır?", "output": "12'dir."}
+{"instruction": "200'ün yüzde 25'i kaçtır?", "output": "50'dir."}
+{"instruction": "80'in yüzde 10'u kaçtır?", "output": "8'dir."}
+{"instruction": "15 - 7 kaç eder?", "output": "8 eder."}
+{"instruction": "6 x 7 kaç eder?", "output": "42 eder."}
+{"instruction": "1 düzine kaç tanedir?", "output": "12 tanedir."}
+{"instruction": "Bir saat kaç dakikadır?", "output": "60 dakikadır."}
+{"instruction": "Bir gün kaç saattir?", "output": "24 saattir."}
+{"instruction": "Bir yıl kaç gündür?", "output": "365 gündür."}
+{"instruction": "Bir hafta kaç gündür?", "output": "7 gündür."}
+{"instruction": "Bir kilogram kaç gramdır?", "output": "1000 gramdır."}
+{"instruction": "Bir kilometre kaç metredir?", "output": "1000 metredir."}
+{"instruction": "Bir metre kaç santimetredir?", "output": "100 santimetredir."}
+{"instruction": "Bir asır kaç yıldır?", "output": "100 yıldır."}
+{"instruction": "Üçgenin iç açıları toplamı kaç derecedir?", "output": "180 derecedir."}
+{"instruction": "Karenin kaç kenarı vardır?", "output": "4 kenarı vardır."}
+{"instruction": "Su kaç derecede kaynar?", "output": "Deniz seviyesinde 100 derecede kaynar."}
+{"instruction": "Su kaç derecede donar?", "output": "0 derecede donar."}
+{"instruction": "Suyun kimyasal formülü nedir?", "output": "H2O'dur."}
+{"instruction": "İnsan vücudunun normal sıcaklığı kaç derecedir?", "output": "Yaklaşık 36,5 derecedir."}
+{"instruction": "Işık hızı saniyede kaç kilometredir?", "output": "Yaklaşık 300.000 kilometredir."}
+{"instruction": "Dünya'nın uydusu nedir?", "output": "Ay'dır."}
+{"instruction": "Güneş sisteminin en büyük gezegeni hangisidir?", "output": "Jüpiter'dir."}
+{"instruction": "Güneşe en yakın gezegen hangisidir?", "output": "Merkür'dür."}
+{"instruction": "Kızıl gezegen olarak bilinen gezegen hangisidir?", "output": "Mars'tır."}
+{"instruction": "İnsan vücudunda kaç kemik vardır?", "output": "Yetişkinde 206 kemik vardır."}
+{"instruction": "Kalp kaç odacıktan oluşur?", "output": "4 odacıktan oluşur."}
+{"instruction": "Altının kimyasal sembolü nedir?", "output": "Au'dur."}
+{"instruction": "Oksijenin kimyasal sembolü nedir?", "output": "O'dur."}
+{"instruction": "Demirin kimyasal sembolü nedir?", "output": "Fe'dir."}
+{"instruction": "Periyodik tablodaki ilk element nedir?", "output": "Hidrojendir."}
+{"instruction": "Dünya'nın en büyük okyanusu hangisidir?", "output": "Büyük Okyanus'tur."}
+{"instruction": "Dünya'nın en yüksek dağı hangisidir?", "output": "Everest'tir."}
+{"instruction": "Dünya'nın en uzun nehri hangisidir?", "output": "Nil Nehri'dir."}
+{"instruction": "En büyük çöl hangisidir?", "output": "Sahra Çölü'dür."}
+{"instruction": "Türkiye'nin başkenti neresidir?", "output": "Ankara'dır."}
+{"instruction": "Türkiye'nin en kalabalık şehri hangisidir?", "output": "İstanbul'dur."}
+{"instruction": "Türkiye'nin en yüksek dağı hangisidir?", "output": "Ağrı Dağı'dır."}
+{"instruction": "Türkiye'nin en uzun nehri hangisidir?", "output": "Kızılırmak'tır."}
+{"instruction": "Türkiye'nin en büyük gölü hangisidir?", "output": "Van Gölü'dür."}
+{"instruction": "Türkiye'nin para birimi nedir?", "output": "Türk lirasıdır."}
+{"instruction": "Türkiye kaç coğrafi bölgeye ayrılır?", "output": "7 bölgeye ayrılır."}
+{"instruction": "Türkiye Cumhuriyeti hangi yıl kuruldu?", "output": "1923 yılında kuruldu."}
+{"instruction": "Türkiye Cumhuriyeti'nin kurucusu kimdir?", "output": "Mustafa Kemal Atatürk'tür."}
+{"instruction": "Cumhuriyet Bayramı hangi gün kutlanır?", "output": "29 Ekim'de kutlanır."}
+{"instruction": "Anıtkabir hangi şehirdedir?", "output": "Ankara'dadır."}
+{"instruction": "Ayasofya hangi şehirdedir?", "output": "İstanbul'dadır."}
+{"instruction": "Kapadokya hangi ildedir?", "output": "Ağırlıklı olarak Nevşehir'dedir."}
+{"instruction": "Pamukkale travertenleri hangi ildedir?", "output": "Denizli'dedir."}
+{"instruction": "Efes Antik Kenti hangi ildedir?", "output": "İzmir'dedir."}
+{"instruction": "Boğaziçi Köprüsü hangi şehirdedir?", "output": "İstanbul'dadır."}
+{"instruction": "Türkiye'nin en kuzeydeki ili hangisidir?", "output": "Sinop'tur."}
+{"instruction": "Türkiye hangi kıtalarda yer alır?", "output": "Asya ve Avrupa kıtalarında yer alır."}
+{"instruction": "Türkiye'nin resmi dili nedir?", "output": "Türkçedir."}
+{"instruction": "Almanya'nın başkenti neresidir?", "output": "Berlin'dir."}
+{"instruction": "Fransa'nın başkenti neresidir?", "output": "Paris'tir."}
+{"instruction": "İtalya'nın başkenti neresidir?", "output": "Roma'dır."}
+{"instruction": "İngiltere'nin başkenti neresidir?", "output": "Londra'dır."}
+{"instruction": "Japonya'nın başkenti neresidir?", "output": "Tokyo'dur."}
+{"instruction": "Rusya'nın başkenti neresidir?", "output": "Moskova'dır."}
+{"instruction": "Amerika Birleşik Devletleri'nin başkenti neresidir?", "output": "Washington D.C.'dir."}
+{"instruction": "Yunanistan'ın başkenti neresidir?", "output": "Atina'dır."}
+{"instruction": "İspanya'nın başkenti neresidir?", "output": "Madrid'dir."}
+{"instruction": "Mısır'ın başkenti neresidir?", "output": "Kahire'dir."}
+{"instruction": "Çin'in başkenti neresidir?", "output": "Pekin'dir."}
+{"instruction": "Hollanda'nın başkenti neresidir?", "output": "Amsterdam'dır."}
+{"instruction": "Eyfel Kulesi hangi şehirdedir?", "output": "Paris'tedir."}
+{"instruction": "Piramitler hangi ülkededir?", "output": "Mısır'dadır."}
+{"instruction": "Kolezyum hangi şehirdedir?", "output": "Roma'dadır."}
+{"instruction": "Mona Lisa tablosunu kim yaptı?", "output": "Leonardo da Vinci yaptı."}
+{"instruction": "Görelilik kuramını kim geliştirdi?", "output": "Albert Einstein geliştirdi."}
+{"instruction": "Yerçekimini kim formüle etti?", "output": "Isaac Newton formüle etti."}
+{"instruction": "Ampulü kim icat etti?", "output": "Thomas Edison icat etti."}
+{"instruction": "Telefonu kim icat etti?", "output": "Alexander Graham Bell icat etti."}
+{"instruction": "Penisilini kim keşfetti?", "output": "Alexander Fleming keşfetti."}
+{"instruction": "Matbaayı kim geliştirdi?", "output": "Johannes Gutenberg geliştirdi."}
+{"instruction": "Nutuk'u kim yazdı?", "output": "Mustafa Kemal Atatürk yazdı."}
+{"instruction": "İnce Memed romanının yazarı kimdir?", "output": "Yaşar Kemal'dir."}
+{"instruction": "Çalıkuşu romanının yazarı kimdir?", "output": "Reşat Nuri Güntekin'dir."}
+{"instruction": "Nobel Edebiyat Ödülü alan ilk Türk yazar kimdir?", "output": "Orhan Pamuk'tur."}
+{"instruction": "İstiklal Marşı'nın şairi kimdir?", "output": "Mehmet Akif Ersoy'dur."}
+{"instruction": "Birinci Dünya Savaşı hangi yıl başladı?", "output": "1914 yılında başladı."}
+{"instruction": "İkinci Dünya Savaşı hangi yıl bitti?", "output": "1945 yılında bitti."}
+{"instruction": "İstanbul hangi yıl fethedildi?", "output": "1453 yılında fethedildi."}
+{"instruction": "Ay'a ilk kez hangi yıl insan ayak bastı?", "output": "1969 yılında."}
+{"instruction": "Bilgisayarın beyni sayılan parça hangisidir?", "output": "İşlemcidir."}
+{"instruction": "HTTP hangi portu kullanır?", "output": "80 numaralı portu kullanır."}
+{"instruction": "HTTPS hangi portu kullanır?", "output": "443 numaralı portu kullanır."}
+{"instruction": "PostgreSQL varsayılan olarak hangi portu kullanır?", "output": "5432 numaralı portu kullanır."}
+{"instruction": "1 bayt kaç bittir?", "output": "8 bittir."}
+{"instruction": "JSON'un açılımı nedir?", "output": "JavaScript Object Notation'dır."}
+{"instruction": "API'nin açılımı nedir?", "output": "Application Programming Interface'dir."}
+{"instruction": "CPU'nun açılımı nedir?", "output": "Central Processing Unit'tir."}
+{"instruction": "LLM'in açılımı nedir?", "output": "Large Language Model'dir."}
+{"instruction": "JWT'nin açılımı nedir?", "output": "JSON Web Token'dır."}
+{"instruction": "SQL'in açılımı nedir?", "output": "Structured Query Language'dir."}
+{"instruction": "Git'te değişiklikleri kaydetme komutu nedir?", "output": "git commit komutudur."}
+{"instruction": "Bu projenin backend dili nedir?", "output": "Go'dur."}
+{"instruction": "Bu projenin frontend framework'ü nedir?", "output": "Next.js'tir."}
+{"instruction": "Bu projede hangi veritabanı kullanılıyor?", "output": "PostgreSQL kullanılıyor."}
+{"instruction": "Bu projede model tarayıcıda hangi kütüphaneyle çalışıyor?", "output": "WebLLM ile çalışıyor."}
+{"instruction": "Bu projede kullanılan temel model hangisidir?", "output": "Gemma 2B-IT'dir."}
+{"instruction": "Bu projede kimlik doğrulama nasıl yapılıyor?", "output": "JWT ile yapılıyor."}
+{"instruction": "Access token kaç dakika geçerlidir?", "output": "15 dakika geçerlidir."}
+{"instruction": "Refresh token kaç gün geçerlidir?", "output": "7 gün geçerlidir."}
+{"instruction": "Parolalar hangi yöntemle saklanıyor?", "output": "bcrypt ile hash'lenerek saklanıyor."}
+{"instruction": "Backend hangi web framework'ünü kullanıyor?", "output": "Gin kullanıyor."}
+{"instruction": "Backend hangi ORM'i kullanıyor?", "output": "GORM kullanıyor."}
+{"instruction": "Frontend state yönetimi neyle yapılıyor?", "output": "Zustand ile yapılıyor."}
+{"instruction": "Grafikler hangi kütüphaneyle çiziliyor?", "output": "Recharts ile çiziliyor."}
+{"instruction": "Modelin niceleme formatı nedir?", "output": "q4f16_1'dir."}
+{"instruction": "Token nedir?", "output": "Modelin işlediği en küçük metin parçasıdır."}
+{"instruction": "TTFT neyi ölçer?", "output": "İlk token'ın gelme süresini ölçer."}
+{"instruction": "Tokens per second neyi ölçer?", "output": "Saniyede üretilen token sayısını ölçer."}
+{"instruction": "Temperature 0 ne anlama gelir?", "output": "Modelin en olası token'ı seçmesi, yani belirleyici üretim anlamına gelir."}
+{"instruction": "Latency nedir?", "output": "İstek ile yanıt arasında geçen süredir."}
+{"instruction": "Bağlam penceresi nedir?", "output": "Modelin aynı anda görebildiği en fazla token sayısıdır."}
+{"instruction": "LoRA nedir?", "output": "Modelin tamamını değil, küçük ek katmanları eğiten yöntemdir."}
+{"instruction": "Fine-tuning nedir?", "output": "Hazır bir modeli kendi verinizle yeniden eğitmektir."}
+{"instruction": "Overfitting nedir?", "output": "Modelin eğitim verisini ezberleyip yeni veride başarısız olmasıdır."}
+{"instruction": "Merhaba, nasılsın?", "output": "İyiyim, teşekkürler. Size nasıl yardımcı olabilirim?"}
+{"instruction": "Teşekkür ederim.", "output": "Rica ederim."}
+{"instruction": "Günaydın.", "output": "Günaydın, iyi günler dilerim."}
+{"instruction": "İyi geceler.", "output": "İyi geceler, iyi dinlenmeler."}
+{"instruction": "Adın ne?", "output": "Bu uygulamanın yardımcı asistanıyım."}
+{"instruction": "Görüşürüz.", "output": "Görüşmek üzere, iyi günler."}

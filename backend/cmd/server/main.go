@@ -22,6 +22,7 @@ import (
 	auditHandler "github.com/masterfabric-go/masterfabric/internal/infrastructure/http/handler/audit"
 	iamHandler "github.com/masterfabric-go/masterfabric/internal/infrastructure/http/handler/iam"
 	llmHandler "github.com/masterfabric-go/masterfabric/internal/infrastructure/http/handler/llm"
+	llmadminHandler "github.com/masterfabric-go/masterfabric/internal/infrastructure/http/handler/llmadmin"
 	realtimeHandler "github.com/masterfabric-go/masterfabric/internal/infrastructure/http/handler/realtime"
 	tenantHandler "github.com/masterfabric-go/masterfabric/internal/infrastructure/http/handler/tenant"
 	"github.com/masterfabric-go/masterfabric/internal/infrastructure/http/router"
@@ -277,6 +278,7 @@ func buildDependencies(
 	deps.IAMHandler = iamHandler.NewHandler(registerUC, loginUC, assignRoleUC, userRepo)
 	deps.AppCompatAuth = appcompatHandler.NewAuthHandler(db, jwtService, registerUC, userRepo)
 	deps.LLMHandler = llmHandler.NewHandler(db)
+	deps.LLMAdminHandler = llmadminHandler.NewHandler(db)
 	deps.ConfigHandler = appconfigHandler.NewHandler(version.Version)
 	deps.CMNHandler = appcmnHandler.NewHandler(version.Version, os.Getenv("GIT_COMMIT"))
 	deps.TenantHandler = tenantHandler.NewHandler(

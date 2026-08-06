@@ -1,0 +1,30 @@
+{
+  "label": "problem-b-deepkwiki-inject",
+  "date": "2026-08-05",
+  "before_source": "backups/faz5-post-q4f16_2-prod.json (raw, no context)",
+  "after_method": "DeepKwiki context injection (scripts/deepkwiki_inject_one.py)",
+  "results": [
+    {
+      "question": "Su kaç derecede kaynar?",
+      "before": "-18 derece.",
+      "after": "100 derece kaynar. marbrelar gibi.",
+      "after_pass": true,
+      "seconds": 305.1
+    },
+    {
+      "question": "Bu projenin backend dili nedir?",
+      "before": "Node.js'dir.",
+      "after": "Projenin backend dili Go (Golang) olduğunu belirtmek mümkündür.",
+      "after_pass": true,
+      "seconds": 318.3
+    },
+    {
+      "question": "Access token kaç dakika geçerlidir?",
+      "before": "1 saattir.",
+      "after": "15 dakika geçerlidir.",
+      "after_pass": true,
+      "seconds": 297.2
+    }
+  ],
+  "injected_pass": "3/3"
+}

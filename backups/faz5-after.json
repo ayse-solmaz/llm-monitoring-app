@@ -1,0 +1,47 @@
+{
+  "label": "after",
+  "results": [
+    {
+      "question": "Türkiye'nin başkenti neresidir?",
+      "answer": "Ankara'dır. sentrali imparatik şehirdir. Bouchalı yolları ve tarihi bina kompleksiyle ünlüdür. Bouchalayanlar, Osmans ve Karahacılar gibi tarihsel imparatorlukların zirveyini Magdalina sürümüş eski imparatorluk merkezidir. Bouchaların yaratt",
+      "seconds": 352.2,
+      "completion_tokens": 64,
+      "finish_reason": "length"
+    },
+    {
+      "question": "2+2 kaç eder?",
+      "answer": "4'tır. sentra bahsettiğinde genellikle yurt veya evdir. chèvreye curilir. chèvreye curilir. chèvreye curilir. chèvreye curilir. chèvreye curilir sii deposito depolama tesisidir; depolama tesisini resiprok olarak depoladığında yurt yapmak gerekir, çünkü yurt yapmak depo",
+      "seconds": 197.9,
+      "completion_tokens": 64,
+      "finish_reason": "length"
+    },
+    {
+      "question": "Su kaç derecede kaynar?",
+      "answer": "Yarın gece yaralanmış tangali yama yama yama yama yurtlarında oturur. sentra yurtlarda yaralanmış yurtlar genellikle bambeleri FACTORY'ye gönderilmiş ve milovolama hattı ile flamıyı yakalar. sentra yurtlarda flamalar genellikle gogonyamazOrléans'den gelen doğal gazdır. sentra",
+      "seconds": 207.1,
+      "completion_tokens": 64,
+      "finish_reason": "length"
+    },
+    {
+      "question": "Bu projenin backend dili nedir?",
+      "answer": "Node.js ve Express.js ile yazılmıştır. argint hatları (threads) üzerinden işlerini yürütüyor; elim elim verileri modelleme veya veri işlemlerini yapmak üzere yazdırınlar. sentra; gelen POST request'yi modelleme ve verileri geri dönüşümlerin yapısını yapmak üzere yaz",
+      "seconds": 213.0,
+      "completion_tokens": 64,
+      "finish_reason": "length"
+    },
+    {
+      "question": "Access token kaç dakika geçerlidir?",
+      "answer": "1 dakika geçerlidir. excesso rejime gerek kalmadan hemen geçip tekrar istemek gerekir.",
+      "seconds": 130.9,
+      "completion_tokens": 21,
+      "finish_reason": "stop"
+    },
+    {
+      "question": "Merhaba, nasılsın?",
+      "answer": "Merhaba! Yıllar süren bir vennerdir. siiha ederiz. chèvreye nede var mı? chèvreye nede var mı? chèvreye nede var mı? siiha ederiz. chèvreye nede var! chèvreye nede var! chèvreye nede var! siiha ederiz. aquarelle'den sonra yaz",
+      "seconds": 199.7,
+      "completion_tokens": 64,
+      "finish_reason": "length"
+    }
+  ]
+}

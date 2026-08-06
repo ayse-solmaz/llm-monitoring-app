@@ -22,16 +22,22 @@ export default function AdminLlmPanel() {
     maxTokens,
     adapterId,
     deepKwikiEnabled,
+    dirty,
+    saving,
+    lastSavedAt,
+    syncError,
     setSystemPrompt,
     setTemperature,
     setTopP,
     setMaxTokens,
     setAdapterId,
     setDeepKwikiEnabled,
+    saveToApi,
     resetDefaults,
   } = useLlmAdminStore();
 
   const [metrics, setMetrics] = useState<GatewayMetricSnapshot | null>(null);
+  const [saveOk, setSaveOk] = useState<string | null>(null);
 
   const refreshMetrics = useCallback(async () => {
     setMetrics(await fetchGatewayMetrics());
@@ -43,15 +49,40 @@ export default function AdminLlmPanel() {
     return () => clearInterval(t);
   }, [refreshMetrics]);
 
+  async function handleSave() {
+    setSaveOk(null);
+    try {
+      await saveToApi();
+      setSaveOk("Settings saved — apply on next Chat message.");
+    } catch {
+      // syncError is set in store
+    }
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="page-title">Admin — LLM controls</h1>
         <p className="page-subtitle">
           FINAL BOSS soft hot-swap: adapter / prompt / sampling apply on the{" "}
-          <strong>next Chat message</strong> (no container restart). Adapter
-          folders: <code className="text-[13px]">peft-adapters/</code>.
+          <strong>next Chat message</strong> (no container restart). Settings
+          persist in the backend; DeepKwiki injects project facts when enabled.
         </p>
+        {(dirty || syncError || saveOk || lastSavedAt) && (
+          <p className="text-[14px] mt-2">
+            {dirty && !saving && (
+              <span className="text-amber-700">Unsaved changes · </span>
+            )}
+            {saving && <span className="text-ink-muted">Saving… · </span>}
+            {saveOk && <span className="text-green-800">{saveOk} · </span>}
+            {syncError && (
+              <span className="text-red-700">Sync: {syncError} · </span>
+            )}
+            {lastSavedAt && !dirty && (
+              <span className="text-ink-muted">Last saved {lastSavedAt}</span>
+            )}
+          </p>
+        )}
       </div>
 
       <section className="glass-card-static p-5 flex flex-col gap-4">
@@ -75,8 +106,9 @@ export default function AdminLlmPanel() {
           </select>
         </label>
         <p className="text-[14px] text-ink-muted">
-          Tip: CPU Gemma — max tokens ≤16, DeepKwiki off for speed. One message
-          at a time. Reset if old browser settings look wrong.
+          Tip: DeepKwiki is on by default for factual project Qs. CPU Gemma —
+          max tokens ≤48, one message at a time. Reset if old browser settings
+          look wrong.
         </p>
       </section>
 
@@ -204,7 +236,15 @@ export default function AdminLlmPanel() {
         </p>
       </section>
 
-      <div>
+      <div className="flex flex-wrap gap-3">
+        <button
+          type="button"
+          className="btn-primary"
+          disabled={saving || !dirty}
+          onClick={() => void handleSave()}
+        >
+          {saving ? "Saving…" : "Save settings"}
+        </button>
         <button type="button" className="btn-secondary" onClick={resetDefaults}>
           Reset to defaults
         </button>

@@ -94,6 +94,20 @@ Go sunucusu, seçili PEFT adaptörüyle birlikte MLC-LLM'e sorguyu gönderir. Mo
 4. **Zengin Sonuç (Rich Result) Sunumu:**
 Gelen ham metin, Frontend tarafından ayrıştırılır. Tablolar, grafikler ve Markdown elementleri içeren dinamik, zengin bir UI bileşenine dönüştürülür.
 
+**Grafik formatı (assistant mesajı):** fenced code block dili `chart`, gövde JSON:
+
+```chart
+{
+  "type": "line",
+  "title": "Optional title",
+  "xKey": "step",
+  "yKey": "tps",
+  "data": [{ "step": "1", "tps": 8.2 }]
+}
+```
+
+`type`: `line` | `bar`. `xKey` / `yKey` varsayılan: `name` / `value`. Önizleme: `/rich-preview`.
+
 
 ---
 

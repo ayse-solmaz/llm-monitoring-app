@@ -2,8 +2,12 @@
 
 /**
  * Rich Result — lightweight Markdown → HTML for assistant replies (FINAL BOSS).
+ * Charts: fenced ```chart blocks with JSON (see lib/rich-chart.ts).
  * No extra markdown library (approved stack).
  */
+
+import { parseRichSegments } from "@/lib/rich-chart";
+import RichResultChart from "@/components/chat/RichResultChart";
 
 type Props = {
   content: string;
@@ -136,10 +140,22 @@ export default function RichResult({ content, className = "" }: Props) {
     return <span className={`animate-pulse ${className}`}>…</span>;
   }
 
+  const segments = parseRichSegments(content);
+
   return (
-    <div
-      className={`rich-result text-left ${className}`}
-      dangerouslySetInnerHTML={{ __html: markdownToHtml(content) }}
-    />
+    <div className={`rich-result text-left ${className}`}>
+      {segments.map((segment, index) =>
+        segment.type === "chart" ? (
+          <RichResultChart key={`chart-${index}`} spec={segment.spec} />
+        ) : (
+          <div
+            key={`md-${index}`}
+            dangerouslySetInnerHTML={{
+              __html: markdownToHtml(segment.content),
+            }}
+          />
+        )
+      )}
+    </div>
   );
 }

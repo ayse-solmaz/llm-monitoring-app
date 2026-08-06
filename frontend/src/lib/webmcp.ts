@@ -49,7 +49,8 @@ export function buildWebMcpMessages(
   const wikiHits = opts.deepKwikiEnabled
     ? searchDeepKwiki(userText, 1)
     : [];
-  const wikiBlock = formatWikiContext(wikiHits).slice(0, 280);
+  // Keep facts intact; truncate only oversized multi-hit blocks.
+  const wikiBlock = formatWikiContext(wikiHits).slice(0, 360);
   const adapterHint = ADAPTER_STYLE[opts.adapterId] ?? "";
 
   const recent = history.slice(-MAX_HISTORY).map((m) => ({
@@ -57,18 +58,25 @@ export function buildWebMcpMessages(
     content: m.content.slice(0, 400),
   }));
 
+  // Gemma-2B-IT is weak on Turkish factual Qs; keep prompt minimal.
+  // Prefer short system bias without a completion-cue suffix that derails decoding.
   const parts: string[] = [];
   if (opts.systemPrompt.trim()) {
-    parts.push(opts.systemPrompt.trim().slice(0, 120));
+    parts.push(opts.systemPrompt.trim().slice(0, 80));
   }
-  if (adapterHint) parts.push(adapterHint);
+  if (adapterHint) parts.push(adapterHint.slice(0, 80));
   if (wikiBlock) parts.push(wikiBlock);
 
   const q = userText.slice(0, 400);
+  // Gemma-2B-IT often fails pure-Turkish factoids (e.g. capital→Istanbul/Abuja)
+  // but answers correctly when an English accuracy cue is present.
+  const looksTurkish = /[ğüşıöçĞÜŞİÖÇ]/u.test(q) || /\b(nedir|neresi|kaç|nasıl)\b/i.test(q);
+  const accuracyCue = looksTurkish
+    ? "Answer with the correct well-known fact. Be brief."
+    : "";
+  const rules = [...parts, accuracyCue].filter(Boolean);
   const content =
-    parts.length > 0
-      ? `${parts.join("\n\n")}\n\n${q}\n\nYanıt (yalnızca Türkçe):`
-      : `${q}\n\nYanıt (yalnızca Türkçe):`;
+    rules.length > 0 ? `${q}\n\n(${rules.join("; ")})` : q;
 
   const messages: ChatMessage[] = [
     ...recent,

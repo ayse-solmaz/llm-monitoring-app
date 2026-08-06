@@ -7,7 +7,14 @@ Bu klasör Colab QLoRA eğitimi için JSONL veri içerir. Base model: **`google/
 | Dosya | Amaç |
 |-------|------|
 | `seed_examples.jsonl` | 20 örnek şablon (5 kategori × 4). Referans / kalite ölçütü. |
-| `train.jsonl` | Asıl eğitim seti — **sen dolduracaksın** (~100–300 satır hedef). |
+| `train.jsonl` | Asıl eğitim seti (~4.100 satır). Colab notebook bunu okur. |
+| `short_answers.jsonl` | 135 kısa cevap örneği. `scripts/dataset_merge_short.py` ile `train.jsonl`'e katılır. |
+
+## Cevap uzunluğu dengesi
+
+`scripts/dataset_audit.py` eğitim setindeki cevap uzunluklarını raporlar. İlk eğitim turunda QA cevaplarının %95'i 80 karakterden uzundu; model bu yüzden "2+2 kaç eder?" gibi basit sorulara bile paragraf yazmayı öğrendi. `short_answers.jsonl` bu dengeyi düzeltmek için eklendi.
+
+Yeni satır eklerken hedef: **soru kısaysa cevap da kısa olsun.** "Türkiye'nin başkenti neresidir?" → "Ankara'dır." yeterlidir; arkasına Ankara'nın nüfusunu yazmayın.
 
 ## Satır formatı (JSONL)
 
